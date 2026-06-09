@@ -1,0 +1,9 @@
+{{ define "main" }}
+<article class="card page reveal">
+  <h1 class="pagetitle glitchable">404 — route not found</h1>
+  <div class="prose">
+    <p>This path never existed, or a visitor injected a fault and it went down with the pod.</p>
+    <p>incident logged. <a href="{{ "/" | relURL }}">back to the status page →</a></p>
+  </div>
+</article>
+{{ end }}

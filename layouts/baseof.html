@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+{{ partial "head.html" . }}
+<body>
+{{ partial "bg.html" . }}
+<div class="frame">
+  {{ partial "nav.html" . }}
+  <main id="main">
+    {{ block "main" . }}{{ end }}
+  </main>
+  {{ partial "footer.html" . }}
+</div>
+{{ partial "oracle.html" . }}
+{{ $chaos := resources.Get "js/chaos.ts" | js.Build (dict "minify" true "target" "es2020" "format" "esm" "targetPath" "js/chaos.js") | fingerprint }}
+<script>
+  (function () {
+    var mod = null;
+    var load = function (cb) {
+      if (mod) { cb(mod); return; }
+      import("{{ $chaos.RelPermalink }}").then(function (m) { mod = m; cb(m); });
+    };
+    var b = document.getElementById("chaos-breaker");
+    if (b) b.addEventListener("click", function () { load(function (m) { m.toggle(); }); });
+    if (sessionStorage.getItem("chaos") === "1") load(function (m) { m.restore(); });
+  })();
+</script>
+</body>
+</html>

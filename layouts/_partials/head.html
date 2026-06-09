@@ -1,0 +1,32 @@
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ if .IsHome }}{{ site.Title }} — status{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
+  <meta name="description" content="{{ or .Description .Params.summary site.Params.description }}">
+  <meta name="color-scheme" content="dark">
+  <link rel="canonical" href="{{ .Permalink }}">
+  <link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
+  <meta property="og:title" content="{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}">
+  <meta property="og:description" content="{{ or .Description .Params.summary site.Params.description }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ .Permalink }}">
+  {{ $font := resources.Get "fonts/DepartureMono-Regular.woff2" | fingerprint }}
+  <link rel="preload" href="{{ $font.RelPermalink }}" as="font" type="font/woff2" crossorigin>
+  {{ $bg := partial "bg-resource.html" . }}
+  {{ with $bg.res }}
+    {{ $w1920 := .Process "resize 1920x webp q82" }}
+    <link rel="preload" as="image" href="{{ $w1920.RelPermalink }}" fetchpriority="high">
+  {{ end }}
+  <style>
+    @font-face {
+      font-family: "Departure Mono";
+      src: url("{{ $font.RelPermalink }}") format("woff2");
+      font-weight: 400;
+      font-display: swap;
+    }
+  </style>
+  {{ $css := resources.Get "css/main.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+  {{/* theme vars must come after main.css so the derived palette overrides the fallbacks */}}
+  {{ partialCached "theme.html" . $bg.name }}
+</head>

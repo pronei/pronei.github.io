@@ -1,0 +1,7 @@
+# hugo build artifacts
+/public/
+/resources/_gen/
+.hugo_build.lock
+
+# os noise
+.DS_Store

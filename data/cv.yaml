@@ -1,0 +1,64 @@
+# Structured CV. The /cv page renders from this; /llms-full.txt embeds it.
+# Keep in sync with static/cv/pranay-mundra-cv.pdf when you update the PDF.
+education:
+  - school: University of California, Santa Cruz
+    degree: Master of Science in Computer Science
+    gpa: GPA 3.93
+    when: Sept 2024 – present
+    detail: Advanced Computer Architecture, Distributed Systems, Advanced OS, Algorithms.
+  - school: PES University, Bengaluru
+    degree: B.Tech in Electronics & Communication
+    gpa: CGPA 9.01
+    when: Aug 2018 – Aug 2022
+    detail: Control System Theory, Digital Communication, Robotics; TA for UE19EC339.
+
+experience:
+  - org: University of California, Santa Cruz
+    role: Graduate Teaching Assistant
+    when: Jan 2025 – Jun 2025
+    points:
+      - Mentored students in CSE115A/B/C on software projects sponsored by Nutanix and Keysight Technologies — requirements analysis, high-level system design, sprint planning.
+  - org: MakeMyTrip & Goibibo (NASDAQ:MMYT)
+    role: Software Engineer I
+    when: Jun 2022 – Jun 2024
+    points:
+      - Designed a highly concurrent multi-org ConfigKey store for the A/B platform — two-level caching on Aerospike, sub-millisecond p99 at 30k requests/second, down from 50ms.
+      - Built a rule-based rate limiter optimizing notification delivery across SMS, WhatsApp and email — more relevant engagement, up to 40% lower infra cost.
+      - Revamped loyalty programs (MMTBLACK, GoTribe, myPartner Hero) with configurable per-user aggregations, enabling new program types for any customer segment.
+      - Closed a fraud hole in Refer&Earn (~$50K) by constraining mobile-number reuse in the signup flow.
+      - Added virtual-thread support to the legacy Java 8 A/B platform with quasar, cutting CPU footprint up to 40%.
+  - org: MakeMyTrip & Goibibo
+    role: Software Intern
+    when: Jan 2022 – May 2022
+    points:
+      - Set up cache sync for intra-cluster services using Kafka; parallelized /assignVariant on the A/B platform.
+      - Supported the legacy route-planning service ahead of its How2Go rework.
+  - org: ARTPARK @ Indian Institute of Science
+    role: Research Intern
+    when: Jun 2021 – Dec 2021
+    points:
+      - Built a log aggregator on Elastic alerting warehouse robot operators to environmental anomalies.
+      - Designed a ROS2 safety node integrated with warehouse cameras to stop robots on human proximity.
+
+projects:
+  - name: faults-lab (atropos · zeus-go · manteion)
+    stack: Go, OpenTelemetry, gRPC, Kubernetes, k6, Vegeta
+    line: Fault-injection research platform — SDK-level fault injection, load orchestration, experiment oracle.
+  - name: global upgrade safety & MSS
+    stack: Go, OpenAPI, Protobuf
+    line: Static analysis deciding whether simultaneous schema changes across a microservice mesh can co-deploy safely; computes the maximal safe subset in linear time.
+  - name: slug mcp
+    stack: Rust, rmcp, Moka
+    line: MCP server exposing UCSC campus services and Santa Cruz environmental telemetry as LLM tool calls.
+
+skills:
+  - group: languages
+    items: [Go, Rust, Java, Python, C/C++, SQL, JavaScript, Shell]
+  - group: frameworks
+    items: [OpenTelemetry, gRPC, vert.X, Spring, gin, k6, Vegeta]
+  - group: devops
+    items: [Docker, Kubernetes, Jaeger, Prometheus, Grafana, Jenkins, AWS, git]
+  - group: data & queues
+    items: [MongoDB, MySQL, Aerospike, Redis, Kafka, RabbitMQ]
+  - group: expertise
+    items: [distributed systems, fault injection, tracing & observability, SDK design, scalable web services]

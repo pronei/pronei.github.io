@@ -1,0 +1,48 @@
+{{- /* Palette engine: extract dominant colors from the active background image at build
+     time and emit CSS custom properties. The whole UI (accents, tabs, buttons, status
+     dots) keys off these vars — swap the image, rebuild, and the site re-themes.
+     All math happens here so the page ships zero theming JS. */ -}}
+{{- $bg := partial "bg-resource.html" . -}}
+{{- $accent := "#2dd4a7" -}}{{- $accentLuma := 120.0 -}}
+{{- $tint := "#0b1014" -}}
+{{- with $bg.res -}}
+  {{- $hexmap := dict "0" 0 "1" 1 "2" 2 "3" 3 "4" 4 "5" 5 "6" 6 "7" 7 "8" 8 "9" 9 "a" 10 "b" 11 "c" 12 "d" 13 "e" 14 "f" 15 -}}
+  {{- $bestScore := -1.0 -}}
+  {{- $darkLuma := 999.0 -}}
+  {{- range $c := .Colors -}}
+    {{- $hex := lower (printf "%s" $c) -}}
+    {{- if and (eq (len $hex) 7) (strings.HasPrefix $hex "#") -}}
+      {{- $r := add (mul (index $hexmap (substr $hex 1 1)) 16) (index $hexmap (substr $hex 2 1)) -}}
+      {{- $g := add (mul (index $hexmap (substr $hex 3 1)) 16) (index $hexmap (substr $hex 4 1)) -}}
+      {{- $b := add (mul (index $hexmap (substr $hex 5 1)) 16) (index $hexmap (substr $hex 6 1)) -}}
+      {{- $mx := math.Max (math.Max $r $g) $b -}}
+      {{- $mn := math.Min (math.Min $r $g) $b -}}
+      {{- $chroma := sub $mx $mn -}}
+      {{- $luma := div (add (add (mul 2126.0 $r) (mul 7152.0 $g)) (mul 722.0 $b)) 10000.0 -}}
+      {{- /* favor saturated swatches whose brightness sits in a usable mid window */ -}}
+      {{- $window := math.Max 0.05 (sub 1.0 (div (math.Abs (sub $luma 128.0)) 170.0)) -}}
+      {{- $score := mul (float $chroma) $window -}}
+      {{- if gt $score $bestScore -}}
+        {{- $bestScore = $score -}}{{- $accent = $hex -}}{{- $accentLuma = $luma -}}
+      {{- end -}}
+      {{- if lt $luma $darkLuma -}}
+        {{- $darkLuma = $luma -}}{{- $tint = $hex -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- /* text-safe accent for use on dark glass: brighten dark accents at build time */ -}}
+{{- $accentText := $accent -}}
+{{- if lt $accentLuma 110.0 -}}
+  {{- $accentText = printf "color-mix(in oklab, %s 55%%, #e8f2ee)" $accent -}}
+{{- end -}}
+{{- /* ink to use ON accent-filled elements, chosen by accent brightness */ -}}
+{{- $accentInk := cond (gt $accentLuma 150.0) "#0b1014" "#f2f7f5" -}}
+<style>
+  :root {
+    --c-accent: {{ $accent | safeCSS }};
+    --c-accent-text: {{ $accentText | safeCSS }};
+    --c-accent-ink: {{ $accentInk | safeCSS }};
+    --c-tint: color-mix(in oklab, {{ $tint | safeCSS }} 60%, #0a0e12);
+  }
+</style>

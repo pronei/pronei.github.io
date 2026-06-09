@@ -1,0 +1,19 @@
+{{- /* Full-bleed background: source PNG is processed to webp at three widths;
+     a jpeg fallback covers ancient browsers. The original never ships. */ -}}
+{{- $bg := partial "bg-resource.html" . -}}
+{{- with $bg.res -}}
+  {{- $w1280 := .Process "resize 1280x webp q80" -}}
+  {{- $w1920 := .Process "resize 1920x webp q82" -}}
+  {{- $w2560 := .Process "resize 2560x webp q82" -}}
+  {{- $jpg := .Process "resize 1920x jpg q82" -}}
+<div class="bg" aria-hidden="true">
+  <picture>
+    <source type="image/webp"
+            srcset="{{ $w1280.RelPermalink }} 1280w, {{ $w1920.RelPermalink }} 1920w, {{ $w2560.RelPermalink }} 2560w"
+            sizes="100vw">
+    <img src="{{ $jpg.RelPermalink }}" alt="" decoding="async" fetchpriority="high"
+         width="{{ $jpg.Width }}" height="{{ $jpg.Height }}">
+  </picture>
+  <div class="scrim"></div>
+</div>
+{{- end -}}

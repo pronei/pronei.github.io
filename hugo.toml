@@ -1,0 +1,57 @@
+baseURL = "https://pronei.github.io/"
+locale = "en-us"
+title = "pranay mundra"
+enableRobotsTXT = true
+disableKinds = ["taxonomy", "term"]
+
+[params]
+  # Swap the site-wide background by changing this filename (any image in assets/backgrounds/).
+  # Every page can also override it with `background: <file>` in its front matter.
+  background = "topology-night.png"
+  tagline = "I break distributed systems on purpose."
+  subline = "MS CS @ UC Santa Cruz · fault injection, observability & SDK design · previously A/B infra at MakeMyTrip (sub-ms p99 @ 30k rps)"
+  email = "pmundra@ucsc.edu"
+  github = "https://github.com/pronei"
+  linkedin = "https://www.linkedin.com/in/pranay-mundra-115055189"
+  location = "San Francisco / Santa Cruz, CA"
+  description = "Pranay Mundra — distributed systems engineer. Fault injection, tracing & observability, SDK design."
+
+[outputs]
+  home = ["html", "llms", "corpus"]
+
+# /llms.txt — index for visiting AI agents (llms.txt convention)
+[outputFormats.llms]
+  mediaType = "text/plain"
+  baseName = "llms"
+  isPlainText = true
+
+# /llms-full.txt — the full grounding corpus; also feeds the on-site chat widget,
+# so the oracle can never drift from what the site actually says.
+[outputFormats.corpus]
+  mediaType = "text/plain"
+  baseName = "llms-full"
+  isPlainText = true
+
+[menus]
+  [[menus.main]]
+    name = "about"
+    pageRef = "/about"
+    weight = 10
+  [[menus.main]]
+    name = "projects"
+    pageRef = "/projects"
+    weight = 20
+  [[menus.main]]
+    name = "cv"
+    pageRef = "/cv"
+    weight = 30
+  [[menus.main]]
+    name = "contact"
+    pageRef = "/contact"
+    weight = 40
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[minify]
+  minifyOutput = true

@@ -1,0 +1,26 @@
+{{ define "main" }}
+<article class="card page reveal">
+  <header class="projhead">
+    {{ with .Params.greek }}<span class="glyph big" aria-hidden="true">{{ .glyph }}</span>{{ end }}
+    <h1 class="pagetitle">{{ .Title }}</h1>
+    {{ with .Params.greek }}<p class="myth">{{ .translit }} — {{ .gloss }}</p>{{ end }}
+    <p class="sub">{{ .Params.summary }}</p>
+    <div class="plaque-foot">
+      <span class="chips">{{ range .Params.stack }}<i>{{ . }}</i>{{ end }}</span>
+      <span class="links">
+        {{ with .Params.links.github }}<a href="{{ . }}">github ↗</a>{{ end }}
+        {{ with .Params.links.note }}<span class="dim">{{ . }}</span>{{ end }}
+      </span>
+    </div>
+  </header>
+  {{ with .Params.metrics }}
+  <ul class="metrics">
+    {{ range . }}<li>{{ . }}</li>{{ end }}
+  </ul>
+  {{ end }}
+  <div class="prose">
+    {{ .Content }}
+  </div>
+  <p><a href="{{ "projects/" | relURL }}">← all projects</a></p>
+</article>
+{{ end }}

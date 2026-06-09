@@ -1,0 +1,14 @@
+# Pranay Mundra
+
+> {{ site.Params.description }} Based in {{ site.Params.location }}. Email: {{ site.Params.email }}. GitHub: {{ site.Params.github }}. LinkedIn: {{ site.Params.linkedin }}.
+
+Full machine-readable corpus (bio, projects, CV): {{ "llms-full.txt" | absURL }}
+
+## Pages
+{{ range site.Sections }}{{ range .Pages }}- [{{ .Title }}]({{ .Permalink }}): {{ .Params.summary }}
+{{ end }}{{ end }}{{ range site.RegularPages.ByTitle }}{{ if not .Section }}- [{{ .Title }}]({{ .Permalink }}): {{ or .Params.summary .Summary | plainify | chomp }}
+{{ end }}{{ end }}
+## Currently
+{{ range hugo.Data.now.workloads }}- {{ .name }} ({{ .gloss }}): {{ .status }} — {{ .note }}
+{{ end }}
+CV (PDF): {{ "cv/pranay-mundra-cv.pdf" | absURL }}

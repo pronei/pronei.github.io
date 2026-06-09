@@ -1,0 +1,36 @@
+# Pranay Mundra — full site corpus
+# Generated at build time from the site content. Grounds /llms.txt agents and the on-site oracle.
+
+CONTACT
+email: {{ site.Params.email }}
+github: {{ site.Params.github }}
+linkedin: {{ site.Params.linkedin }}
+location: {{ site.Params.location }}
+cv pdf: {{ "cv/pranay-mundra-cv.pdf" | absURL }}
+
+CURRENT WORKLOADS (updated {{ hugo.Data.now.updated }})
+{{ range hugo.Data.now.workloads }}- {{ .name }} ({{ .gloss }}): {{ .status }} — {{ .note }}
+{{ end }}
+{{ range site.RegularPages.ByWeight }}
+== {{ upper .Title }} ({{ .Permalink }}) ==
+{{ with .Params.summary }}{{ . }}
+{{ end }}{{ with .Params.greek }}name origin: {{ .translit }} — {{ .gloss }}
+{{ end }}{{ with .Params.stack }}stack: {{ delimit . ", " }}
+{{ end }}{{ with .Params.metrics }}{{ range . }}- {{ . }}
+{{ end }}{{ end }}{{ with .Params.links }}{{ with .github }}source: {{ . }}
+{{ end }}{{ end }}
+{{ .Plain | chomp }}
+{{ end }}
+
+== CV ==
+{{ $cv := hugo.Data.cv }}
+EDUCATION
+{{ range $cv.education }}- {{ .school }}, {{ .degree }}{{ with .gpa }} ({{ . }}){{ end }}, {{ .when }}.{{ with .detail }} {{ . }}{{ end }}
+{{ end }}
+EXPERIENCE
+{{ range $cv.experience }}- {{ .org }} — {{ .role }} ({{ .when }})
+{{ range .points }}  * {{ . }}
+{{ end }}{{ end }}
+SKILLS
+{{ range $cv.skills }}- {{ .group }}: {{ delimit .items ", " }}
+{{ end }}

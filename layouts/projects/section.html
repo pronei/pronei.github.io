@@ -1,0 +1,28 @@
+{{ define "main" }}
+<header class="hero reveal">
+  <h1 class="pagetitle glitchable"><span class="dim">~/</span>projects</h1>
+  <p class="sub">{{ .Params.summary }}</p>
+</header>
+<section class="grid reveal">
+  {{ range .Pages.ByWeight }}
+  <article class="card plaque">
+    {{ with .Params.greek }}<span class="glyph" aria-hidden="true">{{ .glyph }}</span>{{ end }}
+    <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+    {{ with .Params.greek }}<p class="myth">{{ .translit }} — {{ .gloss }}</p>{{ end }}
+    <p class="summary">{{ .Params.summary }}</p>
+    {{ with .Params.metrics }}
+    <ul class="metrics">
+      {{ range . }}<li>{{ . }}</li>{{ end }}
+    </ul>
+    {{ end }}
+    <div class="plaque-foot">
+      <span class="chips">{{ range first 4 .Params.stack }}<i>{{ . }}</i>{{ end }}</span>
+      <span class="links">
+        {{ with .Params.links.github }}<a href="{{ . }}">github ↗</a>{{ end }}
+        {{ with .Params.links.note }}<span class="dim">{{ . }}</span>{{ end }}
+      </span>
+    </div>
+  </article>
+  {{ end }}
+</section>
+{{ end }}

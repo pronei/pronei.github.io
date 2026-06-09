@@ -1,0 +1,4 @@
+{{- /* Resolve the active background image for a page: front-matter override, else site default. */ -}}
+{{- $name := or .Params.background site.Params.background -}}
+{{- $res := resources.Get (printf "backgrounds/%s" $name) -}}
+{{- return (dict "name" $name "res" $res) -}}

@@ -1,0 +1,52 @@
+{{ define "main" }}
+{{ $cv := hugo.Data.cv }}
+<article class="card page reveal cv">
+  <header class="cvhead">
+    <h1 class="pagetitle"><span class="dim">~/</span>cv</h1>
+    <a class="btn" href="{{ "cv/pranay-mundra-cv.pdf" | relURL }}" download>download pdf</a>
+  </header>
+  <div class="prose">{{ .Content }}</div>
+
+  <section>
+    <h2 class="cvsec">education</h2>
+    {{ range $cv.education }}
+    <div class="cventry">
+      <div class="cvtop"><strong>{{ .school }}</strong><span class="dim">{{ .when }}</span></div>
+      <div class="cvmid">{{ .degree }}{{ with .gpa }} · {{ . }}{{ end }}</div>
+      {{ with .detail }}<p class="cvnote">{{ . }}</p>{{ end }}
+    </div>
+    {{ end }}
+  </section>
+
+  <section>
+    <h2 class="cvsec">experience</h2>
+    {{ range $cv.experience }}
+    <div class="cventry">
+      <div class="cvtop"><strong>{{ .org }}</strong><span class="dim">{{ .when }}</span></div>
+      <div class="cvmid">{{ .role }}</div>
+      <ul class="cvlist">
+        {{ range .points }}<li>{{ . | markdownify }}</li>{{ end }}
+      </ul>
+    </div>
+    {{ end }}
+  </section>
+
+  <section>
+    <h2 class="cvsec">selected projects</h2>
+    <p class="cvnote">full writeups live under <a href="{{ "projects/" | relURL }}">~/projects</a>.</p>
+    {{ range $cv.projects }}
+    <div class="cventry">
+      <div class="cvtop"><strong>{{ .name }}</strong><span class="dim">{{ .stack }}</span></div>
+      <p class="cvnote">{{ .line }}</p>
+    </div>
+    {{ end }}
+  </section>
+
+  <section>
+    <h2 class="cvsec">skills</h2>
+    {{ range $cv.skills }}
+    <div class="cvskill"><span class="dim">{{ .group }}</span><span>{{ delimit .items ", " }}</span></div>
+    {{ end }}
+  </section>
+</article>
+{{ end }}

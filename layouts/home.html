@@ -1,0 +1,43 @@
+{{ define "main" }}
+<section class="hero reveal">
+  <h1 class="glitchable">{{ site.Params.tagline }}</h1>
+  <p class="sub">{{ site.Params.subline }}</p>
+</section>
+
+{{ $rows := hugo.Data.now.workloads }}
+{{ $down := 0 }}{{ $degraded := 0 }}
+{{ range $rows }}
+  {{ if eq .status "down" }}{{ $down = add $down 1 }}{{ end }}
+  {{ if eq .status "degraded" }}{{ $degraded = add $degraded 1 }}{{ end }}
+{{ end }}
+<section class="card board reveal" aria-label="current workloads">
+  <div class="board-head">
+    <span class="label">current workloads</span>
+    <span id="board-state" class="state {{ if gt $down 0 }}down{{ else if gt $degraded 0 }}degraded{{ else }}ok{{ end }}">
+      {{- if gt $down 0 }}partial outage{{ else if gt $degraded 0 }}degraded performance{{ else }}all systems operational{{ end -}}
+    </span>
+  </div>
+  <ul class="rows">
+    {{ range $rows }}
+    <li class="row" data-status="{{ .status }}">
+      <span class="dot" aria-hidden="true"></span>
+      <span class="name">{{ with .link }}<a href="{{ . }}">{{ end }}{{ .name }}{{ with .link }}</a>{{ end }}</span>
+      <span class="gloss">{{ .gloss }}</span>
+      <span class="note">{{ .note }}</span>
+      <span class="status">{{ .status }}</span>
+    </li>
+    {{ end }}
+    <li class="row toast" id="chaos-toast" hidden>
+      <span class="dot" aria-hidden="true"></span>
+      <span class="note" id="chaos-toast-text">fault injected by visitor</span>
+      <button class="navbtn" id="chaos-rollback">rollback</button>
+    </li>
+  </ul>
+  <div class="board-foot">
+    <span>updated {{ hugo.Data.now.updated }}</span>
+    <span><a href="{{ "projects/" | relURL }}">project details →</a></span>
+  </div>
+</section>
+
+{{ with .Content }}<section class="prose reveal">{{ . }}</section>{{ end }}
+{{ end }}

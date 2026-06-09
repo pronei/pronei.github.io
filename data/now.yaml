@@ -1,0 +1,29 @@
+# The homepage status board. Edit this file, rebuild, done.
+# status: operational | degraded | down | open
+updated: 2026-06-09
+workloads:
+  - name: manteion
+    gloss: experiment oracle
+    note: wiring experiment resume
+    status: operational
+    link: /projects/faults-lab/
+  - name: atropos
+    gloss: fault-injection SDK
+    note: cache-box replay primitive
+    status: operational
+    link: /projects/faults-lab/
+  - name: zeus-go
+    gloss: load orchestration
+    note: rewriting attack scheduler
+    status: degraded
+    link: /projects/faults-lab/
+  - name: chatcut 2.0
+    gloss: AI video editing
+    note: premiere-pro MCP backend
+    status: operational
+    link: /projects/chatcut/
+  - name: hiring pipeline
+    gloss: distributed systems roles
+    note: accepting connections
+    status: open
+    link: /contact/

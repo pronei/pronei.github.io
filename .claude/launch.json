@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "portfolio",
+      "runtimeExecutable": "hugo",
+      "runtimeArgs": ["server", "--port", "1313", "--renderToMemory"],
+      "port": 1313
+    }
+  ]
+}
