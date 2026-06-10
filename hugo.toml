@@ -14,7 +14,7 @@ disableKinds = ["taxonomy", "term"]
   prevline = "previously platforms at"
   # Deployed Cloudflare Worker for the cmd+k "ask the agent" mode (workers/oracle).
   # Leave empty to show a "not configured" notice in the chat pane.
-  oracleEndpoint = ""
+  oracleEndpoint = "https://oracle.proneidev.workers.dev"
   email = "pmundra@ucsc.edu"
   github = "https://github.com/pronei"
   linkedin = "https://www.linkedin.com/in/pranay-mundra-115055189"
