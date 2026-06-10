@@ -1,0 +1,24 @@
+# Source of truth for the homepage status board. scripts/update_now.py reads this,
+# asks the GitHub API for each repo's latest push + Actions conclusion, and writes
+# data/now.yaml. Rows without a repo pass through verbatim (manual).
+workloads:
+  - name: manteion
+    gloss: experiment oracle
+    repo: microfaults/manteion-go
+    link: /projects/faults-lab/
+  - name: atropos
+    gloss: fault-injection SDK
+    repo: microfaults/atropos-go
+    link: /projects/faults-lab/
+  - name: zeus-go
+    gloss: load orchestration
+    repo: microfaults/zeus-go
+    link: /projects/faults-lab/
+  - name: chatcut 2.0
+    gloss: AI video editing
+    repo: dzymachine/ChatCut-2.0
+    link: /projects/chatcut/
+  - name: slug-mcp
+    gloss: campus MCP server
+    repo: pronei/slug-mcp
+    link: /projects/slug-mcp/

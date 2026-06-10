@@ -6,7 +6,7 @@
   {{- $w1920 := .Process "resize 1920x webp q82" -}}
   {{- $w2560 := .Process "resize 2560x webp q82" -}}
   {{- $jpg := .Process "resize 1920x jpg q82" -}}
-<div class="bg" aria-hidden="true">
+<div class="bg" aria-hidden="true" data-bg="{{ $bg.name }}">
   <picture>
     <source type="image/webp"
             srcset="{{ $w1280.RelPermalink }} 1280w, {{ $w1920.RelPermalink }} 1920w, {{ $w2560.RelPermalink }} 2560w"

@@ -1,14 +1,15 @@
 <header class="top">
-  <a class="brand" href="{{ "/" | relURL }}">pranay<span class="at">@</span>mundra<span class="dim">:~$</span></a>
+  <a class="brand" href="{{ "/" | relURL }}">pranay <span class="at">mundra</span></a>
   <nav aria-label="primary">
     {{ $page := . }}
     {{ range site.Menus.main }}
       <a href="{{ .URL }}" {{ if or ($page.IsMenuCurrent "main" .) ($page.HasMenuCurrent "main" .) }}aria-current="page"{{ end }}>{{ .Name }}</a>
     {{ end }}
     <button id="search-open" class="navbtn" title="search projects & pages">search <kbd>⌘K</kbd></button>
-    <button id="chaos-breaker" class="navbtn breaker" aria-pressed="false" title="inject a fault: corrupts this site's theme">
+    <button id="chaos-breaker" class="navbtn breaker" aria-pressed="false" title="inject a fault: corrupts theme & background — click faster to escalate">
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>
       <span data-label>inject fault</span>
     </button>
+    <button id="chaos-off" class="navbtn xoff" title="rollback all faults" aria-label="rollback all faults">✕</button>
   </nav>
 </header>

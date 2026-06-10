@@ -2,6 +2,14 @@
 <article class="card page reveal">
   <h1 class="pagetitle"><span class="dim">~/</span>{{ lower .Title }}</h1>
   <div class="prose">
+    {{ if .Params.portrait }}
+      {{ $full := or (resources.Get "img/portrait-full.jpg") (resources.Get "img/portrait-full.png") (resources.Get "img/portrait.jpg") }}
+      {{ with $full }}
+        {{ $p := .Process "resize 720x webp q88" }}
+        <img class="page-portrait" src="{{ $p.RelPermalink }}" alt="Pranay Mundra"
+             width="{{ $p.Width }}" height="{{ $p.Height }}">
+      {{ end }}
+    {{ end }}
     {{ .Content }}
   </div>
 </article>

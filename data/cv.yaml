@@ -10,7 +10,7 @@ education:
     degree: B.Tech in Electronics & Communication
     gpa: CGPA 9.01
     when: Aug 2018 – Aug 2022
-    detail: Control System Theory, Digital Communication, Robotics; TA for UE19EC339.
+    detail: Control System Theory, Digital Communication, Robotics; TA for [UE19EC339](https://github.com/pronei/UE19EC339-Robotics).
 
 experience:
   - org: University of California, Santa Cruz
@@ -24,7 +24,7 @@ experience:
     points:
       - Designed a highly concurrent multi-org ConfigKey store for the A/B platform — two-level caching on Aerospike, sub-millisecond p99 at 300k requests/second, down from 50ms.
       - Built a rule-based rate limiter optimizing notification delivery across SMS, WhatsApp and email — more relevant engagement, up to 40% lower infra cost.
-      - Revamped loyalty programs (MMTBLACK, GoTribe, myPartner Hero) with configurable per-user aggregations, enabling new program types for any customer segment.
+      - Revamped loyalty programs ([MMTBLACK](https://tech.makemytrip.com/introducing-the-all-new-mmtblack-indias-ultimate-travel-loyalty-program-that-keeps-on-giving-83a20ebee850), [GoTribe](https://www.goibibo.com/loyalty/), [myPartner Hero](https://mypartner.makemytrip.com/agent/loyalty/hero/?crId=0d2930d8-532a-4a16-be35-a26b44ff23f1)) with configurable per-user aggregations, enabling new program types for any customer segment.
       - Closed a fraud hole in Refer&Earn (~$50K) by constraining mobile-number reuse in the signup flow.
       - Added virtual-thread support to the legacy Java 8 A/B platform with quasar, cutting CPU footprint up to 40%.
   - org: MakeMyTrip & Goibibo
@@ -32,7 +32,7 @@ experience:
     when: Jan 2022 – May 2022
     points:
       - Set up cache sync for intra-cluster services using Kafka; parallelized /assignVariant on the A/B platform.
-      - Supported the legacy route-planning service ahead of its How2Go rework.
+      - Supported the legacy route-planning service ahead of its [How2Go](https://www.makemytrip.com/how2go) rework.
   - org: ARTPARK @ Indian Institute of Science
     role: Research Intern
     when: Jun 2021 – Dec 2021

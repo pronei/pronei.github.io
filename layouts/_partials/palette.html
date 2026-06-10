@@ -1,14 +1,24 @@
-<dialog id="palette" aria-label="site search">
+<dialog id="palette" aria-label="site search" data-endpoint="{{ site.Params.oracleEndpoint }}">
   <div class="pal-inputrow">
-    <span class="dim" aria-hidden="true">›</span>
+    <span class="dim pal-prompt" aria-hidden="true">›</span>
     <input id="pal-q" type="text" placeholder="search projects, pages, keywords…"
            autocomplete="off" spellcheck="false" enterkeyhint="go">
+    <button class="btn pal-send" id="pal-send" hidden>send</button>
     <kbd>esc</kbd>
   </div>
   <ul class="pal-results" id="pal-results" role="listbox"></ul>
-  <p class="pal-empty small dim" id="pal-empty" hidden>no matches — try "fault", "mcp", "rate limiter", "aerospike"…</p>
+  <p class="pal-empty small dim" id="pal-empty" hidden>no matches — but the agent below might know.</p>
+  <button class="pal-ask" id="pal-ask">
+    <span class="pal-kind">agent</span> ask an agent about pranay <span class="dim">— grounded in this site</span>
+  </button>
+  <div class="pal-chat" id="pal-chat">
+    <div class="pal-chat-inner">
+      <div class="tty" id="pal-tty" aria-live="polite"></div>
+    </div>
+  </div>
   <div class="pal-foot">
-    <span class="dim"><kbd>↑</kbd><kbd>↓</kbd> navigate · <kbd>↵</kbd> open</span>
-    <span class="dim">ask-an-LLM returns here soon · <a href="{{ "llms.txt" | relURL }}">llms.txt</a></span>
+    <span class="dim" id="pal-hint-search"><kbd>↑</kbd><kbd>↓</kbd> navigate · <kbd>↵</kbd> open</span>
+    <span class="dim" id="pal-hint-ask" hidden><kbd>↵</kbd> send · <kbd>esc</kbd> back to search</span>
+    <span class="dim">agents: <a href="{{ "llms.txt" | relURL }}">llms.txt</a></span>
   </div>
 </dialog>

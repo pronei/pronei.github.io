@@ -2,6 +2,7 @@
 title: contact
 summary: Email is fastest. No forms, nothing to track you.
 weight: 99
+portrait: true
 ---
 
 No contact form — forms need a backend, and this site doesn't have one. Email gets read.

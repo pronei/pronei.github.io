@@ -13,7 +13,7 @@
     <div class="cventry">
       <div class="cvtop"><strong>{{ .school }}</strong><span class="dim">{{ .when }}</span></div>
       <div class="cvmid">{{ .degree }}{{ with .gpa }} · {{ . }}{{ end }}</div>
-      {{ with .detail }}<p class="cvnote">{{ . }}</p>{{ end }}
+      {{ with .detail }}<p class="cvnote">{{ . | markdownify }}</p>{{ end }}
     </div>
     {{ end }}
   </section>

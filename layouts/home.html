@@ -1,7 +1,22 @@
 {{ define "main" }}
 <section class="hero reveal">
-  <h1 class="glitchable">{{ site.Params.tagline }}</h1>
-  <p class="sub">{{ site.Params.subline }}</p>
+  <div class="hero-text">
+    <h1 class="glitchable">{{ site.Params.tagline }}</h1>
+    <p class="sub">{{ site.Params.subline }}</p>
+    <p class="sub prevline">{{ site.Params.prevline }}
+      {{ $mmt := resources.Get "img/logos/makemytrip.svg" | fingerprint }}
+      {{ $go := resources.Get "img/logos/goibibo.svg" | fingerprint }}
+      <span class="logo-cycle" aria-label="MakeMyTrip and Goibibo">
+        <img class="logo a" src="{{ $mmt.RelPermalink }}" alt="MakeMyTrip" loading="lazy">
+        <img class="logo b" src="{{ $go.RelPermalink }}" alt="Goibibo" loading="lazy">
+      </span>
+    </p>
+  </div>
+  {{ $portrait := or (resources.Get "img/portrait.jpg") (resources.Get "img/portrait.png") (resources.Get "img/portrait-full.jpg") }}
+  {{ with $portrait }}
+    {{ $p := .Process "resize 360x360 smartcrop webp q85" }}
+    <img class="portrait" src="{{ $p.RelPermalink }}" alt="Pranay Mundra" width="180" height="180">
+  {{ end }}
 </section>
 
 {{ $rows := hugo.Data.now.workloads }}

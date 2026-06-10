@@ -7,7 +7,7 @@ metrics:
   - custom Adobe Premiere Pro MCP server — timeline, clips, transitions, render queue as tool calls
   - built in UCSC's CSE115C software engineering sequence
 links:
-  note: UCSC course project — ask for a demo
+  github: https://github.com/dzymachine/ChatCut-2.0
 ---
 
 Video editing has a brutal learning curve and most of it is mechanical: razor here, trim

@@ -31,21 +31,42 @@ where the hero text lives, so bright skies don't wash the headline out. Results 
 prefers them and falls back to a hardened `images.Colors` heuristic for images you
 haven't processed. Either way: zero theming JS at runtime.
 
-**Chaos mode.** The "inject fault" breaker loads ~3KB of JS on first flip
-([assets/js/chaos.ts](assets/js/chaos.ts)) and corrupts the site into a random theme
-preset — colors *and* fonts (`amber-crt`, `bluescreen`, `phosphor`, `redshift`,
-`paper-tape`) — while a random workload goes down on the status board with an incident
-toast. Headline glitches once (skipped under `prefers-reduced-motion`); rollback restores
-the image-derived theme; state is per-tab (`sessionStorage`).
+**Chaos mode.** The "inject fault" breaker ([assets/js/chaos.ts](assets/js/chaos.ts),
+loaded on demand) corrupts the site: a random font set (8: crt, courier, typewriter,
+blueprint, manuscript, optical, teletype, charter) × either a color hijack (7 presets)
+or *adaptive* colors taken from a randomly swapped background image (cross-faded, its
+precomputed palette applied — theming stays coherent with whatever picture is up).
+Clicking faster escalates glitch intensity ×2/×3 (clip-path slicing, hue bursts, ambient
+flicker at ×3); a workload goes down on the board; ✕ or the toast rolls everything back.
+Reduced-motion visitors get the state changes without the seizure bait.
 
-**⌘K palette.** Soft command palette ([assets/js/palette.ts](assets/js/palette.ts),
-loaded on demand): fuzzy keyword search over every page and project via the build-time
-[/searchindex.json](layouts/home.searchindex.json) — try "rate limiter", "aerospike",
-"mcp". Keyboard-first (↑↓ ↵ esc), animated with `@starting-style`. An ask-an-LLM mode is
-planned to live inside it — see [docs/oracle-plan.md](docs/oracle-plan.md) for the
-researched free-model architecture (Cloudflare Workers AI; duck.ai is not viable).
-`/llms.txt` + `/llms-full.txt` (now with an extended-depth notes section from
-[data/llm_extra.yaml](data/llm_extra.yaml)) serve visiting AI agents meanwhile.
+**⌘K palette + the oracle.** One soft dialog ([assets/js/palette.ts](assets/js/palette.ts)):
+fuzzy keyword search over the build-time [/searchindex.json](layouts/home.searchindex.json)
+("rate limiter" → nogo), plus **ask an agent** — a tty-style chat that streams from a free
+Cloudflare Workers AI proxy ([workers/oracle](workers/oracle)), grounded in
+`/llms-full.txt` (which includes the depth notes from
+[data/llm_extra.yaml](data/llm_extra.yaml)). Deploy the worker once:
+
+```
+cd workers/oracle
+npx wrangler login
+npx wrangler deploy        # prints https://oracle.<your-subdomain>.workers.dev
+```
+
+then set `oracleEndpoint = "https://oracle.<your-subdomain>.workers.dev"` in
+[hugo.toml](hugo.toml) and rebuild. Until then the chat shows a polite offline notice.
+Research behind the choice (and why duck.ai is a dead end): [docs/oracle-plan.md](docs/oracle-plan.md).
+
+**Live status board.** The homepage workloads are real:
+[scripts/update_now.py](scripts/update_now.py) reads [data/ci.yaml](data/ci.yaml), asks
+the GitHub API for each repo's head commit, push recency, and Actions conclusion, and
+writes [data/now.yaml](data/now.yaml). The deploy workflow runs it on every build **and
+on a daily cron**, so "current workloads" tracks microfaults/* (atropos, zeus, manteion),
+ChatCut, and slug-mcp without anyone touching yaml. CI failure → `degraded`.
+
+**Portrait slots (replaceable).** Drop `assets/img/portrait.jpg` (circular, blends into
+the hero with soft shadows) and/or `assets/img/portrait-full.jpg` (contact page) — both
+optional, both picked up automatically at build.
 
 ## Editing content
 

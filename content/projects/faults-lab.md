@@ -12,7 +12,7 @@ metrics:
   - cache-box primitive freezes services into cached-response replay
   - W3C Baggage propagation for end-to-end trace correlation
 links:
-  note: research in flight — code private for now, ask me about it
+  github: https://github.com/orgs/microfaults/repositories
 ---
 
 My MS research at UCSC. The question: when a request crosses ten services and the p99 goes

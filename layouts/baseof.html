@@ -11,6 +11,15 @@
   {{ partial "footer.html" . }}
 </div>
 {{ partial "palette.html" . }}
+{{- /* runtime background catalog for chaos mode: every processed background + its palette */ -}}
+{{- $bgs := slice -}}
+{{- range $name, $pal := hugo.Data.palettes -}}
+  {{- with resources.Get (printf "backgrounds/%s" $name) -}}
+    {{- $w := .Process "resize 1920x webp q82" -}}
+    {{- $bgs = $bgs | append (merge (dict "name" $name "url" $w.RelPermalink) $pal) -}}
+  {{- end -}}
+{{- end -}}
+<script type="application/json" id="bg-data">{{ $bgs | jsonify | safeJS }}</script>
 {{ $chaos := resources.Get "js/chaos.ts" | js.Build (dict "minify" true "target" "es2020" "format" "esm" "targetPath" "js/chaos.js") | fingerprint }}
 {{ $pal := resources.Get "js/palette.ts" | js.Build (dict "minify" true "target" "es2020" "format" "esm" "targetPath" "js/palette.js") | fingerprint }}
 <script>
@@ -26,7 +35,7 @@
     };
     var b = document.getElementById("chaos-breaker");
     if (b) b.addEventListener("click", function () { chaos(function (m) { m.toggle(); }); });
-    if (sessionStorage.getItem("chaos-preset")) chaos(function (m) { m.restore(); });
+    if (sessionStorage.getItem("chaos3")) chaos(function (m) { m.restore(); });
     var s = document.getElementById("search-open");
     if (s) s.addEventListener("click", function () { pal(function (m) { m.open(); }); });
     document.addEventListener("keydown", function (e) {
