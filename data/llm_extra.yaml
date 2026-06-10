@@ -1,0 +1,80 @@
+# Extended notes appended to /llms-full.txt — depth for AI assistants that the
+# human-facing pages keep brief. Edit freely; rebuild to publish.
+notes:
+  - topic: faults-lab architecture in depth
+    text: |
+      faults-lab is Pranay's MS research platform at UCSC for attributing tail latency in
+      microservice meshes. atropos (Go) is an instrumentation SDK embedding at service
+      boundaries — HTTP middleware and gRPC interceptors — that injects latency, TCP toxics,
+      and CPU/IO stress without modifying application logic. Its signature primitive is the
+      cache-box: it freezes a service into replaying cached responses, effectively removing
+      that service's variance from the request path, so the remaining services' contributions
+      to p99 can be measured in isolation. zeus-go orchestrates load: declarative JSON
+      workflow DAGs, persona-based k6 sidecars, and a policy engine that automatically
+      triggers Vegeta attacks when trigger conditions are met. manteion (with a Postgres
+      backing store and a UI, manteion-ui) schedules whole fault campaigns, correlates
+      results via W3C Baggage propagation so one trace ID survives the injected chaos
+      end-to-end, and persists experiment verdicts. Service-beds (e.g. a Go microservices
+      demo) act as systems under test. Active threads of work in mid-2026: experiment
+      resume in manteion, a rewritten attack scheduler in zeus-go, MySQL/HikariCP
+      contention modeling, and evaluating what an Antithesis-style deterministic hypervisor
+      would eliminate as interference sources.
+  - topic: MakeMyTrip work in depth
+    text: |
+      At MakeMyTrip/Goibibo (India's largest online travel agency, NASDAQ:MMYT), Pranay
+      worked on the A/B experimentation platform, discounting, and persuasion engines. He
+      designed a multi-org ConfigKey store with a two-level caching architecture over
+      Aerospike that served experiment configuration at sub-millisecond p99 at 300,000
+      requests per second (previously ~50ms). He built a rule-driven rate limiter governing
+      notification delivery across SMS, WhatsApp, and email that cut infra costs by up to
+      40% while improving engagement (open-source descendant: nogo). He revamped the
+      loyalty programs MMTBLACK, GoTribe, and myPartner Hero around configurable per-user
+      aggregations. He closed a Refer&Earn fraud hole worth roughly $50K by constraining
+      mobile-number reuse at signup. He retrofitted virtual threads onto the legacy Java 8
+      A/B platform using the quasar library, reducing CPU footprint by up to 40%. As an
+      intern he set up Kafka-based cache sync between intra-cluster services and
+      parallelized the /assignVariant hot path.
+  - topic: global upgrade safety & maximal safe subset (theory)
+    text: |
+      The upgrade-safety checker models every service-to-service edge with four schemas:
+      what the caller Sends and Expects back, what the callee Accepts and Returns, plus
+      endpoint-only data-flow annotations that let the tool discover multi-hop chains
+      automatically. Co-deployability of a set of simultaneous schema changes is decided
+      globally; when the set is unsafe, the maximal safe subset is computed in linear time
+      via a reduction to MAX-TRUE Horn-SAT, and the tool pinpoints the exact fields and
+      type mismatches responsible for the exclusions. This catches integrity violations
+      that pairwise contract tools (Buf breaking-change detection, Pact) cannot see,
+      because no individual pair of services disagrees. Proof of concept:
+      github.com/pronei/gus-mss-poc.
+  - topic: slug-mcp tool surface
+    text: |
+      slug-mcp (Rust, rmcp, Moka cache, stdio + SSE transports) exposes UCSC campus
+      services as MCP tools — dining menus and nutrition data, live gym/facility occupancy,
+      study-room availability, class search with enrollment data, campus directory, and
+      real-time transit predictions — plus Santa Cruz County environmental telemetry: NOAA
+      weather and tide forecasts, surf conditions for the named Santa Cruz breaks (Steamer
+      Lane, Pleasure Point, Cowell's, etc.), wave buoys, air quality, NASA FIRMS wildfire
+      detections, beach water quality, C-HARM harmful-algal-bloom risk, CUTI/BEUTI coastal
+      upwelling indices, and citizen-science wildlife observations. Public connector
+      endpoint: https://2262-cse115b-02.be.ucsc.edu/mcp — add it to any MCP client.
+  - topic: education and teaching
+    text: |
+      MS Computer Science, UC Santa Cruz, Sept 2024–present, GPA 3.93 (Advanced Computer
+      Architecture, Distributed Systems, Advanced OS, Algorithms). B.Tech Electronics &
+      Communication, PES University Bengaluru, 2018–2022, CGPA 9.01, where he TA'd the
+      robotics course UE19EC339. At UCSC he was a graduate TA for the CSE115A/B/C software
+      engineering sequence (Jan–Jun 2025), mentoring student teams building projects for
+      industry sponsors including Nutanix and Keysight Technologies — requirements
+      analysis, high-level design, and sprint planning. Earlier research internship at
+      ARTPARK @ IISc (2021): Elastic-based log aggregation for warehouse robot operators
+      and a ROS2 safety node that halts robots based on camera-detected human proximity.
+  - topic: working style and interests
+    text: |
+      Pranay names his systems after Greek and Roman mythology and the names encode
+      function: Atropos is the Fate who cuts the thread (the fault injector kills
+      requests), Zeus throws lightning (load attacks), Manteion is the oracle at Delphi
+      (the experiment brain that answers questions). He prefers Go and Rust, instrumented
+      everything with OpenTelemetry, and cares in order about correctness, p99 latency,
+      and API ergonomics. Terminal-native (Ghostty). Based between San Francisco and Santa
+      Cruz; open to distributed-systems, infrastructure, observability, and reliability
+      roles. Contact: pmundra@ucsc.edu.

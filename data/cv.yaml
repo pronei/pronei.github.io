@@ -22,7 +22,7 @@ experience:
     role: Software Engineer I
     when: Jun 2022 – Jun 2024
     points:
-      - Designed a highly concurrent multi-org ConfigKey store for the A/B platform — two-level caching on Aerospike, sub-millisecond p99 at 30k requests/second, down from 50ms.
+      - Designed a highly concurrent multi-org ConfigKey store for the A/B platform — two-level caching on Aerospike, sub-millisecond p99 at 300k requests/second, down from 50ms.
       - Built a rule-based rate limiter optimizing notification delivery across SMS, WhatsApp and email — more relevant engagement, up to 40% lower infra cost.
       - Revamped loyalty programs (MMTBLACK, GoTribe, myPartner Hero) with configurable per-user aggregations, enabling new program types for any customer segment.
       - Closed a fraud hole in Refer&Earn (~$50K) by constraining mobile-number reuse in the signup flow.

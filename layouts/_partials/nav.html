@@ -5,8 +5,8 @@
     {{ range site.Menus.main }}
       <a href="{{ .URL }}" {{ if or ($page.IsMenuCurrent "main" .) ($page.HasMenuCurrent "main" .) }}aria-current="page"{{ end }}>{{ .Name }}</a>
     {{ end }}
-    <button id="oracle-open" class="navbtn" title="ask an LLM about me (bring your own key)">oracle</button>
-    <button id="chaos-breaker" class="navbtn breaker" aria-pressed="false" title="inject a fault into this site">
+    <button id="search-open" class="navbtn" title="search projects & pages">search <kbd>⌘K</kbd></button>
+    <button id="chaos-breaker" class="navbtn breaker" aria-pressed="false" title="inject a fault: corrupts this site's theme">
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>
       <span data-label>inject fault</span>
     </button>

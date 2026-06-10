@@ -15,6 +15,7 @@
       {{ range . }}<li>{{ . }}</li>{{ end }}
     </ul>
     {{ end }}
+    {{ with .Params.connector }}<p class="connector">add the connector → <code>{{ . }}</code></p>{{ end }}
     <div class="plaque-foot">
       <span class="chips">{{ range first 4 .Params.stack }}<i>{{ . }}</i>{{ end }}</span>
       <span class="links">

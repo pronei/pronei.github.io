@@ -6,13 +6,4 @@
     <a href="{{ site.Params.linkedin }}" rel="me">linkedin</a>
     <a href="{{ "llms.txt" | relURL }}">llms.txt</a>
   </div>
-  <div class="frow dim">
-    {{ $bg := partial "bg-resource.html" . }}
-    <span>no frameworks · no analytics · no JS until you flip something</span>
-    <span class="swatches" title="palette derived from {{ $bg.name }}">
-      theme ← {{ $bg.name }}
-      <i style="background:var(--c-accent)"></i><i style="background:var(--c-tint)"></i><i style="background:var(--c-accent-text)"></i>
-    </span>
-    <span>built {{ now.Format "2006-01-02" }} · hugo {{ hugo.Version }}</span>
-  </div>
 </footer>

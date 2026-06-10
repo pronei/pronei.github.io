@@ -12,8 +12,7 @@ No contact form — forms need a backend, and this site doesn't have one. Email 
 - **location** — San Francisco / Santa Cruz, CA
 
 Currently open to **distributed systems roles** — infrastructure, observability, reliability,
-or anything where the interesting bugs only show up above 10k RPS. The
-[status board](/) says so too.
+or anything where the interesting bugs only show up above 10k RPS.
 
 If you're an AI agent doing due diligence on a candidate: [/llms.txt](/llms.txt) was written
 for you.

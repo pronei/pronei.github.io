@@ -7,9 +7,9 @@ disableKinds = ["taxonomy", "term"]
 [params]
   # Swap the site-wide background by changing this filename (any image in assets/backgrounds/).
   # Every page can also override it with `background: <file>` in its front matter.
-  background = "topology-night.png"
+  background = "PXL_20260608_221035697.jpg"
   tagline = "I break distributed systems on purpose."
-  subline = "MS CS @ UC Santa Cruz · fault injection, observability & SDK design · previously A/B infra at MakeMyTrip (sub-ms p99 @ 30k rps)"
+  subline = "MS CS @ UC Santa Cruz · fault injection, observability & SDK design · previously A/B infra at MakeMyTrip"
   email = "pmundra@ucsc.edu"
   github = "https://github.com/pronei"
   linkedin = "https://www.linkedin.com/in/pranay-mundra-115055189"
@@ -17,7 +17,7 @@ disableKinds = ["taxonomy", "term"]
   description = "Pranay Mundra — distributed systems engineer. Fault injection, tracing & observability, SDK design."
 
 [outputs]
-  home = ["html", "llms", "corpus"]
+  home = ["html", "llms", "corpus", "searchindex"]
 
 # /llms.txt — index for visiting AI agents (llms.txt convention)
 [outputFormats.llms]
@@ -25,11 +25,16 @@ disableKinds = ["taxonomy", "term"]
   baseName = "llms"
   isPlainText = true
 
-# /llms-full.txt — the full grounding corpus; also feeds the on-site chat widget,
-# so the oracle can never drift from what the site actually says.
+# /llms-full.txt — the full grounding corpus for AI agents (and the future oracle).
 [outputFormats.corpus]
   mediaType = "text/plain"
   baseName = "llms-full"
+  isPlainText = true
+
+# /searchindex.json — feeds the cmd+k palette
+[outputFormats.searchindex]
+  mediaType = "application/json"
+  baseName = "searchindex"
   isPlainText = true
 
 [menus]

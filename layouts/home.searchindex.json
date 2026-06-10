@@ -1,0 +1,16 @@
+{{- $items := slice -}}
+{{- range site.RegularPages.ByWeight -}}
+  {{- $greek := "" -}}
+  {{- with .Params.greek }}{{ $greek = printf "%s %s" .translit .gloss }}{{ end -}}
+  {{- $items = $items | append (dict
+        "title" .Title
+        "url" .RelPermalink
+        "kind" (cond (eq .Section "projects") "project" "page")
+        "summary" (or .Params.summary "")
+        "stack" (delimit (or .Params.stack slice) " ")
+        "greek" $greek
+        "metrics" (delimit (or .Params.metrics slice) " ")
+        "body" (substr (lower .Plain) 0 2400)
+      ) -}}
+{{- end -}}
+{{- $items | jsonify -}}

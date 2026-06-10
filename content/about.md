@@ -11,7 +11,7 @@ tail latency hides.
 The short version: electronics undergrad in Bengaluru → robotics research at ARTPARK @ IISc
 (log aggregation and safety systems for warehouse robots) → two years at MakeMyTrip running
 A/B infrastructure at India-travel scale, where I learned that a 50ms p99 is a personal
-insult — we got it under a millisecond at 30k requests/second. Now I'm finishing an MS in
+insult — we got it under a millisecond at 300k requests/second. Now I'm finishing an MS in
 Computer Science at UC Santa Cruz, where my research is **faults-lab**: a platform for
 injecting faults at service boundaries and isolating each service's contribution to tail
 latency under load.

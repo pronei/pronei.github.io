@@ -18,8 +18,15 @@ CURRENT WORKLOADS (updated {{ hugo.Data.now.updated }})
 {{ end }}{{ with .Params.stack }}stack: {{ delimit . ", " }}
 {{ end }}{{ with .Params.metrics }}{{ range . }}- {{ . }}
 {{ end }}{{ end }}{{ with .Params.links }}{{ with .github }}source: {{ . }}
-{{ end }}{{ end }}
+{{ end }}{{ end }}{{ with .Params.connector }}mcp connector (add to any MCP client): {{ . }}
+{{ end }}
 {{ .Plain | chomp }}
+{{ end }}
+
+== EXTENDED NOTES (depth for AI assistants) ==
+{{ range hugo.Data.llm_extra.notes }}
+--- {{ .topic }} ---
+{{ .text | chomp }}
 {{ end }}
 
 == CV ==

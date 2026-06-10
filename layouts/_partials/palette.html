@@ -1,0 +1,14 @@
+<dialog id="palette" aria-label="site search">
+  <div class="pal-inputrow">
+    <span class="dim" aria-hidden="true">›</span>
+    <input id="pal-q" type="text" placeholder="search projects, pages, keywords…"
+           autocomplete="off" spellcheck="false" enterkeyhint="go">
+    <kbd>esc</kbd>
+  </div>
+  <ul class="pal-results" id="pal-results" role="listbox"></ul>
+  <p class="pal-empty small dim" id="pal-empty" hidden>no matches — try "fault", "mcp", "rate limiter", "aerospike"…</p>
+  <div class="pal-foot">
+    <span class="dim"><kbd>↑</kbd><kbd>↓</kbd> navigate · <kbd>↵</kbd> open</span>
+    <span class="dim">ask-an-LLM returns here soon · <a href="{{ "llms.txt" | relURL }}">llms.txt</a></span>
+  </div>
+</dialog>

@@ -22,8 +22,3 @@ workloads:
     note: premiere-pro MCP backend
     status: operational
     link: /projects/chatcut/
-  - name: hiring pipeline
-    gloss: distributed systems roles
-    note: accepting connections
-    status: open
-    link: /contact/

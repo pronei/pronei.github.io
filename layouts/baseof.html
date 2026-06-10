@@ -10,18 +10,31 @@
   </main>
   {{ partial "footer.html" . }}
 </div>
-{{ partial "oracle.html" . }}
+{{ partial "palette.html" . }}
 {{ $chaos := resources.Get "js/chaos.ts" | js.Build (dict "minify" true "target" "es2020" "format" "esm" "targetPath" "js/chaos.js") | fingerprint }}
+{{ $pal := resources.Get "js/palette.ts" | js.Build (dict "minify" true "target" "es2020" "format" "esm" "targetPath" "js/palette.js") | fingerprint }}
 <script>
   (function () {
-    var mod = null;
-    var load = function (cb) {
-      if (mod) { cb(mod); return; }
-      import("{{ $chaos.RelPermalink }}").then(function (m) { mod = m; cb(m); });
+    var cm = null, pm = null;
+    var chaos = function (cb) {
+      if (cm) { cb(cm); return; }
+      import("{{ $chaos.RelPermalink }}").then(function (m) { cm = m; cb(m); });
+    };
+    var pal = function (cb) {
+      if (pm) { cb(pm); return; }
+      import("{{ $pal.RelPermalink }}").then(function (m) { pm = m; cb(m); });
     };
     var b = document.getElementById("chaos-breaker");
-    if (b) b.addEventListener("click", function () { load(function (m) { m.toggle(); }); });
-    if (sessionStorage.getItem("chaos") === "1") load(function (m) { m.restore(); });
+    if (b) b.addEventListener("click", function () { chaos(function (m) { m.toggle(); }); });
+    if (sessionStorage.getItem("chaos-preset")) chaos(function (m) { m.restore(); });
+    var s = document.getElementById("search-open");
+    if (s) s.addEventListener("click", function () { pal(function (m) { m.open(); }); });
+    document.addEventListener("keydown", function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        pal(function (m) { m.open(); });
+      }
+    });
   })();
 </script>
 </body>

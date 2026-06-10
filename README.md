@@ -11,37 +11,41 @@ hugo                     # production build into public/
 
 ## The gimmicks (all load-bearing)
 
-**Dynamic theme from the background image.** The palette engine
-([layouts/_partials/theme.html](layouts/_partials/theme.html)) runs Hugo's native
-`images.Colors` on the active background at build time, scores the swatches
-(chroma-weighted, mid-luminance window), and emits `--c-accent` / `--c-accent-text` /
-`--c-accent-ink` / `--c-tint` as CSS custom properties. Every accent in the UI keys off
-those vars.
+**Dynamic theme from the background image.** Drop any photo into `assets/backgrounds/`,
+point `params.background` in [hugo.toml](hugo.toml) at it (or override per page with
+`background:` front matter), run:
 
-To re-skin the entire site:
+```
+python3 scripts/palette.py    # numpy only; uses macOS sips for decoding
+hugo
+```
 
-1. Drop any image into `assets/backgrounds/`
-2. Point `params.background` in [hugo.toml](hugo.toml) at it (or set `background:` in any
-   page's front matter for a per-page override)
-3. Rebuild. Done.
+[scripts/palette.py](scripts/palette.py) implements the Material-You-style pipeline
+(2026 reference): k-means quantization in Oklab, candidate scoring at
+`0.35·population + 0.65·chroma` with a low-chroma gate (grayscale photos fall back to
+the house teal *hue*, never a muddy gray), tone-mapped dark-scheme roles (accent ≈ tone
+80, surface ≈ tone 6), WCAG-snapped contrast (≥3:1 accent-on-surface, ≥4.5:1 as text),
+and a scrim that scales with image luminance — weighted toward the top of the image,
+where the hero text lives, so bright skies don't wash the headline out. Results land in
+[data/palettes.yaml](data/palettes.yaml); [theme.html](layouts/_partials/theme.html)
+prefers them and falls back to a hardened `images.Colors` heuristic for images you
+haven't processed. Either way: zero theming JS at runtime.
 
-Three generated backgrounds ship: `topology-night` (teal), `signal-dusk` (amber),
-`fog-array` (blue) — regenerate or restyle them with
-`python3 scripts/gen_backgrounds.py` (numpy only). Real photos work too; dark-leaning
-images work best with the frosted-glass surfaces. The accent picker needs the image to
-contain *some* saturated region — pure grayscale images fall back to the default teal.
+**Chaos mode.** The "inject fault" breaker loads ~3KB of JS on first flip
+([assets/js/chaos.ts](assets/js/chaos.ts)) and corrupts the site into a random theme
+preset — colors *and* fonts (`amber-crt`, `bluescreen`, `phosphor`, `redshift`,
+`paper-tape`) — while a random workload goes down on the status board with an incident
+toast. Headline glitches once (skipped under `prefers-reduced-motion`); rollback restores
+the image-derived theme; state is per-tab (`sessionStorage`).
 
-**Chaos mode.** The "inject fault" breaker loads ~2KB of JS on first flip
-([assets/js/chaos.ts](assets/js/chaos.ts)), takes a random workload down on the status
-board, glitches the headline once (skipped under `prefers-reduced-motion`), and offers a
-rollback. State is per-tab (`sessionStorage`).
-
-**The oracle.** BYO-key chat widget ([assets/js/chat.ts](assets/js/chat.ts)) — visitors
-paste their own Anthropic API key, which stays in `sessionStorage` and goes only to
-`api.anthropic.com` (the documented `anthropic-dangerous-direct-browser-access` CORS
-header). Grounding comes from [/llms-full.txt](layouts/home.corpus.txt), generated from
-site content at build time, so the bot can't drift from the published pages. Client-side
-cap of 6 requests/minute. `/llms.txt` serves visiting AI agents the index version.
+**⌘K palette.** Soft command palette ([assets/js/palette.ts](assets/js/palette.ts),
+loaded on demand): fuzzy keyword search over every page and project via the build-time
+[/searchindex.json](layouts/home.searchindex.json) — try "rate limiter", "aerospike",
+"mcp". Keyboard-first (↑↓ ↵ esc), animated with `@starting-style`. An ask-an-LLM mode is
+planned to live inside it — see [docs/oracle-plan.md](docs/oracle-plan.md) for the
+researched free-model architecture (Cloudflare Workers AI; duck.ai is not viable).
+`/llms.txt` + `/llms-full.txt` (now with an extended-depth notes section from
+[data/llm_extra.yaml](data/llm_extra.yaml)) serve visiting AI agents meanwhile.
 
 ## Editing content
 
@@ -52,6 +56,7 @@ cap of 6 requests/minute. `/llms.txt` serves visiting AI agents the index versio
 | projects | one markdown file each in [content/projects/](content/projects/) |
 | about / contact | [content/about.md](content/about.md), [content/contact.md](content/contact.md) |
 | tagline, links, default background | [hugo.toml](hugo.toml) |
+| AI-agent depth notes (llms-full.txt) | [data/llm_extra.yaml](data/llm_extra.yaml) |
 
 ## Deploy
 
