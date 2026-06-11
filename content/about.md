@@ -3,6 +3,7 @@ title: about
 summary: Who I am, how I got here, and why everything is named after Greek mythology.
 menu_weight: 10
 weight: 90
+affiliations: true
 ---
 
 I'm Pranay. I build distributed systems, then break them on purpose to find out where the

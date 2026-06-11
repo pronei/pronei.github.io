@@ -7,8 +7,10 @@
       {{ $mmt := resources.Get "img/logos/makemytrip.svg" | fingerprint }}
       {{ $go := resources.Get "img/logos/goibibo.svg" | fingerprint }}
       <span class="logo-cycle" aria-label="MakeMyTrip and Goibibo">
-        <img class="logo a" src="{{ $mmt.RelPermalink }}" alt="MakeMyTrip" loading="lazy">
-        <img class="logo b" src="{{ $go.RelPermalink }}" alt="Goibibo" loading="lazy">
+        <a class="logo a" href="https://www.makemytrip.com" target="_blank" rel="noopener" aria-label="MakeMyTrip">
+          <img src="{{ $mmt.RelPermalink }}" alt="MakeMyTrip" loading="lazy"></a>
+        <a class="logo b" href="https://www.goibibo.com" target="_blank" rel="noopener" aria-label="Goibibo">
+          <img src="{{ $go.RelPermalink }}" alt="Goibibo" loading="lazy"></a>
       </span>
     </p>
   </div>

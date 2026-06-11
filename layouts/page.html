@@ -1,16 +1,34 @@
 {{ define "main" }}
 <article class="card page reveal">
   <h1 class="pagetitle"><span class="dim">~/</span>{{ lower .Title }}</h1>
-  <div class="prose">
-    {{ if .Params.portrait }}
-      {{ $full := or (resources.Get "img/portrait-full.jpg") (resources.Get "img/portrait-full.png") (resources.Get "img/portrait.jpg") }}
-      {{ with $full }}
-        {{ $p := .Process "resize 720x webp q88" }}
-        <img class="page-portrait" src="{{ $p.RelPermalink }}" alt="Pranay Mundra"
-             width="{{ $p.Width }}" height="{{ $p.Height }}">
+  <div class="page-cols{{ if .Params.affiliations }} with-rail{{ end }}">
+    <div class="prose">
+      {{ if .Params.portrait }}
+        {{ $full := or (resources.Get "img/portrait-full.jpg") (resources.Get "img/portrait-full.png") (resources.Get "img/portrait.jpg") }}
+        {{ with $full }}
+          {{ $p := .Process "resize 720x webp q88" }}
+          <img class="page-portrait" src="{{ $p.RelPermalink }}" alt="Pranay Mundra"
+               width="{{ $p.Width }}" height="{{ $p.Height }}">
+        {{ end }}
       {{ end }}
+      {{ .Content }}
+    </div>
+    {{ if .Params.affiliations }}
+    <aside class="rail" aria-label="affiliations">
+      <p class="rail-label">where I've been</p>
+      {{ range hugo.Data.affiliations }}
+      <a class="affil" href="{{ .url }}" target="_blank" rel="noopener">
+        <span class="affil-logo">
+          {{ with resources.Get .logo }}<img src="{{ .RelPermalink }}" alt="" loading="lazy">{{ end }}
+        </span>
+        <span class="affil-meta">
+          <b>{{ .name }}</b>
+          <span>{{ .role }} · {{ .years }}</span>
+        </span>
+      </a>
+      {{ end }}
+    </aside>
     {{ end }}
-    {{ .Content }}
   </div>
 </article>
 {{ end }}

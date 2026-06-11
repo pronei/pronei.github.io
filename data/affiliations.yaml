@@ -1,0 +1,22 @@
+# Right-rail "where I've been" on the about page. Chronological. Logos sit on
+# light tiles (a credentials wall) so dark line-art marks like IISc stay legible.
+- name: PES University
+  role: B.Tech ECE
+  years: "2018–22"
+  logo: img/logos/pes.png
+  url: https://pesuniversity.pes.edu
+- name: ARTPARK · IISc
+  role: Research Intern
+  years: "2021"
+  logo: img/logos/iisc.svg
+  url: https://artpark.in
+- name: MakeMyTrip
+  role: SWE · Platforms
+  years: "2022–24"
+  logo: img/logos/makemytrip.svg
+  url: https://www.makemytrip.com
+- name: UC Santa Cruz
+  role: MS CS · TA
+  years: "2024–"
+  logo: img/logos/ucsc.svg
+  url: https://www.ucsc.edu
