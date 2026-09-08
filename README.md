@@ -59,10 +59,24 @@ Research behind the choice (and why duck.ai is a dead end): [docs/oracle-plan.md
 
 **Live status board.** The homepage workloads are real:
 [scripts/update_now.py](scripts/update_now.py) reads [data/ci.yaml](data/ci.yaml), asks
-the GitHub API for each repo's head commit, push recency, and Actions conclusion, and
-writes [data/now.yaml](data/now.yaml). The deploy workflow runs it on every build **and
-on a daily cron**, so "current workloads" tracks microfaults/* (atropos, zeus, manteion),
-ChatCut, and slug-mcp without anyone touching yaml. CI failure → `degraded`.
+the GitHub API for each repo's head commit, push time, and Actions conclusion, and writes
+[data/now.yaml](data/now.yaml) — absolute facts only; "3d ago" is rendered by Hugo at
+build time ([rel-time.html](layouts/_partials/rel-time.html)). CI failure → `degraded`;
+a failed probe keeps the previous row flagged *(last known)* instead of blanking it.
+
+How it stays fresh — there are no push hooks by default, it's polling:
+
+| trigger | when |
+|---|---|
+| `schedule` | every 6h — re-polls the API, redeploys |
+| `repository_dispatch` | instantly, if a project repo installs [docs/notify-portfolio.yml](docs/notify-portfolio.yml) (needs one fine-grained PAT) |
+| `push` / `workflow_dispatch` | you |
+
+The gotcha that froze the board in Aug 2026: **GitHub auto-disables `schedule` triggers
+after 60 days with no commits to the repo.** The workflow now commits `data/now.yaml` back
+whenever it changes (real activity) and adds an empty keepalive commit after 45 idle days,
+so the schedule can't lapse. Those bot commits are expected — `git pull` before you edit.
+If it ever shows `disabled_inactivity` again: `gh workflow enable deploy`.
 
 **Portrait slots (replaceable).** Drop `assets/img/portrait.jpg` (circular, blends into
 the hero with soft shadows) and/or `assets/img/portrait-full.jpg` (contact page) — both

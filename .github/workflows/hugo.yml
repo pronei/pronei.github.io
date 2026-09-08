@@ -1,16 +1,29 @@
-# Build and deploy to GitHub Pages on push to main.
-# Repo settings -> Pages -> Source: "GitHub Actions" must be enabled once.
+# Build and deploy to GitHub Pages.
+#
+# Triggers, and why there are four:
+#   push               — you changed the site
+#   schedule           — poll the project repos (GitHub API) so the status board tracks reality
+#   repository_dispatch — a project repo pinged us on push (see docs/notify-portfolio.yml); instant
+#   workflow_dispatch  — manual
+#
+# Gotcha this file is built around: GitHub silently DISABLES schedule triggers after 60 days
+# without a commit to this repo (that froze the board in Aug 2026). So the "persist" step
+# commits data/now.yaml back whenever it changed — real activity — and drops a keepalive
+# commit if nothing has landed in 45 days. Bot pushes with GITHUB_TOKEN never retrigger
+# this workflow, so there is no loop.
 name: deploy
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
+  repository_dispatch:
+    types: [project-push]
   schedule:
-    - cron: "23 13 * * *"  # daily — keeps the status board tracking real repo activity
+    - cron: "17 */6 * * *"  # every 6h, offset from the :00 stampede
 
 permissions:
-  contents: read
+  contents: write   # persist step commits data/now.yaml
   pages: write
   id-token: write
 
@@ -19,7 +32,8 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  HUGO_VERSION: 0.163.0
+  HUGO_VERSION: 0.165.0
+  KEEPALIVE_DAYS: 45
 
 jobs:
   build:
@@ -30,16 +44,41 @@ jobs:
           wget -qO /tmp/hugo.deb \
             "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb"
           sudo dpkg -i /tmp/hugo.deb
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: true   # needed for the persist step's push
       - id: pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
+
       - name: refresh status board from live repos
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: python3 scripts/update_now.py || true
+        run: python3 scripts/update_now.py
+
+      - name: persist status board (keeps the repo active; cron auto-disables after 60 idle days)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/now.yaml
+          if ! git diff --cached --quiet; then
+            git commit -m "status: board refresh from repo activity (${{ github.event_name }}) [skip ci]"
+          else
+            last=$(git log -1 --format=%ct)
+            age=$(( ( $(date +%s) - last ) / 86400 ))
+            if [ "$age" -ge "$KEEPALIVE_DAYS" ]; then
+              git commit --allow-empty -m "chore: keepalive after ${age} idle days so the schedule stays enabled [skip ci]"
+            else
+              echo "board unchanged, last commit ${age}d ago (< ${KEEPALIVE_DAYS}) — nothing to persist"
+              exit 0
+            fi
+          fi
+          git pull --rebase --quiet origin main || true
+          git push origin HEAD:main
+        continue-on-error: true   # a push race must never block the deploy
+
       - name: build
         run: hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: ./public
 
@@ -51,4 +90,4 @@ jobs:
     needs: build
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

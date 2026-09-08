@@ -8,8 +8,8 @@ linkedin: {{ site.Params.linkedin }}
 location: {{ site.Params.location }}
 cv pdf: {{ "cv/pranay-mundra-cv.pdf" | absURL }}
 
-CURRENT WORKLOADS (updated {{ hugo.Data.now.updated }})
-{{ range hugo.Data.now.workloads }}- {{ .name }} ({{ .gloss }}): {{ .status }} — {{ .note }}
+CURRENT WORKLOADS (checked {{ now.UTC.Format "2006-01-02" }} against the GitHub API)
+{{ range hugo.Data.now.workloads }}- {{ .name }} ({{ .gloss }}): {{ .status }}{{ with .subject }} — {{ . }}{{ end }}{{ with .pushed_at }} (pushed {{ . }}){{ end }}{{ with .ci }}, ci {{ . }}{{ end }}
 {{ end }}
 {{ range site.RegularPages.ByWeight }}
 == {{ upper .Title }} ({{ .Permalink }}) ==

@@ -1,0 +1,5 @@
+{{- /* RFC3339 timestamp -> "today" | "yesterday" | "Nd ago" | "Nmo ago", computed at
+     build time. Keeping this in the template (not in data/now.yaml) means the data
+     file only changes when a repo really changes. */ -}}
+{{- $days := int (math.Floor (div (now.Sub (time .)).Hours 24)) -}}
+{{- if le $days 0 }}today{{ else if eq $days 1 }}yesterday{{ else if lt $days 30 }}{{ $days }}d ago{{ else }}{{ div $days 30 }}mo ago{{ end -}}

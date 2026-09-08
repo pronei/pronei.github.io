@@ -1,20 +1,24 @@
 #!/usr/bin/env python3
 """Refresh data/now.yaml from real repo activity (stdlib only).
 
-Reads data/ci.yaml, queries the GitHub API for each workload's repo —
-latest push time, head commit subject, latest completed Actions conclusion —
-and writes data/now.yaml for the homepage status board.
+Reads data/ci.yaml, asks the GitHub API for each workload's repo — last push
+time, head commit subject, latest completed Actions conclusion — and writes
+data/now.yaml for the homepage status board.
 
-Status mapping: Actions failure -> degraded; no pushes in 60 days -> idle
-(rendered as operational but noted); otherwise operational.
+Only ABSOLUTE facts are stored (RFC3339 push time, CI verdict, commit subject).
+Relative labels like "3d ago" are rendered by Hugo at build time
+(layouts/_partials/rel-time.html), so this file changes only when a repo
+actually changes. That matters: the deploy workflow commits it back, and those
+commits are the repository activity that stops GitHub from auto-disabling the
+scheduled workflow after 60 idle days (which is exactly how the board froze
+in Aug 2026).
 
-Run locally (optionally with GITHUB_TOKEN for rate limits):
-    python3 scripts/update_now.py
-The deploy workflow runs this on every build and on a daily cron, so the
-board tracks reality without committing anything.
+If a probe fails (rate limit, API blip) the previous row is kept and flagged
+`stale: true` — the board never regresses to blanks.
+
+    GITHUB_TOKEN=$(gh auth token) python3 scripts/update_now.py
 """
 
-import datetime as dt
 import json
 import os
 import urllib.request
@@ -24,6 +28,8 @@ ROOT = Path(__file__).resolve().parent.parent
 CI = ROOT / "data" / "ci.yaml"
 OUT = ROOT / "data" / "now.yaml"
 API = "https://api.github.com"
+SUBJECT_MAX = 46
+FIELDS = ("name", "gloss", "link", "repo", "subject", "pushed_at", "ci", "status", "stale")
 
 
 def gh(path: str):
@@ -36,85 +42,103 @@ def gh(path: str):
         return json.load(res)
 
 
-def parse_ci():
-    """Tiny purpose-built parser for data/ci.yaml's flat list-of-dicts shape."""
+def unquote(v: str):
+    """Values are written with json.dumps when they need quoting; read them back the same way."""
+    v = v.strip()
+    if v.startswith('"'):
+        try:
+            return json.loads(v)
+        except ValueError:
+            return v.strip('"')
+    if v in ("null", "~", ""):
+        return None
+    if v in ("true", "false"):
+        return v == "true"
+    return v
+
+
+def parse_rows(path: Path):
+    """Tiny purpose-built parser for the flat list-of-dicts shape both yaml files share."""
     rows, cur = [], None
-    for raw in CI.read_text().splitlines():
-        line = raw.split("#", 1)[0].rstrip()
-        if not line.strip() or line.strip() == "workloads:":
+    if not path.exists():
+        return rows
+    for raw in path.read_text().splitlines():
+        # only whole-line comments; a '#' inside a value ("Merge pull request #2") is data
+        if not raw.strip() or raw.lstrip().startswith("#") or raw.strip() == "workloads:":
             continue
+        line = raw.rstrip()
         if line.lstrip().startswith("- "):
             cur = {}
             rows.append(cur)
             line = line.replace("- ", "  ", 1)
         if cur is not None and ":" in line:
             k, v = line.strip().split(":", 1)
-            cur[k.strip()] = v.strip().strip('"')
+            cur[k.strip()] = unquote(v)
     return rows
 
 
-def rel(ts: str) -> str:
-    then = dt.datetime.fromisoformat(ts.replace("Z", "+00:00"))
-    days = (dt.datetime.now(dt.timezone.utc) - then).days
-    if days <= 0:
-        return "today"
-    if days == 1:
-        return "yesterday"
-    if days < 30:
-        return f"{days}d ago"
-    return f"{days // 30}mo ago"
-
-
-def probe(repo: str):
+def probe(repo: str) -> dict:
     info = gh(f"/repos/{repo}")
-    pushed = info["pushed_at"]
     subject = ""
     try:
         commits = gh(f"/repos/{repo}/commits?per_page=1")
         subject = commits[0]["commit"]["message"].split("\n")[0]
     except Exception:
         pass
-    conclusion = None
+    ci = None
     try:
         runs = gh(f"/repos/{repo}/actions/runs?per_page=1&status=completed")
         if runs.get("workflow_runs"):
-            conclusion = runs["workflow_runs"][0]["conclusion"]
+            ci = runs["workflow_runs"][0]["conclusion"]
     except Exception:
         pass
+    if len(subject) > SUBJECT_MAX:
+        subject = subject[: SUBJECT_MAX - 1] + "…"
+    return {
+        "subject": subject,
+        "pushed_at": info["pushed_at"],
+        "ci": ci,
+        "status": "degraded" if ci in ("failure", "timed_out") else "operational",
+    }
 
-    status = "operational"
-    if conclusion in ("failure", "timed_out"):
-        status = "degraded"
-    note = subject[:46] + ("…" if len(subject) > 46 else "")
-    parts = [p for p in (note, f"pushed {rel(pushed)}") if p]
-    if conclusion:
-        parts.append(f"ci {conclusion}")
-    return status, " · ".join(parts)
+
+def emit(v) -> str:
+    if v is None:
+        return "null"
+    if isinstance(v, bool):
+        return "true" if v else "false"
+    s = str(v)
+    # quote anything yaml could misread (colons, leading symbols, unicode); plain slugs stay bare
+    return s if s.replace("/", "").replace("-", "").replace("_", "").replace(".", "").isalnum() else json.dumps(s, ensure_ascii=False)
 
 
 def main() -> None:
+    previous = {r.get("name"): r for r in parse_rows(OUT)}
     lines = [
         "# GENERATED by scripts/update_now.py from data/ci.yaml + the GitHub API.",
-        "# Edit data/ci.yaml (not this file) to change rows.",
-        f"updated: {dt.date.today().isoformat()}",
+        "# Edit data/ci.yaml (not this file). The deploy workflow rewrites and commits it.",
         "workloads:",
     ]
-    for row in parse_ci():
-        name, gloss, link = row.get("name", "?"), row.get("gloss", ""), row.get("link", "")
-        status, note = row.get("status", "operational"), row.get("note", "")
+    for row in parse_rows(CI):
+        out = {k: row.get(k) for k in ("name", "gloss", "link", "repo")}
+        out.update({"subject": row.get("subject"), "pushed_at": row.get("pushed_at"),
+                    "ci": None, "status": row.get("status") or "operational", "stale": None})
         if row.get("repo"):
             try:
-                status, note = probe(row["repo"])
+                out.update(probe(row["repo"]))
             except Exception as e:
-                note = f"status probe failed ({type(e).__name__})"
-        lines += [
-            f"  - name: {name}",
-            f"    gloss: {gloss}",
-            f"    note: {json.dumps(note)}",
-            f"    status: {status}",
-            f"    link: {link}",
-        ]
-        print(f"{name:14} {status:12} {note}")
+                prev = previous.get(out["name"], {})
+                for k in ("subject", "pushed_at", "ci", "status"):
+                    if prev.get(k) is not None:
+                        out[k] = prev[k]
+                out["stale"] = True
+                print(f"! {out['name']}: probe failed ({type(e).__name__}) — kept previous row")
+        lines.append(f"  - name: {emit(out['name'])}")
+        for k in FIELDS[1:]:
+            if out.get(k) is None and k in ("stale", "repo", "subject", "pushed_at"):
+                continue  # omit empties; templates guard with `with`
+            lines.append(f"    {k}: {emit(out.get(k))}")
+        print(f"{out['name']:14} {out['status']:12} {out.get('subject') or '-'}  {out.get('pushed_at') or ''}  ci={out.get('ci')}")
     OUT.write_text("\n".join(lines) + "\n")
     print(f"wrote {OUT}")
 

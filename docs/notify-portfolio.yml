@@ -1,0 +1,33 @@
+# Optional "hook" for instant status-board updates.
+#
+# Copy this file to .github/workflows/notify-portfolio.yml in any project repo
+# (microfaults/atropos-go, zeus-go, manteion-go, pronei/slug-mcp, ...). On every
+# push it fires a repository_dispatch at the portfolio, whose deploy workflow
+# listens for `project-push`, re-polls the GitHub API, and redeploys — the board
+# reflects the commit within ~2 minutes instead of waiting for the 6-hourly cron.
+#
+# One-time setup per project repo:
+#   1. Create a fine-grained PAT: https://github.com/settings/personal-access-tokens/new
+#      - Repository access: only pronei/pronei.github.io
+#      - Permissions: Contents -> Read and write   (repository_dispatch needs this)
+#      - Expiration: 1 year; put a reminder in your calendar
+#   2. gh secret set PORTFOLIO_DISPATCH_TOKEN --repo microfaults/atropos-go   # paste the PAT
+#
+# Without this file everything still works — the cron catches up within 6h.
+name: notify portfolio
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: repository_dispatch -> pronei/pronei.github.io
+        run: |
+          curl -fsS -X POST \
+            -H "authorization: Bearer ${{ secrets.PORTFOLIO_DISPATCH_TOKEN }}" \
+            -H "accept: application/vnd.github+json" \
+            https://api.github.com/repos/pronei/pronei.github.io/dispatches \
+            -d '{"event_type":"project-push","client_payload":{"repo":"${{ github.repository }}","sha":"${{ github.sha }}"}}'

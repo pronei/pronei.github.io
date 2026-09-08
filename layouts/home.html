@@ -40,7 +40,7 @@
       <span class="dot" aria-hidden="true"></span>
       <span class="name">{{ with .link }}<a href="{{ . }}">{{ end }}{{ .name }}{{ with .link }}</a>{{ end }}</span>
       <span class="gloss">{{ .gloss }}</span>
-      <span class="note">{{ .note }}</span>
+      <span class="note">{{ .subject }}{{ with .pushed_at }} · pushed {{ partial "rel-time.html" . }}{{ end }}{{ with .ci }} · ci {{ . }}{{ end }}{{ if .stale }} · <span class="dim">(last known)</span>{{ end }}</span>
       <span class="status">{{ .status }}</span>
     </li>
     {{ end }}
@@ -51,7 +51,7 @@
     </li>
   </ul>
   <div class="board-foot">
-    <span>updated {{ hugo.Data.now.updated }}</span>
+    <span title="live from the GitHub API at build time">checked {{ now.UTC.Format "2006-01-02 15:04" }} UTC</span>
     <span><a href="{{ "projects/" | relURL }}">project details →</a></span>
   </div>
 </section>

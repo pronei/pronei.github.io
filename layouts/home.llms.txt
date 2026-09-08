@@ -9,6 +9,6 @@ Full machine-readable corpus (bio, projects, CV): {{ "llms-full.txt" | absURL }}
 {{ end }}{{ end }}{{ range site.RegularPages.ByTitle }}{{ if not .Section }}- [{{ .Title }}]({{ .Permalink }}): {{ or .Params.summary .Summary | plainify | chomp }}
 {{ end }}{{ end }}
 ## Currently
-{{ range hugo.Data.now.workloads }}- {{ .name }} ({{ .gloss }}): {{ .status }} — {{ .note }}
+{{ range hugo.Data.now.workloads }}- {{ .name }} ({{ .gloss }}): {{ .status }}{{ with .subject }} — {{ . }}{{ end }}{{ with .pushed_at }} (pushed {{ . }}){{ end }}{{ with .ci }}, ci {{ . }}{{ end }}
 {{ end }}
 CV (PDF): {{ "cv/pranay-mundra-cv.pdf" | absURL }}
