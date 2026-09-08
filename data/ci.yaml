@@ -14,9 +14,9 @@ workloads:
     gloss: load orchestration
     repo: microfaults/zeus-go
     link: /projects/faults-lab/
-  - name: chatcut 2.0
-    gloss: AI video editing
-    repo: dzymachine/ChatCut-2.0
+  - name: chatcut 3.0
+    gloss: natural-language video editing
+    repo: pronei/ChatCut-3.0
     link: /projects/chatcut/
   - name: slug-mcp
     gloss: campus MCP server

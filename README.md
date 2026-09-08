@@ -1,4 +1,4 @@
-# pranay@mundra:~$
+# pranay mundra
 
 Personal portfolio. Hugo only — no npm, no node_modules, no frameworks, no analytics.
 One binary in, static files out.
@@ -55,7 +55,7 @@ npx wrangler deploy        # prints https://oracle.<your-subdomain>.workers.dev
 
 then set `oracleEndpoint = "https://oracle.<your-subdomain>.workers.dev"` in
 [hugo.toml](hugo.toml) and rebuild. Until then the chat shows a polite offline notice.
-Research behind the choice (and why duck.ai is a dead end): [docs/oracle-plan.md](docs/oracle-plan.md).
+Deploy notes, limits, and the research behind the choice (why duck.ai is a dead end): [workers/oracle/README.md](workers/oracle/README.md).
 
 **Live status board.** The homepage workloads are real:
 [scripts/update_now.py](scripts/update_now.py) reads [data/ci.yaml](data/ci.yaml), asks
@@ -86,12 +86,13 @@ optional, both picked up automatically at build.
 
 | What | Where |
 |---|---|
-| status board rows | [data/now.yaml](data/now.yaml) |
+| status board rows | [data/ci.yaml](data/ci.yaml) — `data/now.yaml` is generated, don't edit it |
 | CV (page + corpus) | [data/cv.yaml](data/cv.yaml) — keep `static/cv/pranay-mundra-cv.pdf` in sync |
 | projects | one markdown file each in [content/projects/](content/projects/) |
 | about / contact | [content/about.md](content/about.md), [content/contact.md](content/contact.md) |
 | tagline, links, default background | [hugo.toml](hugo.toml) |
 | AI-agent depth notes (llms-full.txt) | [data/llm_extra.yaml](data/llm_extra.yaml) |
+| agent profile — the bullets in /llms.txt | [data/profile.yaml](data/profile.yaml) |
 
 ## Deploy
 
@@ -101,7 +102,7 @@ GitHub Pages: push to `main` on a repo with Pages → "GitHub Actions" enabled �
 domain, change `baseURL` and add a `static/CNAME`.
 
 Cloudflare Pages: framework preset "Hugo", build command `hugo --minify`, output
-directory `public`, env var `HUGO_VERSION=0.163.0`.
+directory `public`, env var `HUGO_VERSION=0.165.0`.
 
 ## Performance posture
 
@@ -109,4 +110,4 @@ Zero JS shipped until a visitor flips the breaker or opens the oracle (two ~300-
 inline loaders gate the dynamic imports). One stylesheet (~15KB raw). One self-hosted
 display font (Departure Mono, 22KB woff2, OFL — license vendored next to it). Background
 images are served as webp at three widths with a jpeg fallback and preloaded with
-`fetchpriority=high`; source PNGs never ship.
+`fetchpriority=high`; the committed sources (1920px JPEGs) never ship.

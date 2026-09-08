@@ -4,14 +4,15 @@
 Each image is dark-leaning so the frosted-glass UI stays readable, but carries a
 distinct dominant accent so Hugo's palette extraction visibly re-themes the site:
 
-  topology-night.png  - teal/green node graph    -> green accent
-  signal-dusk.png     - amber signal traces      -> amber accent
-  fog-array.png       - blue-gray sensor array   -> blue accent
+  topology-night.jpg  - teal/green node graph    -> green accent
+  signal-dusk.jpg     - amber signal traces      -> amber accent
+  fog-array.jpg       - blue-gray sensor array   -> blue accent
 
 Deterministic (fixed seeds). Re-run after editing: python3 scripts/gen_backgrounds.py
 """
 
 import struct
+import subprocess
 import zlib
 from pathlib import Path
 
@@ -137,6 +138,17 @@ def fog_array() -> np.ndarray:
     return finish(img, rng, vignette=0.38)
 
 
+def to_jpeg(png: Path) -> Path:
+    """Store the committed source as a 1920px JPEG (~0.3MB) instead of a 6MB PNG.
+    Hugo only ever serves webp derivatives, so nothing downstream sees the difference."""
+    jpg = png.with_suffix(".jpg")
+    subprocess.run(["sips", "-s", "format", "jpeg", "-s", "formatOptions", "90",
+                    "--resampleWidth", "1920", str(png), "--out", str(jpg)],
+                   check=True, capture_output=True)
+    png.unlink()
+    return jpg
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     for name, fn in [
@@ -145,4 +157,5 @@ if __name__ == "__main__":
         ("fog-array.png", fog_array),
     ]:
         write_png(OUT / name, fn())
-        print(f"wrote {OUT / name}")
+        print(f"wrote {to_jpeg(OUT / name)}")
+    print("now run: python3 scripts/palette.py")

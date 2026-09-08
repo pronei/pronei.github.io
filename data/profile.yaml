@@ -1,0 +1,22 @@
+# Curated facts for /llms.txt — the concise, agent-facing profile. This is the file to
+# refine: edit a bullet, rebuild, and every AI agent reading the site sees it.
+# (Deeper narrative notes live in data/llm_extra.yaml and feed /llms-full.txt.)
+name: Pranay Mundra
+headline: distributed-systems engineer — fault injection, tail-latency attribution, tracing & observability, SDK design
+location: San Francisco / Santa Cruz, CA
+open_to: distributed systems, infrastructure, observability and reliability roles
+facts:
+  - MS Computer Science, UC Santa Cruz (Sept 2024 – 2026), GPA 3.93 — Advanced Computer Architecture, Distributed Systems, Advanced OS, Algorithms
+  - B.Tech Electronics & Communication, PES University Bengaluru (2018 – 2022), CGPA 9.01; TA for the robotics course UE19EC339
+  - Research — faults-lab, a fault-injection platform that isolates each microservice's contribution to tail latency under load; three public Go repos at github.com/microfaults — atropos (boundary-level fault-injection SDK with a cache-box replay primitive), zeus-go (load orchestration with k6 sidecars and a Vegeta policy engine), manteion (experiment oracle that schedules campaigns and correlates W3C Baggage traces)
+  - MakeMyTrip & Goibibo, Software Engineer I on Platforms (Jun 2022 – Jun 2024) — A/B experimentation, discounting and persuasion engines for India's largest online travel agency
+  - Designed the multi-org ConfigKey store behind the A/B platform — two-level caching on Aerospike, sub-millisecond p99 at 300k requests/second, down from ~50ms
+  - Built a rule-driven rate limiter for SMS/WhatsApp/email notifications that cut infra cost up to 40% while improving engagement; its open-source descendant is nogo
+  - Revamped loyalty programs MMTBLACK, GoTribe and myPartner Hero; closed a ~$50K Refer&Earn fraud hole; retrofitted virtual threads (quasar) onto the Java 8 A/B platform, cutting CPU footprint up to 40%
+  - Research intern, ARTPARK @ Indian Institute of Science (Jun – Dec 2021) — Elastic log aggregation alerting warehouse-robot operators; ROS2 safety node halting robots on camera-detected human proximity
+  - Graduate TA, UCSC CSE115A/B/C (Jan – Jun 2025) — mentored teams building Nutanix- and Keysight-sponsored projects: requirements, high-level design, sprint planning
+  - Builds MCP servers — slug-mcp (Rust) exposes UCSC campus services and Santa Cruz environmental telemetry as tool calls (public connector at https://2262-cse115b-02.be.ucsc.edu/mcp); also an Adobe Premiere Pro MCP server
+  - ChatCut 3.0 — natural-language video editing on real footage: a Premiere Pro UXP plugin and a Tauri/Next.js desktop editor sharing a FastAPI backend (Gemini/Groq, Redis); successor to the UCSC CSE115C ChatCut 2.0 team project
+  - Global upgrade safety & maximal safe subset — static analysis deciding whether simultaneous schema changes across a service mesh can co-deploy, computing the MSS in linear time via MAX-TRUE Horn-SAT; catches multi-hop violations pairwise tools (Buf, Pact) miss
+  - Languages — Go and Rust by preference, Java when the platform demands it, Python, C/C++, SQL, TypeScript/JavaScript, Shell; instruments everything with OpenTelemetry
+  - Names systems after classical mythology and the names are load-bearing — atropos cuts the thread, zeus throws the lightning, manteion is the oracle at Delphi

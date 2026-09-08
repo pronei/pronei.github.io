@@ -8,7 +8,7 @@ disableKinds = ["taxonomy", "term"]
   # Swap the site-wide background by changing this filename (any image in assets/backgrounds/).
   # Every page can also override it with `background: <file>` in its front matter.
   background = "PXL_20260608_221035697.jpg"
-  # background = "signal-dusk.png"
+  # background = "signal-dusk.jpg"
   tagline = "I break distributed systems on purpose."
   subline = "MS CS @ UC Santa Cruz · fault injection, observability & SDK design"
   prevline = "previously platforms at"

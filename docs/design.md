@@ -16,7 +16,7 @@ failures, scroll-jacking, and broken links.
 |---|---|---|
 | Framework | **Hugo** (extended, single binary) | User choice; zero npm forever; `images.Colors` makes the theming pipeline dependency-free |
 | Identity | **Chaos-engineering theme** | Homepage is a status page; visitors can inject a (reversible, presentation-only) fault; mythology naming surfaced on project plaques |
-| Chatbot | **Build now, BYO Anthropic key** | Anthropic is the only major provider with documented browser CORS; key in sessionStorage; grounded via build-generated /llms-full.txt (context stuffing — no RAG at 13KB) |
+| Chatbot | **⌘K "ask an agent" via a Cloudflare Workers AI proxy** (`workers/oracle`, free tier) | v1 was BYO-Anthropic-key (removed 2026-06-09); a keyless free model was the ask — see `workers/oracle/README.md` for the research verdict. Grounded via build-generated /llms-full.txt (context stuffing — no RAG at ~15KB) |
 | Backgrounds | **Generated placeholders** | Three procedural images (numpy, committed script) prove the palette pipeline; user swaps in photos whenever |
 
 ## Architecture
@@ -43,15 +43,18 @@ failures, scroll-jacking, and broken links.
 - `images.Colors` returns few, heavily quantized swatches — backgrounds must carry real
   colored pixel mass (the generator's "wash" layers exist for this). Grayscale photos fall
   back to the default teal.
-- The oracle is Anthropic-only: OpenAI and Gemini block browser CORS, so "any provider"
-  would require a proxy backend, which this site refuses to have. OpenRouter could be
-  added later behind the same provider seam in chat.ts.
+- The oracle depends on one external deployable (the Cloudflare Worker); if it's down the
+  palette degrades to search-only with an error line rather than breaking.
 
 ## Verification performed
 
 Hugo build clean (no warnings, ~110ms). Screenshots: home, projects, cv, mobile (375px).
 Chaos: engage → victim row down + toast + title prefix + state change; rollback restores;
-state survives reload via sessionStorage. Oracle: dialog opens, corpus fetch 13.4KB,
-real browser call to api.anthropic.com returns 401 for a bad key with friendly error
-(proves CORS + request shape; a valid key exercises the same streaming path).
+state survives reload via sessionStorage. Oracle: ⌘K ask-mode opens, streams from the Worker when deployed, shows a graceful
+offline/404 line otherwise.
 Theme swap: switching `background` to signal-dusk re-derived every accent to amber.
+
+## Later changes
+
+- 2026-06-10 — status board generated from real GitHub activity; chaos v3; ⌘K palette + Workers AI oracle.
+- 2026-09-07 — board froze because GitHub auto-disables `schedule` after 60 idle days; workflow now commits `data/now.yaml` back (keepalive) and polls every 6h; `repository_dispatch` receiver added.

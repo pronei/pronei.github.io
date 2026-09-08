@@ -25,12 +25,12 @@ workloads:
     pushed_at: "2026-07-29T00:32:45Z"
     ci: success
     status: operational
-  - name: "chatcut 2.0"
-    gloss: "AI video editing"
+  - name: "chatcut 3.0"
+    gloss: "natural-language video editing"
     link: /projects/chatcut/
-    repo: dzymachine/ChatCut-2.0
+    repo: pronei/ChatCut-3.0
     subject: "Added video to video generation mode with swi…"
-    pushed_at: "2026-06-15T14:41:10Z"
+    pushed_at: "2026-09-08T00:42:02Z"
     ci: null
     status: operational
   - name: slug-mcp

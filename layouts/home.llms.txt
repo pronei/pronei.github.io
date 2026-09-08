@@ -1,14 +1,30 @@
-# Pranay Mundra
+{{- $p := hugo.Data.profile -}}
+# {{ $p.name }}
 
-> {{ site.Params.description }} Based in {{ site.Params.location }}. Email: {{ site.Params.email }}. GitHub: {{ site.Params.github }}. LinkedIn: {{ site.Params.linkedin }}.
+> {{ $p.headline }}. Based in {{ $p.location }}. Open to {{ $p.open_to }}. Contact: {{ site.Params.email }} · {{ site.Params.github }} · {{ site.Params.linkedin }}.
 
-Full machine-readable corpus (bio, projects, CV): {{ "llms-full.txt" | absURL }}
+This site is a static Hugo build. Full corpus for agents (bio, every project writeup, CV, depth notes): {{ "llms-full.txt" | absURL }}. CV as PDF: {{ "cv/pranay-mundra-cv.pdf" | absURL }}. Search index: {{ "searchindex.json" | absURL }}.
 
-## Pages
-{{ range site.Sections }}{{ range .Pages }}- [{{ .Title }}]({{ .Permalink }}): {{ .Params.summary }}
-{{ end }}{{ end }}{{ range site.RegularPages.ByTitle }}{{ if not .Section }}- [{{ .Title }}]({{ .Permalink }}): {{ or .Params.summary .Summary | plainify | chomp }}
+## Key facts
+{{ range $p.facts }}- {{ . }}
+{{ end }}
+## Experience
+{{ range hugo.Data.cv.experience }}
+### {{ .org }} — {{ .role }} ({{ .when }})
+{{ range .points }}- {{ . }}
 {{ end }}{{ end }}
-## Currently
+## Education
+{{ range hugo.Data.cv.education }}- {{ .school }} — {{ .degree }}{{ with .gpa }} ({{ . }}){{ end }}, {{ .when }}.{{ with .detail }} {{ . }}{{ end }}
+{{ end }}
+## Projects
+{{ range (where site.RegularPages "Section" "projects").ByWeight }}- [{{ .Title }}]({{ .Permalink }}): {{ .Params.summary }}{{ with .Params.stack }} — {{ delimit . ", " }}{{ end }}{{ with .Params.links.github }} — source: {{ . }}{{ end }}
+{{ end }}
+## Currently (live from the GitHub API at build time, {{ now.UTC.Format "2006-01-02" }})
 {{ range hugo.Data.now.workloads }}- {{ .name }} ({{ .gloss }}): {{ .status }}{{ with .subject }} — {{ . }}{{ end }}{{ with .pushed_at }} (pushed {{ . }}){{ end }}{{ with .ci }}, ci {{ . }}{{ end }}
 {{ end }}
-CV (PDF): {{ "cv/pranay-mundra-cv.pdf" | absURL }}
+## Skills
+{{ range hugo.Data.cv.skills }}- {{ .group }}: {{ delimit .items ", " }}
+{{ end }}
+## Pages
+{{ range site.RegularPages.ByWeight }}{{ if ne .Section "projects" }}- [{{ .Title }}]({{ .Permalink }}): {{ .Params.summary }}
+{{ end }}{{ end }}

@@ -1,24 +1,28 @@
 ---
-title: chatcut 2.0
+title: chatcut 3.0
 weight: 4
-summary: Chat-driven video editing — natural language in, real Premiere Pro timeline operations out, via a custom MCP server.
-stack: [Rust, MCP, Adobe Premiere Pro]
+summary: Natural-language video editing on real footage — a Premiere Pro plugin and a standalone desktop editor sharing one AI backend. Vibe editing, not AI-generated video.
+stack: [Python, FastAPI, TypeScript, React, Tauri, Rust, Premiere Pro UXP]
 metrics:
-  - custom Adobe Premiere Pro MCP server — timeline, clips, transitions, render queue as tool calls
-  - built in UCSC's CSE115C software engineering sequence
+  - two front ends — an Adobe Premiere Pro UXP panel and a standalone Tauri + Next.js desktop/browser editor
+  - one shared FastAPI backend — AI providers (Gemini, Groq), video processing, Redis-backed caching
+  - Rust native layer (Tauri) for FFmpeg and OS integration; successor to the CSE115C ChatCut 2.0 team project
 links:
-  github: https://github.com/dzymachine/ChatCut-2.0
+  github: https://github.com/pronei/ChatCut-3.0
 ---
 
 Video editing has a brutal learning curve and most of it is mechanical: razor here, trim
-there, push to the render queue. ChatCut 2.0 puts a language model in front of Adobe
-Premiere Pro so you can say *"cut the dead air, add a cross-dissolve between scenes two and
-three, and render a 1080p preview"* and watch the timeline do it.
+there, push to the render queue. ChatCut puts a language model in front of the editor so
+you can say *"cut the dead air, add a cross-dissolve between scenes two and three, and
+render a 1080p preview"* and watch the timeline do it — on **your** footage. It's vibe
+editing, not AI-generated video.
 
-The interesting engineering is the bridge: a from-scratch **Premiere Pro MCP server** that
-exposes the editor's surface — sequences, clips, markers, transitions, effects, audio
-levels, proxies, the render queue — as structured tool calls. The LLM never touches pixels;
-it orchestrates a real editor with real project files, so everything it does is inspectable
-and undoable in the app you already use.
+3.0 ships two front ends on one backend. The **Premiere Pro plugin** is a UXP panel that
+drives the real editor — sequences, clips, transitions, the render queue — so everything
+the model does is inspectable and undoable in the app you already use. The **standalone
+editor** is a Tauri + Next.js desktop/browser app with a Rust native layer for FFmpeg and
+OS integration, for people who don't live in Premiere. Both talk to a shared Python
+FastAPI service that routes to AI providers (Gemini, Groq), handles video processing, and
+caches through Redis.
 
-Built with a team in UCSC's CSE115C; I own the MCP layer in Rust.
+It grew out of ChatCut 2.0, the UCSC CSE115C team project; 3.0 is my own continuation.

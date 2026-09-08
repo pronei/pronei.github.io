@@ -5,3 +5,6 @@
 
 # os noise
 .DS_Store
+
+# python bytecode from the helper scripts
+__pycache__/
