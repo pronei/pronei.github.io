@@ -30,7 +30,7 @@ workloads:
     link: /projects/chatcut/
     repo: pronei/ChatCut-3.0
     subject: "Added video to video generation mode with swi…"
-    pushed_at: "2026-09-08T00:42:02Z"
+    pushed_at: "2026-09-08T19:44:35Z"
     ci: null
     status: operational
   - name: slug-mcp
