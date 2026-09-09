@@ -50,10 +50,10 @@ Cloudflare Workers AI proxy ([workers/oracle](workers/oracle)), grounded in
 ```
 cd workers/oracle
 npx wrangler login
-npx wrangler deploy        # prints https://oracle.<your-subdomain>.workers.dev
+npx wrangler deploy        # prints https://oracle.pranayrs.workers.dev
 ```
 
-then set `oracleEndpoint = "https://oracle.<your-subdomain>.workers.dev"` in
+then set `oracleEndpoint = "https://oracle.pranayrs.workers.dev"` in
 [hugo.toml](hugo.toml) and rebuild. Until then the chat shows a polite offline notice.
 Deploy notes, limits, and the research behind the choice (why duck.ai is a dead end): [workers/oracle/README.md](workers/oracle/README.md).
 

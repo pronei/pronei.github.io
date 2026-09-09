@@ -7,15 +7,17 @@ site POSTs `{messages:[…]}` here and streams the SSE reply into its tty pane.
 ```
 cd workers/oracle
 npx wrangler login      # once, in a browser
-npx wrangler deploy     # prints https://oracle.<your-subdomain>.workers.dev
+npx wrangler deploy     # prints the real URL — currently https://oracle.pranayrs.workers.dev
 ```
 
-Then set `oracleEndpoint` in `hugo.toml` to exactly that URL and push. A quick check that
+Then set `oracleEndpoint` in `hugo.toml` to exactly that URL and push. **The subdomain is the
+account's, not a name you choose** — pointing `hugo.toml` at a subdomain you don't own is
+indistinguishable from 'the model is broken': every request 404s with Cloudflare error 1042. A quick check that
 the deploy is really there (my code answers 405 to GET, 400 to an empty POST; Cloudflare
 answers **404 / error 1042** when nothing is deployed at that name):
 
 ```
-curl -s -o /dev/null -w '%{http_code}\n' https://oracle.<your-subdomain>.workers.dev/
+curl -s -o /dev/null -w '%{http_code}\n' https://oracle.pranayrs.workers.dev/
 ```
 
 ## How it stays safe and grounded
