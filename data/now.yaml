@@ -6,7 +6,7 @@ workloads:
     link: /projects/faults-lab/
     repo: microfaults/manteion-go
     subject: "docs: add Manteion oracle banner to README"
-    pushed_at: "2026-08-06T08:57:55Z"
+    pushed_at: "2026-09-09T01:28:21Z"
     ci: success
     status: operational
   - name: atropos
