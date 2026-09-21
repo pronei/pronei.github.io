@@ -136,11 +136,13 @@ async function ask(question: string): Promise<void> {
       body: JSON.stringify({ messages: history }),
     });
     if (!res.ok || !res.body) {
+      let reason = "";
+      try { reason = ((await res.json()) as { error?: string }).error ?? ""; } catch { /* not json */ }
       out.remove();
       history.pop();
-      ttyLine("err", res.status === 429
+      ttyLine("err", reason || (res.status === 429
         ? "rate limited — the free tier needs a breather, try again in a minute"
-        : `oracle error ${res.status} — try again later`);
+        : `oracle error ${res.status} — try again later`));
       return;
     }
     const reader = res.body.getReader();
