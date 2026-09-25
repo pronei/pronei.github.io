@@ -5,9 +5,6 @@
 
 This site is a static Hugo build. Full corpus for agents (bio, every project writeup, CV, depth notes): {{ "llms-full.txt" | absURL }}. CV as PDF: {{ "cv/pranay-mundra-cv.pdf" | absURL }}. Search index: {{ "searchindex.json" | absURL }}.
 
-## Key facts
-{{ range $p.facts }}- {{ . }}
-{{ end }}
 ## Experience
 {{ range hugo.Data.cv.experience }}
 ### {{ .org }} — {{ .role }} ({{ .when }})
@@ -15,6 +12,9 @@ This site is a static Hugo build. Full corpus for agents (bio, every project wri
 {{ end }}{{ end }}
 ## Education
 {{ range hugo.Data.cv.education }}- {{ .school }} — {{ .degree }}{{ with .gpa }} ({{ . }}){{ end }}, {{ .when }}.{{ with .detail }} {{ . }}{{ end }}
+{{ end }}
+## Research and working style
+{{ range $p.facts }}- {{ . }}
 {{ end }}
 ## Projects
 {{ range (where site.RegularPages "Section" "projects").ByWeight }}- [{{ .Title }}]({{ .Permalink }}): {{ .Params.summary }}{{ with .Params.stack }} — {{ delimit . ", " }}{{ end }}{{ with .Params.links.github }} — source: {{ . }}{{ end }}

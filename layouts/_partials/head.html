@@ -31,7 +31,7 @@
       font-display: swap;
     }
   </style>
-  {{ $css := resources.Get "css/main.css" | minify | fingerprint }}
+  {{ $css := resources.Get "css/main.css" | css.Build (dict "minify" true) | fingerprint }}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}">
   {{/* theme vars must come after main.css so the derived palette overrides the fallbacks */}}
   {{ partialCached "theme.html" . $bg.name }}

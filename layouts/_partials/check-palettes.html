@@ -1,17 +1,16 @@
-{{- /* Build-time guard: every background needs a palette entry and vice versa. Without one
-     the page silently falls back to the rough images.Colors heuristic (or chaos mode drops
-     the image). Warns locally; CI builds with --panicOnWarning, so there it fails the build.
-     Fix: python3 scripts/palette.py (macOS; uses sips). */ -}}
+{{- /* Build-time guard: data/palettes.yaml must describe exactly the files in
+     assets/backgrounds/ — no unprocessed photos, no stale entries. Hard error locally and
+     in CI. Fix either way with: python3 scripts/palette.py (macOS; uses sips). */ -}}
 {{- $have := dict -}}
 {{- range resources.Match "backgrounds/*" -}}
   {{- $name := path.Base .Name -}}
   {{- $have = merge $have (dict $name true) -}}
   {{- if not (index hugo.Data.palettes $name) -}}
-    {{- warnf "background %q has no entry in data/palettes.yaml — run: python3 scripts/palette.py" $name -}}
+    {{- errorf "background %q has no entry in data/palettes.yaml — run: python3 scripts/palette.py" $name -}}
   {{- end -}}
 {{- end -}}
 {{- range $name, $_ := hugo.Data.palettes -}}
   {{- if not (index $have $name) -}}
-    {{- warnf "data/palettes.yaml lists %q but assets/backgrounds/%s doesn't exist — rerun scripts/palette.py" $name $name -}}
+    {{- errorf "data/palettes.yaml lists %q but assets/backgrounds/%s doesn't exist — rerun scripts/palette.py" $name $name -}}
   {{- end -}}
 {{- end -}}

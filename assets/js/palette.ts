@@ -21,9 +21,14 @@ const dlg = () => document.getElementById("palette") as HTMLDialogElement;
 
 async function loadIndex(): Promise<Item[]> {
   if (index) return index;
-  const res = await fetch("/searchindex.json");
-  index = (await res.json()) as Item[];
-  return index;
+  try {
+    const res = await fetch("/searchindex.json");
+    if (!res.ok) return [];
+    index = (await res.json()) as Item[];
+    return index;
+  } catch {
+    return []; // transient failure: leave index unset so the next open retries
+  }
 }
 
 function score(item: Item, tokens: string[]): number {

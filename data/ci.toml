@@ -1,0 +1,33 @@
+# Source of truth for the homepage status board. scripts/update_now.py reads this
+# (stdlib tomllib), asks the GitHub API for each repo's latest push + Actions
+# conclusion, and writes data/now.json. Rows without `repo` pass through verbatim.
+
+[[workloads]]
+name = "manteion"
+gloss = "experiment oracle"
+repo = "microfaults/manteion-go"
+link = "/projects/faults-lab/"
+
+[[workloads]]
+name = "atropos"
+gloss = "fault-injection SDK"
+repo = "microfaults/atropos-go"
+link = "/projects/faults-lab/"
+
+[[workloads]]
+name = "zeus-go"
+gloss = "load orchestration"
+repo = "microfaults/zeus-go"
+link = "/projects/faults-lab/"
+
+[[workloads]]
+name = "chatcut 3.0"
+gloss = "natural-language video editing"
+repo = "pronei/ChatCut-3.0"
+link = "/projects/chatcut/"
+
+[[workloads]]
+name = "slug-mcp"
+gloss = "campus MCP server"
+repo = "pronei/slug-mcp"
+link = "/projects/slug-mcp/"

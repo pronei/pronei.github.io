@@ -1,0 +1,8 @@
+/* ─── motion & transparency preferences ─────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .card, dialog#oracle { backdrop-filter: none; -webkit-backdrop-filter: none; background: color-mix(in oklab, var(--c-tint) 97%, transparent); }
+}

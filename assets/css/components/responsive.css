@@ -1,0 +1,10 @@
+/* ─── small screens ─────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .frame { padding: 16px 14px 28px; }
+  .hero { margin-top: 5vh; }
+  .portrait { width: 128px; height: 128px; margin: 0 auto; }
+  .page-portrait { float: none; display: block; width: 100%; margin: 4px 0 14px; }
+  .row { grid-template-columns: 9px minmax(90px, max-content) 1fr max-content; }
+  .row .gloss { display: none; }
+  .cvskill { grid-template-columns: 1fr; gap: 2px; }
+}

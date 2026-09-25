@@ -1,0 +1,9 @@
+/* ─── print (the cv page is the use case) ───────────────────────────────── */
+@media print {
+  .bg, .top nav, .bottom, .btn, dialog { display: none !important; }
+  body { background: #fff; color: #111; font-size: 12px; }
+  .card { background: #fff; border: none; backdrop-filter: none; }
+  a { color: #111; border: none; }
+  .cvsec { color: #111; }
+  .pagetitle, .brand { color: #111; }
+}

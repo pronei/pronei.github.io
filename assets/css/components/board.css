@@ -1,0 +1,31 @@
+/* ─── status board ──────────────────────────────────────────────────────── */
+.board { padding: 4px 18px 8px; }
+.board-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 0 10px; border-bottom: 1px solid var(--hairline); }
+.label { font-family: var(--font-display); font-size: 11px; letter-spacing: 0.09em; color: var(--ink-dim); text-transform: lowercase; }
+.state { font-family: var(--font-display); font-size: 11.5px; }
+.state.ok { color: var(--c-accent-text); }
+.state.degraded { color: var(--warn); }
+.state.down { color: var(--down); }
+.rows { list-style: none; margin: 0; padding: 0; }
+.row { display: grid; grid-template-columns: 9px minmax(110px, max-content) 1fr 1.2fr max-content; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--hairline); font-size: 13px; }
+.rows .row:last-of-type { border-bottom: none; }
+.row .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c-accent); }
+.row .name { font-family: var(--font-display); font-size: 12.5px; }
+.row .name a { color: var(--ink); border: none; }
+.row .name a:hover { color: var(--c-accent-text); }
+.row .gloss { color: var(--ink-dim); }
+.row .note { color: var(--ink-mute); }
+.row .status { font-family: var(--font-display); font-size: 11px; color: var(--c-accent-text); justify-self: end; }
+.row[data-status="degraded"] .dot { background: var(--warn); }
+.row[data-status="degraded"] .status { color: var(--warn); }
+.row[data-status="down"] .dot { background: var(--down); animation: none; }
+.row[data-status="down"] .status { color: var(--down); }
+.row[data-status="open"] .dot { box-shadow: 0 0 0 3px color-mix(in oklab, var(--c-accent) 25%, transparent); }
+.row[data-status="operational"] .dot, .row[data-status="open"] .dot { animation: breathe 3.2s ease-in-out infinite; }
+@keyframes breathe { 50% { opacity: 0.45; } }
+.row.toast { grid-template-columns: 9px 1fr max-content; color: var(--warn); border-top: 1px solid var(--hairline); }
+.row.toast .dot { background: var(--warn); }
+.row.toast .note { color: var(--warn); font-family: var(--font-mono); font-size: 12px; }
+.board-foot { display: flex; justify-content: space-between; gap: 10px; padding: 10px 0 8px; border-top: 1px solid var(--hairline); font-family: var(--font-display); font-size: 11px; color: var(--ink-dim); }
+.board-foot a { border: none; color: var(--ink-mute); }
+.board-foot a:hover { color: var(--c-accent-text); }

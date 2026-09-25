@@ -1,0 +1,11 @@
+/* ─── glass cards ───────────────────────────────────────────────────────── */
+.card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(16px) saturate(1.25);
+  -webkit-backdrop-filter: blur(16px) saturate(1.25);
+}
+@supports not (backdrop-filter: blur(1px)) {
+  .card { background: color-mix(in oklab, var(--c-tint) 96%, transparent); }
+}

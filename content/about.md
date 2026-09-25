@@ -11,11 +11,11 @@ tail latency hides.
 
 The short version: electronics undergrad in Bengaluru → robotics research at ARTPARK @ IISc
 (log aggregation and safety systems for warehouse robots) → two years at MakeMyTrip running
-A/B infrastructure at India-travel scale, where I learned that a 50ms p99 is a personal
-insult — we got it under a millisecond at 300k requests/second. Now I'm finishing an MS in
-Computer Science at UC Santa Cruz, where my research is **faults-lab**: a platform for
+A/B infrastructure at India-travel scale, where I learned that a slow p99 is a personal
+insult ([the CV](/cv/) has what I did about it). Then an MS in Computer Science at UC Santa
+Cruz, finished in August 2026, where my research became **faults-lab**: a platform for
 injecting faults at service boundaries and isolating each service's contribution to tail
-latency under load.
+latency under load. I'm still building it.
 
 What I care about, in order: correctness, p99s, and APIs that don't make the next engineer's
 life worse. I write Go and Rust by preference, Java when the legacy platform demands it, and

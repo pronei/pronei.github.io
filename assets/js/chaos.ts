@@ -4,42 +4,15 @@
 // corrupted re-rolls and ESCALATES glitch intensity (faster clicks = worse).
 // The ✕ button (or the board toast) rolls everything back. Per-tab state.
 
-type FontSet = { name: string; display: string; body: string };
-type ColorSet = { name: string; light?: boolean; vars: Record<string, string> };
-type Bg = {
-  name: string; url: string;
-  accent: string; accentText: string; accentInk: string; tint: string;
-  scrimTop: string; scrimMid: string; scrimBot: string; glassMix: string;
-};
+import { fonts as FONTS, colors as COLORS, backgrounds, type Bg } from "@params";
 
-const FONTS: FontSet[] = [
-  { name: "crt", display: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace", body: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace" },
-  { name: "courier", display: "'Courier New', Courier, monospace", body: "'Courier New', Courier, monospace" },
-  { name: "typewriter", display: "'American Typewriter', 'Courier New', monospace", body: "Georgia, 'Times New Roman', serif" },
-  { name: "blueprint", display: "Futura, 'Century Gothic', 'Avenir Next', sans-serif", body: "'Avenir Next', Avenir, Verdana, sans-serif" },
-  { name: "manuscript", display: "Baskerville, 'Times New Roman', serif", body: "Baskerville, 'Times New Roman', serif" },
-  { name: "optical", display: "Optima, Candara, 'Gill Sans', sans-serif", body: "Optima, Candara, 'Gill Sans', sans-serif" },
-  { name: "teletype", display: "'Andale Mono', Consolas, monospace", body: "'Andale Mono', Consolas, monospace" },
-  { name: "charter", display: "Charter, Cambria, Georgia, serif", body: "Charter, Cambria, Georgia, serif" },
-];
-
-// every --ink-dim clears WCAG AA (4.5:1) on its own --c-tint — corrupted, not unreadable
-const COLORS: ColorSet[] = [
-  { name: "amber-crt", vars: { "--c-accent": "#ffb000", "--c-accent-text": "#ffc54d", "--c-accent-ink": "#1c1203", "--c-tint": "#171007", "--ink": "#f5e9cd", "--ink-mute": "#cdb285", "--ink-dim": "#8d7c54" } },
-  { name: "bluescreen", vars: { "--c-accent": "#5aa2ff", "--c-accent-text": "#8abdff", "--c-accent-ink": "#04102a", "--c-tint": "#0a1430", "--ink": "#dde8ff", "--ink-mute": "#9fb4dd", "--ink-dim": "#6f81a6" } },
-  { name: "phosphor", vars: { "--c-accent": "#33ff66", "--c-accent-text": "#66ff8c", "--c-accent-ink": "#03130a", "--c-tint": "#04130a", "--ink": "#d2ffd9", "--ink-mute": "#84cf95", "--ink-dim": "#4d8a5d" } },
-  { name: "redshift", vars: { "--c-accent": "#ff5c57", "--c-accent-text": "#ff8a85", "--c-accent-ink": "#1c0605", "--c-tint": "#190b0d", "--ink": "#ffe4e1", "--ink-mute": "#d3a09b", "--ink-dim": "#9a746f" } },
-  { name: "vaporwave", vars: { "--c-accent": "#ff71ce", "--c-accent-text": "#ff9ddd", "--c-accent-ink": "#1c0517", "--c-tint": "#150f22", "--ink": "#f4e9ff", "--ink-mute": "#bda6d8", "--ink-dim": "#87789e" } },
-  { name: "norad", vars: { "--c-accent": "#ff3b30", "--c-accent-text": "#ff6f66", "--c-accent-ink": "#190302", "--c-tint": "#0d0d0d", "--ink": "#f2f2f2", "--ink-mute": "#b3b3b3", "--ink-dim": "#7c7c7c" } },
-  { name: "paper-tape", light: true, vars: { "--c-accent": "#b3261e", "--c-accent-text": "#8f1d16", "--c-accent-ink": "#fff6ec", "--c-tint": "#e9e4d8", "--ink": "#221d14", "--ink-mute": "#5d5749", "--ink-dim": "#6a6458" } },
-];
-
-const COLOR_VARS = ["--c-accent", "--c-accent-text", "--c-accent-ink", "--c-tint", "--ink", "--ink-mute", "--ink-dim"];
+// presets live in data/chaos.yaml; rollback must clear every var any of them can set
+const COLOR_VARS = [...new Set(["--c-accent", "--c-accent-text", "--c-accent-ink", "--c-tint",
+  ...COLORS.flatMap((c) => Object.keys(c.vars))])];
 const SCRIM_VARS = ["--scrim-top", "--scrim-mid", "--scrim-bot", "--glass-mix"];
 const FONT_VARS = ["--font-display", "--font-body"];
 const STORE = "chaos3";
 
-let bgs: Bg[] | null = null;
 let victim: HTMLElement | null = null;
 let savedNote = "";
 let savedStatus = "";
@@ -48,14 +21,6 @@ let level = 0;
 
 const root = () => document.documentElement;
 const pick = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
-
-function bgData(): Bg[] {
-  if (!bgs) {
-    const el = document.getElementById("bg-data");
-    bgs = el ? (JSON.parse(el.textContent || "[]") as Bg[]) : [];
-  }
-  return bgs;
-}
 
 function currentBgName(): string {
   return (document.querySelector(".bg") as HTMLElement | null)?.dataset.bg ?? "";
@@ -113,22 +78,26 @@ function setBreakerLabel(text: string): void {
   setTimeout(() => { b.style.width = ""; b.style.transition = ""; }, 360);
 }
 
+let glitchTimers: number[] = [];
+
 function glitch(intensity: number): void {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  glitchTimers.forEach(clearTimeout); // cancel stale removals so a rapid re-roll isn't cut short
+  glitchTimers = [];
   const cls = intensity >= 3 ? "glitching-3" : intensity === 2 ? "glitching-2" : "glitching";
   document.querySelectorAll(".glitchable, .brand").forEach((el) => {
     el.classList.remove("glitching", "glitching-2", "glitching-3");
     void (el as HTMLElement).offsetWidth;
     el.classList.add(cls);
-    setTimeout(() => el.classList.remove(cls), intensity >= 2 ? 2200 : 1400);
+    glitchTimers.push(setTimeout(() => el.classList.remove(cls), intensity >= 2 ? 2200 : 1400));
   });
 }
 
-function takeDownVictim(desc: string): void {
+function takeDownVictim(desc: string, prefer?: string | null): void {
   restoreVictim();
   const rows = Array.from(document.querySelectorAll<HTMLElement>('.rows .row[data-status="operational"]'));
   if (rows.length) {
-    victim = pick(rows);
+    victim = (prefer && rows.find((r) => r.querySelector(".name")?.textContent?.trim() === prefer)) || pick(rows);
     savedNote = victim.querySelector(".note")?.textContent ?? "";
     savedStatus = victim.dataset.status ?? "operational";
     victim.dataset.status = "down";
@@ -168,10 +137,10 @@ function restoreVictim(): void {
   }
 }
 
-type State = { font: string; color: string | null; bg: string; level: number };
+type State = { font: string; color: string | null; bg: string; level: number; victim?: string | null };
 
 function corrupt(announce: boolean, saved?: State): void {
-  const data = bgData();
+  const data = backgrounds;
   const font = saved ? FONTS.find((f) => f.name === saved.font) ?? pick(FONTS) : pick(FONTS);
   const others = data.filter((b) => b.name !== currentBgName());
   const bg = saved
@@ -196,11 +165,13 @@ function corrupt(announce: boolean, saved?: State): void {
   root().classList.toggle("chaos-flicker", level >= 3);
 
   const desc = `${font.name} / ${color ? color.name : `adaptive(${bg?.name ?? "current"})`}`;
-  sessionStorage.setItem(STORE, JSON.stringify({ font: font.name, color: color?.name ?? null, bg: bg?.name ?? currentBgName(), level } satisfies State));
   const b = document.getElementById("chaos-breaker");
   if (b) b.setAttribute("aria-pressed", "true");
   setBreakerLabel(level > 1 ? `escalate ×${level}` : "escalate");
-  takeDownVictim(desc);
+  takeDownVictim(desc, saved?.victim);
+  // remember the downed service (and keep it across boardless pages) so it doesn't hop around
+  const victimName = victim?.querySelector(".name")?.textContent?.trim() ?? saved?.victim ?? null;
+  sessionStorage.setItem(STORE, JSON.stringify({ font: font.name, color: color?.name ?? null, bg: bg?.name ?? currentBgName(), level, victim: victimName } satisfies State));
   if (announce) glitch(level);
   if (!document.title.startsWith("[degraded] ")) document.title = "[degraded] " + document.title;
 }

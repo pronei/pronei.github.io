@@ -1,0 +1,52 @@
+{
+  "workloads": [
+    {
+      "name": "manteion",
+      "gloss": "experiment oracle",
+      "link": "/projects/faults-lab/",
+      "repo": "microfaults/manteion-go",
+      "status": "operational",
+      "subject": "docs: add Manteion oracle banner to README",
+      "pushed_at": "2026-09-09T01:28:21Z",
+      "ci": "success"
+    },
+    {
+      "name": "atropos",
+      "gloss": "fault-injection SDK",
+      "link": "/projects/faults-lab/",
+      "repo": "microfaults/atropos-go",
+      "status": "operational",
+      "subject": "docs: add Atropos banner to README; align net…",
+      "pushed_at": "2026-07-14T19:06:37Z",
+      "ci": "success"
+    },
+    {
+      "name": "zeus-go",
+      "gloss": "load orchestration",
+      "link": "/projects/faults-lab/",
+      "repo": "microfaults/zeus-go",
+      "status": "operational",
+      "subject": "docs: add Zeus banner and a Status & roadmap …",
+      "pushed_at": "2026-07-29T00:32:45Z",
+      "ci": "success"
+    },
+    {
+      "name": "chatcut 3.0",
+      "gloss": "natural-language video editing",
+      "link": "/projects/chatcut/",
+      "repo": "pronei/ChatCut-3.0",
+      "status": "operational",
+      "subject": "Added video to video generation mode with swi…",
+      "pushed_at": "2026-09-08T19:44:35Z"
+    },
+    {
+      "name": "slug-mcp",
+      "gloss": "campus MCP server",
+      "link": "/projects/slug-mcp/",
+      "repo": "pronei/slug-mcp",
+      "status": "operational",
+      "subject": "fix: repair four broken tools found by the li…",
+      "pushed_at": "2026-09-04T15:22:15Z"
+    }
+  ]
+}

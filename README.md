@@ -33,18 +33,22 @@ the house teal *hue*, never a muddy gray), tone-mapped dark-scheme roles (accent
 80, surface ≈ tone 6), WCAG-snapped contrast (≥3:1 accent-on-surface, ≥4.5:1 as text),
 and a scrim that scales with image luminance — weighted toward the top of the image,
 where the hero text lives, so bright skies don't wash the headline out. Results land in
-[data/palettes.yaml](data/palettes.yaml); [theme.html](layouts/_partials/theme.html)
-prefers them and falls back to a hardened `images.Colors` heuristic for images you
-haven't processed. Either way: zero theming JS at runtime.
+[data/palettes.yaml](data/palettes.yaml), which [theme.html](layouts/_partials/theme.html)
+turns into CSS custom properties — zero theming JS at runtime. It's the only palette
+engine: a background without an entry (or a stale entry, or a typo in
+`params.background`) fails the build, locally and in CI.
 
 **Chaos mode.** The "inject fault" breaker ([assets/js/chaos.ts](assets/js/chaos.ts),
-loaded on demand) corrupts the site: a random font set (8: crt, courier, typewriter,
-blueprint, manuscript, optical, teletype, charter) × either a color hijack (7 presets)
-or *adaptive* colors taken from a randomly swapped background image (cross-faded, its
+loaded on demand) corrupts the site: a random font set × either a color hijack or
+*adaptive* colors taken from a randomly swapped background image (cross-faded, its
 precomputed palette applied — theming stays coherent with whatever picture is up).
 Clicking faster escalates glitch intensity ×2/×3 (clip-path slicing, hue bursts, ambient
 flicker at ×3); a workload goes down on the board; ✕ or the toast rolls everything back.
 Reduced-motion visitors get the state changes without the seizure bait.
+The presets (8 font sets, 7 color hijacks) live in [data/chaos.yaml](data/chaos.yaml) and
+reach the TypeScript at build time through `js.Build`'s `@params`, together with the
+background catalog, so the page HTML carries none of it. A preset missing a field fails
+the build.
 
 **⌘K palette + the oracle.** One soft dialog ([assets/js/palette.ts](assets/js/palette.ts)):
 fuzzy keyword search over the build-time [/searchindex.json](layouts/home.searchindex.json)
@@ -65,9 +69,9 @@ then set `oracleEndpoint = "https://oracle.pranayrs.workers.dev"` in
 Deploy notes, limits, and the research behind the choice (why duck.ai is a dead end): [workers/oracle/README.md](workers/oracle/README.md).
 
 **Live status board.** The homepage workloads are real:
-[scripts/update_now.py](scripts/update_now.py) reads [data/ci.yaml](data/ci.yaml), asks
+[scripts/update_now.py](scripts/update_now.py) reads [data/ci.toml](data/ci.toml), asks
 the GitHub API for each repo's head commit, push time, and Actions conclusion, and writes
-[data/now.yaml](data/now.yaml) — absolute facts only; "3d ago" is rendered by Hugo at
+[data/now.json](data/now.json) — absolute facts only; "3d ago" is rendered by Hugo at
 build time ([rel-time.html](layouts/_partials/rel-time.html)). CI failure → `degraded`;
 a failed probe keeps the previous row flagged *(last known)* instead of blanking it.
 
@@ -80,7 +84,7 @@ How it stays fresh — there are no push hooks by default, it's polling:
 | `push` / `workflow_dispatch` | you |
 
 The gotcha that froze the board in Aug 2026: **GitHub auto-disables `schedule` triggers
-after 60 days with no commits to the repo.** The workflow now commits `data/now.yaml` back
+after 60 days with no commits to the repo.** The workflow now commits `data/now.json` back
 whenever it changes (real activity) and adds an empty keepalive commit after 45 idle days,
 so the schedule can't lapse. Those bot commits are expected — `git pull` before you edit.
 If it ever shows `disabled_inactivity` again: `gh workflow enable deploy`.
@@ -99,13 +103,15 @@ optional, both picked up automatically at build.
 
 | What | Where |
 |---|---|
-| status board rows | [data/ci.yaml](data/ci.yaml) — `data/now.yaml` is generated, don't edit it |
+| status board rows | [data/ci.toml](data/ci.toml) — `data/now.json` is generated, don't edit it |
 | CV (page + corpus) | [data/cv.yaml](data/cv.yaml) — keep `static/cv/pranay-mundra-cv.pdf` in sync |
 | projects | one markdown file each in [content/projects/](content/projects/) |
 | about / contact | [content/about.md](content/about.md), [content/contact.md](content/contact.md) |
 | tagline, links, default background | [hugo.toml](hugo.toml) |
 | AI-agent depth notes (llms-full.txt) | [data/llm_extra.yaml](data/llm_extra.yaml) |
 | agent profile — the bullets in /llms.txt | [data/profile.yaml](data/profile.yaml) |
+| chaos-mode fonts and color hijacks | [data/chaos.yaml](data/chaos.yaml) |
+| styles | one file per component in [assets/css/components/](assets/css/components/); [assets/css/main.css](assets/css/main.css) is the ordered `@import` index |
 
 ## Deploy
 
@@ -121,7 +127,8 @@ directory `public`, env var `HUGO_VERSION=0.166.0`.
 
 Mobile Lighthouse: 100 performance / 100 accessibility on every main page, LCP 1.2–1.9s,
 ~320–410KB per page. Zero JS until a visitor flips the breaker or opens the palette (tiny
-inline loaders gate the dynamic imports). One stylesheet, one self-hosted display font
+inline loaders gate the dynamic imports). One stylesheet (17 component files bundled and
+minified by Hugo's built-in `css.Build`, no npm), one self-hosted display font
 (Departure Mono, 22KB woff2, OFL). The background is webp at 1280/1920w, q60, and is
 deliberately **not** preloaded and fetched at `fetchpriority=low`: Chrome excludes
 full-viewport images from LCP, so a high-priority background only starves the CSS and font

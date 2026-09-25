@@ -1,0 +1,43 @@
+/* ─── chaos mode ────────────────────────────────────────────────────────── */
+.chaos-on .glitchable, .glitching {
+  animation: glitch 0.42s steps(2) 3;
+}
+@keyframes glitch {
+  0%, 100% { text-shadow: none; transform: none; }
+  20% { text-shadow: -2px 0 var(--down), 2px 0 var(--c-accent); transform: translateX(1px); }
+  45% { text-shadow: 2px 0 var(--down), -2px 0 var(--c-accent); transform: translateX(-1px) skewX(-0.4deg); }
+  70% { text-shadow: -1px 0 var(--c-accent), 1px 0 var(--down); }
+}
+.chaos-on .top nav a:hover { animation: jitter 0.3s linear 1; }
+@keyframes jitter { 25% { transform: translate(1px, -1px); } 50% { transform: translate(-1px, 1px); } 75% { transform: translate(1px, 1px); } }
+.chaos-on .bg img { filter: saturate(0.8) contrast(1.06); }
+.chaos-light { color-scheme: light; }
+.chaos-light .bg img { filter: saturate(0.55) contrast(0.92) brightness(1.12); }
+#chaos-off { display: none; padding: 5px 8px; }
+.chaos-on #chaos-off { display: inline-flex; }
+.bg img.bgfade { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.8s ease; }
+
+/* escalation levels */
+.glitching-2 { animation: glitch2 0.5s steps(2) 4; }
+.glitching-3 { animation: glitch3 0.45s steps(3) 5; }
+@keyframes glitch2 {
+  0%, 100% { text-shadow: none; transform: none; clip-path: none; }
+  15% { text-shadow: -3px 0 var(--down), 3px 0 var(--c-accent); transform: translateX(2px) skewX(-1deg); }
+  35% { clip-path: inset(20% 0 55% 0); transform: translateX(-3px); }
+  55% { text-shadow: 3px 0 var(--down), -3px 0 var(--c-accent); clip-path: inset(60% 0 10% 0); }
+  75% { clip-path: none; transform: translateX(2px) skewX(0.8deg); }
+}
+@keyframes glitch3 {
+  0%, 100% { text-shadow: none; transform: none; clip-path: none; filter: none; }
+  10% { text-shadow: -5px 0 var(--down), 5px 0 var(--c-accent); transform: translate(3px, -2px) skewX(-2deg); }
+  25% { clip-path: inset(10% 0 65% 0); transform: translateX(-5px); filter: hue-rotate(40deg); }
+  45% { clip-path: inset(55% 0 20% 0); text-shadow: 5px 0 var(--down), -5px 0 var(--c-accent); }
+  60% { clip-path: inset(30% 0 35% 0); transform: translate(4px, 2px); filter: invert(0.08); }
+  80% { clip-path: none; transform: translateX(-2px) skewX(1.4deg); }
+}
+.chaos-flicker .frame { animation: flick 2.8s steps(1) infinite; }
+@keyframes flick {
+  0%, 91%, 94%, 100% { opacity: 1; }
+  92% { opacity: 0.82; }
+  96% { opacity: 0.9; }
+}

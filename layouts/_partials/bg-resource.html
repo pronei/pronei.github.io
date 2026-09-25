@@ -1,4 +1,7 @@
 {{- /* Resolve the active background image for a page: front-matter override, else site default. */ -}}
 {{- $name := or .Params.background site.Params.background -}}
 {{- $res := resources.Get (printf "backgrounds/%s" $name) -}}
+{{- if not $res -}}
+  {{- errorf "background %q (from %s) not found in assets/backgrounds/" $name (cond (isset .Params "background") (printf "front matter of %s" .File.Path) "hugo.toml params.background") -}}
+{{- end -}}
 {{- return (dict "name" $name "res" $res) -}}

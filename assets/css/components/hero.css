@@ -1,0 +1,57 @@
+/* ─── hero ──────────────────────────────────────────────────────────────── */
+.hero { margin: 8vh 0 30px; display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap; }
+.hero-text { max-width: 620px; }
+h1, .pagetitle { font-family: var(--font-display); font-weight: 400; line-height: 1.3; margin: 0; font-size: clamp(1.45rem, 4.2vw, 2.3rem); letter-spacing: -0.01em; }
+.hero .sub, .sub { color: color-mix(in oklab, var(--ink) 90%, transparent); font-size: 17px; line-height: 1.55; margin: 14px 0 0; max-width: 56ch; }
+.prevline { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.logo-cycle { position: relative; display: inline-block; width: 136px; height: 38px; vertical-align: middle; }
+.logo-cycle .logo {
+  position: absolute; inset: 0; display: flex; align-items: center; border: none;
+  opacity: 0; visibility: hidden; pointer-events: none; z-index: 1;
+}
+.logo-cycle .logo img {
+  width: 100%; height: 100%; object-fit: contain; object-position: left center;
+  /* white halo lifts dark wordmarks off the photo; dark shadow lifts light parts off bright sky */
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.9)) drop-shadow(0 2px 7px rgba(0, 0, 0, 0.55));
+}
+.logo-cycle .logo.a { animation: logo-a 8s ease-in-out infinite; }
+.logo-cycle .logo.b { animation: logo-b 8s ease-in-out infinite; }
+/* The two links are stacked; only the visible one may be hit-testable. `visibility`
+   animates in every browser (hidden elements never receive clicks) and `z-index` puts
+   the live logo on top — `pointer-events` alone isn't honored in keyframes everywhere,
+   which is why clicks used to land on the DOM-last (goibibo) link regardless of phase. */
+@keyframes logo-a {
+  0% { opacity: 0; transform: translateY(9px); visibility: visible; pointer-events: auto; z-index: 2; }
+  6%, 42% { opacity: 1; transform: translateY(0); visibility: visible; pointer-events: auto; z-index: 2; }
+  48%, 100% { opacity: 0; transform: translateY(-9px); visibility: hidden; pointer-events: none; z-index: 1; }
+}
+@keyframes logo-b {
+  0%, 50% { opacity: 0; transform: translateY(9px); visibility: hidden; pointer-events: none; z-index: 1; }
+  56%, 92% { opacity: 1; transform: translateY(0); visibility: visible; pointer-events: auto; z-index: 2; }
+  98%, 100% { opacity: 0; transform: translateY(-9px); visibility: hidden; pointer-events: none; z-index: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .logo-cycle .logo.a { opacity: 1; visibility: visible; pointer-events: auto; z-index: 2; animation: none; }
+  .logo-cycle .logo.b { animation: none; }
+}
+.portrait {
+  width: 180px; height: 180px; border-radius: 50%; object-fit: cover; flex: none;
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--c-accent) 35%, transparent),
+    0 12px 50px color-mix(in oklab, var(--c-tint) 80%, transparent),
+    0 0 110px 36px color-mix(in oklab, var(--c-tint) 60%, transparent);
+}
+.page-portrait {
+  float: right; width: min(300px, 46%); height: auto; margin: 4px 0 16px 22px;
+  border-radius: 16px; object-fit: cover;
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--c-accent) 30%, transparent),
+    0 16px 60px color-mix(in oklab, var(--c-tint) 75%, transparent);
+}
+/* text protection over arbitrary photos */
+.hero h1, .hero .sub, .pagetitle {
+  text-shadow:
+    0 1px 3px color-mix(in oklab, var(--c-tint) 60%, transparent),
+    0 2px 26px color-mix(in oklab, var(--c-tint) 70%, transparent);
+}
+.dim { color: var(--ink-dim); }

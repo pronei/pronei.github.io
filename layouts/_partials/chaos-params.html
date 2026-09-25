@@ -1,0 +1,27 @@
+{{- /* Build-time data for assets/js/chaos.ts, injected as js.Build "@params" (types in
+     assets/js/params.d.ts). Validates data/chaos.yaml so a malformed preset fails the build
+     instead of silently breaking the breaker at runtime. */ -}}
+{{- $c := hugo.Data.chaos -}}
+{{- $colorVars := slice "--c-accent" "--c-accent-text" "--c-accent-ink" "--c-tint" "--ink" "--ink-mute" "--ink-dim" -}}
+{{- range $c.fonts -}}
+  {{- if not (and .name .display .body) -}}
+    {{- errorf "data/chaos.yaml: font %v needs name, display and body" . -}}
+  {{- end -}}
+{{- end -}}
+{{- range $c.colors -}}
+  {{- $preset := . -}}
+  {{- range $colorVars -}}
+    {{- if not (index $preset.vars .) -}}
+      {{- errorf "data/chaos.yaml: color preset %q is missing %s" $preset.name . -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- /* every processed background + its palette, so chaos can swap backgrounds client-side */ -}}
+{{- $bgs := slice -}}
+{{- range $name, $pal := hugo.Data.palettes -}}
+  {{- with resources.Get (printf "backgrounds/%s" $name) -}}
+    {{- $w := (partial "bg-images.html" .).w1920 -}}
+    {{- $bgs = $bgs | append (merge (dict "name" $name "url" $w.RelPermalink) $pal) -}}
+  {{- end -}}
+{{- end -}}
+{{- return dict "fonts" $c.fonts "colors" $c.colors "backgrounds" $bgs -}}

@@ -1,0 +1,24 @@
+/* ─── frame & header ────────────────────────────────────────────────────── */
+.frame { max-width: 960px; margin: 0 auto; padding: 22px 22px 40px; min-height: 100dvh; display: flex; flex-direction: column; }
+main { flex: 1; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding-bottom: 10px; }
+.brand { font-family: var(--font-display); font-size: 15px; color: var(--ink); border: none; letter-spacing: 0.01em; }
+.brand .at { color: var(--c-accent-text); }
+.brand .dim { color: var(--ink-dim); }
+.top nav { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; font-family: var(--font-display); font-size: 12.5px; }
+.top nav a { color: var(--ink-mute); border: none; padding-bottom: 3px; border-bottom: 2px solid transparent; }
+.top nav a:hover { color: var(--ink); }
+.top nav a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--c-accent); }
+
+.navbtn {
+  font-family: var(--font-display); font-size: 11.5px; cursor: pointer;
+  color: var(--c-accent-text);
+  background: color-mix(in oklab, var(--c-accent) 9%, transparent);
+  border: 1px solid color-mix(in oklab, var(--c-accent) 32%, transparent);
+  border-radius: 7px; padding: 5px 10px;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.navbtn:hover { background: color-mix(in oklab, var(--c-accent) 18%, transparent); }
+.navbtn:active { transform: scale(0.97); }
+.breaker[aria-pressed="true"] { background: var(--c-accent); color: var(--c-accent-ink); border-color: var(--c-accent); }

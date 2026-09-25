@@ -1,0 +1,17 @@
+/* ─── base ──────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--c-tint);
+  color: var(--ink);
+  font: 16px/1.65 var(--font-body);
+  text-rendering: optimizeLegibility;
+}
+::selection { background: var(--c-accent); color: var(--c-accent-ink); }
+a { color: var(--c-accent-text); text-decoration: none; border-bottom: 1px solid color-mix(in oklab, var(--c-accent) 35%, transparent); }
+a:hover { border-bottom-color: var(--c-accent-text); }
+:focus-visible { outline: 2px solid var(--c-accent-text); outline-offset: 2px; border-radius: 2px; }
+code { font-family: var(--font-mono); font-size: 0.88em; background: color-mix(in oklab, var(--ink) 8%, transparent); padding: 0.1em 0.35em; border-radius: 5px; }

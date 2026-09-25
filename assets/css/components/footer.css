@@ -1,0 +1,5 @@
+/* ─── footer ────────────────────────────────────────────────────────────── */
+.bottom { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--hairline); display: flex; flex-direction: column; gap: 6px; font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-dim); }
+.bottom .frow { display: flex; gap: 16px; flex-wrap: wrap; }
+.bottom a { color: var(--ink-mute); border: none; }
+.bottom a:hover { color: var(--c-accent-text); }

@@ -5,5 +5,5 @@ summary: Education, experience, and skills — rendered from data, with the real
 weight: 95
 ---
 
-The one-page PDF is the source of truth; this page renders the same data for people who
-don't like downloading things.
+The one-page PDF is the printable version; this page is the same CV for people who don't
+like downloading things.

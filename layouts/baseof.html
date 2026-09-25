@@ -12,27 +12,20 @@
 </div>
 {{ partial "palette.html" . }}
 {{- partialCached "check-palettes.html" . "once" -}}
-{{- /* runtime background catalog for chaos mode: every processed background + its palette */ -}}
-{{- $bgs := slice -}}
-{{- range $name, $pal := hugo.Data.palettes -}}
-  {{- with resources.Get (printf "backgrounds/%s" $name) -}}
-    {{- $w := (partial "bg-images.html" .).w1920 -}}
-    {{- $bgs = $bgs | append (merge (dict "name" $name "url" $w.RelPermalink) $pal) -}}
-  {{- end -}}
-{{- end -}}
-<script type="application/json" id="bg-data">{{ $bgs | jsonify | safeJS }}</script>
-{{ $chaos := resources.Get "js/chaos.ts" | js.Build (dict "minify" true "target" "es2020" "format" "esm" "targetPath" "js/chaos.js") | fingerprint }}
+{{ $chaos := resources.Get "js/chaos.ts" | js.Build (dict "minify" true "target" "es2020" "format" "esm" "targetPath" "js/chaos.js" "params" (partialCached "chaos-params.html" . "once")) | fingerprint }}
 {{ $pal := resources.Get "js/palette.ts" | js.Build (dict "minify" true "target" "es2020" "format" "esm" "targetPath" "js/palette.js") | fingerprint }}
 <script>
   (function () {
     var cm = null, pm = null;
     var chaos = function (cb) {
       if (cm) { cb(cm); return; }
-      import("{{ $chaos.RelPermalink }}").then(function (m) { cm = m; cb(m); });
+      import("{{ $chaos.RelPermalink }}").then(function (m) { cm = m; cb(m); })
+        .catch(function (e) { console.error("chaos module failed to load", e); });
     };
     var pal = function (cb) {
       if (pm) { cb(pm); return; }
-      import("{{ $pal.RelPermalink }}").then(function (m) { pm = m; cb(m); });
+      import("{{ $pal.RelPermalink }}").then(function (m) { pm = m; cb(m); })
+        .catch(function (e) { console.error("palette module failed to load", e); });
     };
     var b = document.getElementById("chaos-breaker");
     if (b) b.addEventListener("click", function () { chaos(function (m) { m.toggle(); }); });
