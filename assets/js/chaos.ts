@@ -23,14 +23,15 @@ const FONTS: FontSet[] = [
   { name: "charter", display: "Charter, Cambria, Georgia, serif", body: "Charter, Cambria, Georgia, serif" },
 ];
 
+// every --ink-dim clears WCAG AA (4.5:1) on its own --c-tint — corrupted, not unreadable
 const COLORS: ColorSet[] = [
   { name: "amber-crt", vars: { "--c-accent": "#ffb000", "--c-accent-text": "#ffc54d", "--c-accent-ink": "#1c1203", "--c-tint": "#171007", "--ink": "#f5e9cd", "--ink-mute": "#cdb285", "--ink-dim": "#8d7c54" } },
-  { name: "bluescreen", vars: { "--c-accent": "#5aa2ff", "--c-accent-text": "#8abdff", "--c-accent-ink": "#04102a", "--c-tint": "#0a1430", "--ink": "#dde8ff", "--ink-mute": "#9fb4dd", "--ink-dim": "#64779f" } },
+  { name: "bluescreen", vars: { "--c-accent": "#5aa2ff", "--c-accent-text": "#8abdff", "--c-accent-ink": "#04102a", "--c-tint": "#0a1430", "--ink": "#dde8ff", "--ink-mute": "#9fb4dd", "--ink-dim": "#6f81a6" } },
   { name: "phosphor", vars: { "--c-accent": "#33ff66", "--c-accent-text": "#66ff8c", "--c-accent-ink": "#03130a", "--c-tint": "#04130a", "--ink": "#d2ffd9", "--ink-mute": "#84cf95", "--ink-dim": "#4d8a5d" } },
-  { name: "redshift", vars: { "--c-accent": "#ff5c57", "--c-accent-text": "#ff8a85", "--c-accent-ink": "#1c0605", "--c-tint": "#190b0d", "--ink": "#ffe4e1", "--ink-mute": "#d3a09b", "--ink-dim": "#8f655f" } },
-  { name: "vaporwave", vars: { "--c-accent": "#ff71ce", "--c-accent-text": "#ff9ddd", "--c-accent-ink": "#1c0517", "--c-tint": "#150f22", "--ink": "#f4e9ff", "--ink-mute": "#bda6d8", "--ink-dim": "#7d6c96" } },
-  { name: "norad", vars: { "--c-accent": "#ff3b30", "--c-accent-text": "#ff6f66", "--c-accent-ink": "#190302", "--c-tint": "#0d0d0d", "--ink": "#f2f2f2", "--ink-mute": "#b3b3b3", "--ink-dim": "#6f6f6f" } },
-  { name: "paper-tape", light: true, vars: { "--c-accent": "#b3261e", "--c-accent-text": "#8f1d16", "--c-accent-ink": "#fff6ec", "--c-tint": "#e9e4d8", "--ink": "#221d14", "--ink-mute": "#5d5749", "--ink-dim": "#8b8474" } },
+  { name: "redshift", vars: { "--c-accent": "#ff5c57", "--c-accent-text": "#ff8a85", "--c-accent-ink": "#1c0605", "--c-tint": "#190b0d", "--ink": "#ffe4e1", "--ink-mute": "#d3a09b", "--ink-dim": "#9a746f" } },
+  { name: "vaporwave", vars: { "--c-accent": "#ff71ce", "--c-accent-text": "#ff9ddd", "--c-accent-ink": "#1c0517", "--c-tint": "#150f22", "--ink": "#f4e9ff", "--ink-mute": "#bda6d8", "--ink-dim": "#87789e" } },
+  { name: "norad", vars: { "--c-accent": "#ff3b30", "--c-accent-text": "#ff6f66", "--c-accent-ink": "#190302", "--c-tint": "#0d0d0d", "--ink": "#f2f2f2", "--ink-mute": "#b3b3b3", "--ink-dim": "#7c7c7c" } },
+  { name: "paper-tape", light: true, vars: { "--c-accent": "#b3261e", "--c-accent-text": "#8f1d16", "--c-accent-ink": "#fff6ec", "--c-tint": "#e9e4d8", "--ink": "#221d14", "--ink-mute": "#5d5749", "--ink-dim": "#6a6458" } },
 ];
 
 const COLOR_VARS = ["--c-accent", "--c-accent-text", "--c-accent-ink", "--c-tint", "--ink", "--ink-mute", "--ink-dim"];
@@ -63,7 +64,7 @@ function currentBgName(): string {
 function crossfadeBg(bg: Bg): void {
   const wrap = document.querySelector(".bg") as HTMLElement | null;
   if (!wrap) return;
-  const old = wrap.querySelector("picture, img.bgfade") as HTMLElement | null;
+  const old = wrap.querySelector("img") as HTMLElement | null;
   const img = document.createElement("img");
   img.className = "bgfade";
   img.src = bg.url;

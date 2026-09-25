@@ -9,7 +9,7 @@
   --c-tint: #0b1014;
   --ink: #e8eef0;
   --ink-mute: #9fb3bf;
-  --ink-dim: #5f7480;
+  --ink-dim: #748691;            /* ≥5:1 on every palette tint (was #5f7480, 3.9:1 — failed WCAG AA) */
   --warn: #f0b429;
   --down: #ff5c57;
   --glass: color-mix(in oklab, var(--c-tint) var(--glass-mix, 78%), transparent);

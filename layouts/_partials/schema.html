@@ -1,0 +1,25 @@
+{{- /* JSON-LD Person for the home page, derived from data/ so it can't drift from the CV.
+     Degrees whose dates end in "present" are an affiliation, finished ones alumniOf. */ -}}
+{{- if .IsHome -}}
+  {{- $cv := hugo.Data.cv -}}
+  {{- $alumni := slice -}}{{- $current := slice -}}
+  {{- range $cv.education -}}
+    {{- $org := dict "@type" "CollegeOrUniversity" "name" .school -}}
+    {{- if findRE `(?i)present` .when -}}{{- $current = $current | append $org -}}{{- else -}}{{- $alumni = $alumni | append $org -}}{{- end -}}
+  {{- end -}}
+  {{- $knows := slice -}}
+  {{- range $cv.skills -}}{{- if eq .group "expertise" -}}{{- $knows = .items -}}{{- end -}}{{- end -}}
+  {{- $p := dict
+        "@context" "https://schema.org"
+        "@type" "Person"
+        "name" "Pranay Mundra"
+        "url" ("/" | absURL)
+        "email" (printf "mailto:%s" site.Params.email)
+        "description" site.Params.description
+        "sameAs" (slice site.Params.github site.Params.linkedin)
+        "knowsAbout" $knows -}}
+  {{- with $alumni -}}{{- $p = merge $p (dict "alumniOf" .) -}}{{- end -}}
+  {{- with $current -}}{{- $p = merge $p (dict "affiliation" .) -}}{{- end -}}
+  {{- with resources.Get "img/portrait.jpg" -}}{{- $p = merge $p (dict "image" (.Process "resize 360x360 smartcrop webp q85").Permalink) -}}{{- end -}}
+<script type="application/ld+json">{{ $p | jsonify | safeJS }}</script>
+{{- end -}}

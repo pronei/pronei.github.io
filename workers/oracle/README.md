@@ -6,9 +6,14 @@ site POSTs `{messages:[…]}` here and streams the SSE reply into its tty pane.
 
 ```
 cd workers/oracle
-npx wrangler login      # once, in a browser
-npx wrangler deploy     # prints the real URL — currently https://oracle.pranayrs.workers.dev
+npm ci                  # wrangler pinned in package-lock.json (4.140.0)
+npx wrangler login      # once, in a browser — and again whenever the OAuth token expires
+npm run deploy          # prints the real URL — currently https://oracle.pranayrs.workers.dev
 ```
+
+npm 12 blocks dependency install scripts by default. `package.json` → `allowScripts` records
+that esbuild / workerd / fsevents postinstalls are denied on purpose: bundling and the
+local runtime work without them (verified with `wrangler deploy --dry-run` and `wrangler dev`).
 
 Then set `oracleEndpoint` in `hugo.toml` to exactly that URL and push. **The subdomain is the
 account's, not a name you choose** — pointing `hugo.toml` at a subdomain you don't own is

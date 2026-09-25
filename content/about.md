@@ -21,7 +21,7 @@ What I care about, in order: correctness, p99s, and APIs that don't make the nex
 life worse. I write Go and Rust by preference, Java when the legacy platform demands it, and
 I instrument everything — if it doesn't emit traces, it didn't happen.
 
-### on naming things
+## on naming things
 
 Every system I build gets a name from classical mythology, and the names are load-bearing:
 
@@ -32,7 +32,7 @@ Every system I build gets a name from classical mythology, and the names are loa
 The chat widget in the nav is called the oracle for the same reason. I am aware this is a
 disease. I have no plans to treat it.
 
-### elsewhere
+## elsewhere
 
 When not staring at Grafana: I'm somewhere between San Francisco and Santa Cruz, and I built
 [slug-mcp](https://github.com/pronei/slug-mcp) partly so my own AI tools could tell me the

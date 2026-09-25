@@ -1,0 +1,44 @@
+{{- /* Build-time 1200×630 social card for the page (og:image). Pure Hugo image filters:
+     the page's own background, blurred + darkened; the portrait masked to a circle; text
+     in Departure Mono (the OTF is used only here and is never published). Accent colour
+     comes from the same palette entry that themes the page. Returns
+     dict "img" <resource> "alt" <string>, or nil (404s). */ -}}
+{{- $out := dict -}}
+{{- $bg := partial "bg-resource.html" . -}}
+{{- if and $bg.res (ne .Kind "404") -}}
+  {{- $font := resources.Get "fonts/DepartureMono-Regular.otf" -}}
+  {{- $pal := index hugo.Data.palettes $bg.name -}}
+  {{- $accent := cond (isset $pal "accentText") (index $pal "accentText") "#49c7c2" -}}
+
+  {{- $line := site.Params.tagline -}}
+  {{- $summary := site.Params.subline -}}
+  {{- if not .IsHome -}}
+    {{- $line = printf "~/%s" (trim .RelPermalink "/") -}}
+    {{- $summary = or .Params.summary .Description site.Params.description -}}
+  {{- end -}}
+
+  {{- /* greedy word-wrap to 46 columns (monospace), at most 3 lines */ -}}
+  {{- $lines := slice -}}{{- $cur := "" -}}
+  {{- range split (plainify $summary) " " -}}
+    {{- $try := cond (eq $cur "") . (printf "%s %s" $cur .) -}}
+    {{- if gt (strings.RuneCount $try) 46 -}}{{- $lines = $lines | append $cur -}}{{- $cur = . -}}{{- else -}}{{- $cur = $try -}}{{- end -}}
+  {{- end -}}
+  {{- with $cur -}}{{- $lines = $lines | append . -}}{{- end -}}
+  {{- if gt (len $lines) 3 -}}{{- $lines = slice (index $lines 0) (index $lines 1) (printf "%s…" (index $lines 2)) -}}{{- end -}}
+
+  {{- $card := $bg.res.Process "fill 1200x630 Center jpg q85" -}}
+  {{- $filters := slice (images.GaussianBlur 3) (images.Brightness -48) (images.Saturation -15) -}}
+  {{- with or (resources.Get "img/portrait.jpg") (resources.Get "img/portrait.png") -}}
+    {{- $face := .Process "fill 280x280 smartcrop png" | images.Filter (images.Mask (resources.Get "img/og-mask.png")) -}}
+    {{- $filters = $filters | append (images.Overlay $face 850 175) -}}
+  {{- end -}}
+  {{- $filters = $filters | append (images.Text "pranay mundra" (dict "font" $font "size" 72 "x" 80 "y" 160 "color" "#e8eef0")) -}}
+  {{- $filters = $filters | append (images.Text $line (dict "font" $font "size" 30 "x" 80 "y" 268 "color" $accent)) -}}
+  {{- range $i, $l := first 3 $lines -}}
+    {{- $filters = $filters | append (images.Text $l (dict "font" $font "size" 24 "x" 80 "y" (add 340 (mul $i 36)) "color" "#c8d4da")) -}}
+  {{- end -}}
+  {{- $filters = $filters | append (images.Text "pronei.github.io" (dict "font" $font "size" 24 "x" 80 "y" 520 "color" "#9fb3bf")) -}}
+  {{- $img := $card | images.Filter $filters -}}
+  {{- $out = dict "img" ($img.Process "jpg q84") "alt" (printf "Pranay Mundra — %s" $line) -}}
+{{- end -}}
+{{- return $out -}}

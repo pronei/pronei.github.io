@@ -11,11 +11,12 @@
   {{ partial "footer.html" . }}
 </div>
 {{ partial "palette.html" . }}
+{{- partialCached "check-palettes.html" . "once" -}}
 {{- /* runtime background catalog for chaos mode: every processed background + its palette */ -}}
 {{- $bgs := slice -}}
 {{- range $name, $pal := hugo.Data.palettes -}}
   {{- with resources.Get (printf "backgrounds/%s" $name) -}}
-    {{- $w := .Process "resize 1920x webp q82" -}}
+    {{- $w := (partial "bg-images.html" .).w1920 -}}
     {{- $bgs = $bgs | append (merge (dict "name" $name "url" $w.RelPermalink) $pal) -}}
   {{- end -}}
 {{- end -}}

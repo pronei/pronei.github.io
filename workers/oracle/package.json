@@ -1,0 +1,18 @@
+{
+  "name": "oracle",
+  "private": true,
+  "description": "Workers AI proxy behind the site's cmd+k 'ask an agent' (see README.md)",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "tail": "wrangler tail"
+  },
+  "devDependencies": {
+    "wrangler": "4.140.0"
+  },
+  "allowScripts": {
+    "esbuild": false,
+    "fsevents": false,
+    "workerd": false
+  }
+}

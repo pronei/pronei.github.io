@@ -6,9 +6,13 @@
       {{ if .Params.portrait }}
         {{ $full := or (resources.Get "img/portrait-full.jpg") (resources.Get "img/portrait-full.png") (resources.Get "img/portrait.jpg") }}
         {{ with $full }}
-          {{ $p := .Process "resize 720x webp q88" }}
-          <img class="page-portrait" src="{{ $p.RelPermalink }}" alt="Pranay Mundra"
-               width="{{ $p.Width }}" height="{{ $p.Height }}">
+          {{- /* 300px CSS float on desktop, full-width on phones (see .page-portrait) */ -}}
+          {{ $s := .Process "resize 400x webp photo q78" }}
+          {{ $l := .Process "resize 720x webp photo q78" }}
+          <img class="page-portrait" src="{{ $s.RelPermalink }}" alt="Pranay Mundra"
+               srcset="{{ $s.RelPermalink }} 400w, {{ $l.RelPermalink }} 720w"
+               sizes="(max-width: 640px) 100vw, 300px"
+               width="{{ $l.Width }}" height="{{ $l.Height }}" fetchpriority="high">
         {{ end }}
       {{ end }}
       {{ .Content }}

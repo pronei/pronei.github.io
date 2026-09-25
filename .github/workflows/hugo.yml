@@ -11,6 +11,12 @@
 # commits data/now.yaml back whenever it changed — real activity — and drops a keepalive
 # commit if nothing has landed in 45 days. Bot pushes with GITHUB_TOKEN never retrigger
 # this workflow, so there is no loop.
+#
+# Gates (a failure here stops the deploy): TypeScript type-check (Hugo's esbuild strips types
+# without checking them), worker syntax, and a --panicOnWarning build — which is what turns
+# the "background has no palette entry" warning into a hard failure.
+# The lighthouse job is a separate, NON-gating budget check on pushes (lab perf is noisy on
+# shared runners; a red X is the signal, the site still ships). Reports: workflow artifact.
 name: deploy
 
 on:
@@ -32,7 +38,9 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  HUGO_VERSION: 0.165.0
+  HUGO_VERSION: 0.166.0
+  TYPESCRIPT_VERSION: 7.0.2
+  LHCI_VERSION: 0.15.1
   KEEPALIVE_DAYS: 45
 
 jobs:
@@ -49,6 +57,11 @@ jobs:
           persist-credentials: true   # needed for the persist step's push
       - id: pages
         uses: actions/configure-pages@v6
+
+      - name: type-check (tsc)
+        run: npx -y -p typescript@${TYPESCRIPT_VERSION} tsc -p .
+      - name: worker syntax
+        run: node --check workers/oracle/src/index.js
 
       - name: refresh status board from live repos
         env:
@@ -76,8 +89,8 @@ jobs:
           git push origin HEAD:main
         continue-on-error: true   # a push race must never block the deploy
 
-      - name: build
-        run: hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
+      - name: build (strict — any Hugo warning fails)
+        run: hugo --minify --panicOnWarning --baseURL "${{ steps.pages.outputs.base_url }}/"
       - uses: actions/upload-pages-artifact@v5
         with:
           path: ./public
@@ -91,3 +104,25 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v5
+
+  lighthouse:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: install hugo (extended)
+        run: |
+          wget -qO /tmp/hugo.deb \
+            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb"
+          sudo dpkg -i /tmp/hugo.deb
+      - uses: actions/checkout@v7
+      - name: build for a local static server
+        run: hugo --minify --baseURL "http://localhost/"
+      - name: lighthouse budgets (mobile, median of 3) — see lighthouserc.json
+        run: npx -y @lhci/cli@${LHCI_VERSION} autorun
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci/

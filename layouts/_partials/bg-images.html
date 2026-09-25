@@ -1,0 +1,8 @@
+{{- /* One place that defines the served background derivatives, shared by the page
+     background (bg.html) and chaos mode's runtime catalog (baseof.html), so both hit
+     the same cached files. q60 + the webp "photo" hint is visually identical to q82 on
+     these photos (they sit behind a scrim and frosted glass) at ~1/3 fewer bytes. No
+     2560w: a background behind glass doesn't need retina sharpness. */ -}}
+{{- return dict
+      "w1280" (.Process "resize 1280x webp photo q60")
+      "w1920" (.Process "resize 1920x webp photo q60") -}}

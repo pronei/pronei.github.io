@@ -4,10 +4,16 @@ Personal portfolio. Hugo only — no npm, no node_modules, no frameworks, no ana
 One binary in, static files out.
 
 ```
-brew install hugo        # extended build, ≥ 0.146
+brew install hugo        # extended build; CI pins 0.166.0
 hugo server              # dev at localhost:1313
 hugo                     # production build into public/
 ```
+
+CI gates every deploy on: a TypeScript 7 type-check (`tsc -p .` — Hugo's esbuild strips
+types without checking them), a worker syntax check, and a `--panicOnWarning` build, which
+also fails if any background lacks a palette entry. A separate non-gating Lighthouse job
+([lighthouserc.json](lighthouserc.json)) holds pushes to mobile budgets — performance ≥ 90,
+accessibility 100, LCP ≤ 3s, ≤ 600KB — and uploads reports as a workflow artifact.
 
 ## The gimmicks (all load-bearing)
 
@@ -49,8 +55,9 @@ Cloudflare Workers AI proxy ([workers/oracle](workers/oracle)), grounded in
 
 ```
 cd workers/oracle
-npx wrangler login
-npx wrangler deploy        # prints https://oracle.pranayrs.workers.dev
+npm ci                     # wrangler is pinned in package-lock.json
+npx wrangler login         # once; tokens expire — re-run if deploy/dev says "could not be authenticated"
+npm run deploy             # prints https://oracle.pranayrs.workers.dev
 ```
 
 then set `oracleEndpoint = "https://oracle.pranayrs.workers.dev"` in
@@ -78,6 +85,12 @@ whenever it changes (real activity) and adds an empty keepalive commit after 45 
 so the schedule can't lapse. Those bot commits are expected — `git pull` before you edit.
 If it ever shows `disabled_inactivity` again: `gh workflow enable deploy`.
 
+**Share cards.** Every page gets its own 1200×630 `og:image`, rendered at build time by
+[og-card.html](layouts/_partials/og-card.html) from pure Hugo image filters — the page's
+background blurred and darkened, the portrait masked to a circle, name + `~/path` + summary
+in Departure Mono. The home page also carries JSON-LD `Person` data
+([schema.html](layouts/_partials/schema.html)) derived from `cv.yaml`.
+
 **Portrait slots (replaceable).** Drop `assets/img/portrait.jpg` (circular, blends into
 the hero with soft shadows) and/or `assets/img/portrait-full.jpg` (contact page) — both
 optional, both picked up automatically at build.
@@ -102,12 +115,14 @@ GitHub Pages: push to `main` on a repo with Pages → "GitHub Actions" enabled �
 domain, change `baseURL` and add a `static/CNAME`.
 
 Cloudflare Pages: framework preset "Hugo", build command `hugo --minify`, output
-directory `public`, env var `HUGO_VERSION=0.165.0`.
+directory `public`, env var `HUGO_VERSION=0.166.0`.
 
 ## Performance posture
 
-Zero JS shipped until a visitor flips the breaker or opens the oracle (two ~300-byte
-inline loaders gate the dynamic imports). One stylesheet (~15KB raw). One self-hosted
-display font (Departure Mono, 22KB woff2, OFL — license vendored next to it). Background
-images are served as webp at three widths with a jpeg fallback and preloaded with
-`fetchpriority=high`; the committed sources (1920px JPEGs) never ship.
+Mobile Lighthouse: 100 performance / 100 accessibility on every main page, LCP 1.2–1.9s,
+~320–410KB per page. Zero JS until a visitor flips the breaker or opens the palette (tiny
+inline loaders gate the dynamic imports). One stylesheet, one self-hosted display font
+(Departure Mono, 22KB woff2, OFL). The background is webp at 1280/1920w, q60, and is
+deliberately **not** preloaded and fetched at `fetchpriority=low`: Chrome excludes
+full-viewport images from LCP, so a high-priority background only starves the CSS and font
+the headline needs — that mistake cost a 7.8s mobile LCP until Sept 2026.

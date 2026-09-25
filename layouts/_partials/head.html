@@ -10,13 +10,19 @@
   <meta property="og:description" content="{{ or .Description .Params.summary site.Params.description }}">
   <meta property="og:type" content="website">
   <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:site_name" content="{{ site.Title }}">
+  {{- with partial "og-card.html" . }}{{ with .img }}
+  <meta property="og:image" content="{{ .Permalink }}">
+  <meta property="og:image:width" content="{{ .Width }}">
+  <meta property="og:image:height" content="{{ .Height }}">
+  {{- end }}
+  <meta property="og:image:alt" content="{{ .alt }}">
+  <meta name="twitter:card" content="summary_large_image">
+  {{- end }}
+  {{ partial "schema.html" . }}
   {{ $font := resources.Get "fonts/DepartureMono-Regular.woff2" | fingerprint }}
   <link rel="preload" href="{{ $font.RelPermalink }}" as="font" type="font/woff2" crossorigin>
   {{ $bg := partial "bg-resource.html" . }}
-  {{ with $bg.res }}
-    {{ $w1920 := .Process "resize 1920x webp q82" }}
-    <link rel="preload" as="image" href="{{ $w1920.RelPermalink }}" fetchpriority="high">
-  {{ end }}
   <style>
     @font-face {
       font-family: "Departure Mono";

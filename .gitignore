@@ -8,3 +8,10 @@
 
 # python bytecode from the helper scripts
 __pycache__/
+
+# worker toolchain (pinned via workers/oracle/package-lock.json)
+node_modules/
+.wrangler/
+
+# lighthouse ci reports
+.lighthouseci/
