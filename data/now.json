@@ -45,8 +45,8 @@
       "link": "/projects/slug-mcp/",
       "repo": "pronei/slug-mcp",
       "status": "operational",
-      "subject": "fix: repair four broken tools found by the li…",
-      "pushed_at": "2026-09-25T18:37:46Z",
+      "subject": "docs: mark the auth-gated tools as non-functi…",
+      "pushed_at": "2026-09-30T22:36:53Z",
       "ci": "success"
     }
   ]
