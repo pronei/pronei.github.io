@@ -32,6 +32,10 @@ failures, scroll-jacking, and broken links.
   background catalog) and the palette/oracle (~4KB) are esbuild-bundled TS (`js.Build`,
   `format: esm`) behind dynamic imports. Chaos presets come from `data/chaos.yaml` via
   `@params` (typed in `assets/js/params.d.ts`), validated in `chaos-params.html`.
+  Skins (`skins:` in the same file) are whole design systems: a stylesheet scoped to
+  `:root.skin-<name>` built with `css.Build`, plus fonts registered through the FontFace
+  API. Both are fingerprinted at build time and fetched only when the skin rolls. Each roll
+  first clears the previous roll's inline vars, since they would outrank a skin's stylesheet.
 - **CSS**: one file per component under `assets/css/components/`, bundled by `css.Build`
   (Hugo ≥ 0.158, esbuild) from the `@import` index in `main.css`. Import order is the
   cascade: preferences, responsive and print stay last.

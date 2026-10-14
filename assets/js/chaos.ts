@@ -1,12 +1,13 @@
 // chaos mode v3 — the breaker corrupts the site: random font set + random
 // background (cross-faded) + colors that either adapt to the new background's
-// precomputed palette or get hijacked by a color preset. Clicking again while
-// corrupted re-rolls and ESCALATES glitch intensity (faster clicks = worse).
-// The ✕ button (or the board toast) rolls everything back. Per-tab state.
+// precomputed palette or get hijacked by a color preset. Some rolls are instead a
+// skin: a whole design system takes the site over (see data/chaos.yaml). Clicking
+// again while corrupted re-rolls and ESCALATES glitch intensity (faster clicks =
+// worse). The ✕ button (or the board toast) rolls everything back. Per-tab state.
 
-import { fonts as FONTS, colors as COLORS, backgrounds, type Bg } from "@params";
+import { fonts as FONTS, colors as COLORS, skins as SKINS, backgrounds, type Bg, type Skin } from "@params";
 
-// presets live in data/chaos.yaml; rollback must clear every var any of them can set
+// presets live in data/chaos.yaml; each roll and the rollback clear every var any of them can set
 const COLOR_VARS = [...new Set(["--c-accent", "--c-accent-text", "--c-accent-ink", "--c-tint",
   ...COLORS.flatMap((c) => Object.keys(c.vars))])];
 const SCRIM_VARS = ["--scrim-top", "--scrim-mid", "--scrim-bot", "--glass-mix"];
@@ -59,6 +60,76 @@ function applyPaletteOf(bg: Bg, withColors: boolean): void {
     });
   }
   for (const [k, v] of Object.entries(map)) root().style.setProperty(k, v);
+}
+
+function clearInlineVars(): void {
+  for (const k of [...COLOR_VARS, ...SCRIM_VARS, ...FONT_VARS]) root().style.removeProperty(k);
+}
+
+// A skin is one stylesheet scoped to :root.skin-<name> plus its webfonts. Neither is
+// fetched until the skin first rolls; the promise settles once the stylesheet is in and
+// the fonts are loaded (or 1.5s pass; late fonts still swap in).
+const skinClass = (s: Skin): string => `skin-${s.name}`;
+const skinReady = new Map<string, Promise<boolean>>();
+
+function loadSkin(skin: Skin): Promise<boolean> {
+  const cached = skinReady.get(skin.name);
+  if (cached) return cached;
+  const css = new Promise<boolean>((resolve) => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = skin.css;
+    link.onload = () => resolve(true);
+    link.onerror = () => resolve(false);
+    document.head.append(link);
+  });
+  const fonts = skin.fonts.map((f) => {
+    const face = new FontFace(f.family, `url("${f.url}") format("woff2")`, { weight: f.weight, style: f.style, display: "swap" });
+    document.fonts.add(face);
+    return face.load().catch(() => face); // a failed font just leaves its fallback stack
+  });
+  const ready = Promise.all([css, Promise.race([Promise.all(fonts), new Promise((r) => setTimeout(r, 1500))])])
+    .then(([ok]) => ok);
+  skinReady.set(skin.name, ready);
+  return ready;
+}
+
+function currentSkin(): Skin | null {
+  return SKINS.find((s) => root().classList.contains(skinClass(s))) ?? null;
+}
+
+function setSkin(skin: Skin | null): Promise<boolean> {
+  for (const s of SKINS) root().classList.toggle(skinClass(s), s === skin);
+  return skin ? loadSkin(skin) : Promise.resolve(false);
+}
+
+// each skin takes its configured share of rolls; landing on the skin that is already on
+// falls through to an ordinary roll, so every click visibly changes something
+function rollSkin(current: Skin | null): Skin | null {
+  let r = Math.random();
+  for (const s of SKINS) {
+    if (r < s.chance) return s === current ? null : s;
+    r -= s.chance;
+  }
+  return null;
+}
+
+// the skin's opening title card (styled by its own stylesheet), shown once when it lands
+function titleCard(skin: Skin): void {
+  if (!skin.title || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  document.querySelector(".skin-titlecard")?.remove();
+  const card = document.createElement("div");
+  card.className = "skin-titlecard";
+  card.setAttribute("aria-hidden", "true");
+  for (const [cls, text] of [["t", skin.title], ["s", skin.slate]]) {
+    if (!text) continue;
+    const span = document.createElement("span");
+    span.className = cls;
+    span.textContent = text;
+    card.append(span);
+  }
+  document.body.append(card);
+  setTimeout(() => card.remove(), 2700);
 }
 
 function setBreakerLabel(text: string): void {
@@ -137,47 +208,71 @@ function restoreVictim(): void {
   }
 }
 
-type State = { font: string; color: string | null; bg: string; level: number; victim?: string | null };
+type State = {
+  font: string | null; color: string | null; bg: string; level: number;
+  victim?: string | null; skin?: string | null;
+};
 
 function corrupt(announce: boolean, saved?: State): void {
+  // every roll replaces the last one wholesale: leftover inline vars would outrank a skin's
+  // stylesheet, and a light preset's dark --ink would bleed into a dark adaptive roll
+  clearInlineVars();
+  const skin = saved ? SKINS.find((s) => s.name === saved.skin) ?? null : rollSkin(currentSkin());
+  const ready = setSkin(skin);
   const data = backgrounds;
-  const font = saved ? FONTS.find((f) => f.name === saved.font) ?? pick(FONTS) : pick(FONTS);
-  const others = data.filter((b) => b.name !== currentBgName());
-  const bg = saved
-    ? data.find((b) => b.name === saved.bg) ?? (others.length ? pick(others) : null)
-    : others.length ? pick(others) : null;
-  const useOverride = saved ? saved.color !== null : Math.random() < 0.35;
-  const color = saved
-    ? COLORS.find((c) => c.name === saved.color) ?? null
-    : useOverride ? pick(COLORS) : null;
+  let desc: string;
+  let roll: Pick<State, "font" | "color" | "bg">;
 
-  root().style.setProperty("--font-display", font.display);
-  root().style.setProperty("--font-body", font.body);
-  if (bg) {
-    crossfadeBg(bg);
-    applyPaletteOf(bg, !color);
-  }
-  if (color) {
-    for (const [k, v] of Object.entries(color.vars)) root().style.setProperty(k, v);
+  if (skin) {
+    // the skin owns type and colour; it only keeps a background an earlier roll swapped in
+    const bg = saved && saved.bg !== currentBgName() ? data.find((b) => b.name === saved.bg) : undefined;
+    if (bg) crossfadeBg(bg);
+    root().classList.remove("chaos-light");
+    desc = `${skin.name} takeover`;
+    roll = { font: null, color: null, bg: currentBgName() };
+    if (announce) void ready.then((ok) => { if (ok && currentSkin() === skin) titleCard(skin); });
+  } else {
+    const font = saved ? FONTS.find((f) => f.name === saved.font) ?? pick(FONTS) : pick(FONTS);
+    const others = data.filter((b) => b.name !== currentBgName());
+    const bg = saved
+      ? data.find((b) => b.name === saved.bg) ?? (others.length ? pick(others) : null)
+      : others.length ? pick(others) : null;
+    const useOverride = saved ? saved.color !== null : Math.random() < 0.35;
+    const color = saved
+      ? COLORS.find((c) => c.name === saved.color) ?? null
+      : useOverride ? pick(COLORS) : null;
+
+    root().style.setProperty("--font-display", font.display);
+    root().style.setProperty("--font-body", font.body);
+    if (bg) {
+      crossfadeBg(bg);
+      applyPaletteOf(bg, !color);
+    }
+    if (color) {
+      for (const [k, v] of Object.entries(color.vars)) root().style.setProperty(k, v);
+    }
+    root().classList.toggle("chaos-light", !!color?.light);
+    desc = `${font.name} / ${color ? color.name : `adaptive(${bg?.name ?? "current"})`}`;
+    roll = { font: font.name, color: color?.name ?? null, bg: bg?.name ?? currentBgName() };
   }
   root().classList.add("chaos-on");
-  root().classList.toggle("chaos-light", !!color?.light);
   root().classList.toggle("chaos-flicker", level >= 3);
 
-  const desc = `${font.name} / ${color ? color.name : `adaptive(${bg?.name ?? "current"})`}`;
   const b = document.getElementById("chaos-breaker");
   if (b) b.setAttribute("aria-pressed", "true");
   setBreakerLabel(level > 1 ? `escalate ×${level}` : "escalate");
   takeDownVictim(desc, saved?.victim);
   // remember the downed service (and keep it across boardless pages) so it doesn't hop around
   const victimName = victim?.querySelector(".name")?.textContent?.trim() ?? saved?.victim ?? null;
-  sessionStorage.setItem(STORE, JSON.stringify({ font: font.name, color: color?.name ?? null, bg: bg?.name ?? currentBgName(), level, victim: victimName } satisfies State));
+  sessionStorage.setItem(STORE, JSON.stringify({ ...roll, level, victim: victimName, skin: skin?.name ?? null } satisfies State));
   if (announce) glitch(level);
   if (!document.title.startsWith("[degraded] ")) document.title = "[degraded] " + document.title;
 }
 
 function rollback(): void {
-  for (const k of [...COLOR_VARS, ...SCRIM_VARS, ...FONT_VARS]) root().style.removeProperty(k);
+  clearInlineVars();
+  void setSkin(null);
+  document.querySelector(".skin-titlecard")?.remove();
   root().classList.remove("chaos-on", "chaos-light", "chaos-flicker");
   sessionStorage.removeItem(STORE);
   level = 0;

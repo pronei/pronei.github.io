@@ -50,6 +50,15 @@ reach the TypeScript at build time through `js.Build`'s `@params`, together with
 background catalog, so the page HTML carries none of it. A preset missing a field fails
 the build.
 
+A quarter of rolls are a **skin** instead: a whole design system takes the site over. The one
+skin so far is **belladonna**, the Mxx Belladonna design system from minerva: Bodoni display,
+Cinzel caps nav, Jost body, Martian Mono labels, one oxblood accent on warm near-black,
+square edges, a tungsten-graded photo with film grain in a 2.39:1 letterbox, and an
+"Atropa belladonna" title card when it lands. A skin is one stylesheet scoped to
+`:root.skin-<name>` ([assets/css/skins/](assets/css/skins/)) plus its fonts
+([assets/fonts/belladonna/](assets/fonts/belladonna/), OFL), registered in `chaos.yaml` and
+fetched only when it rolls.
+
 **⌘K palette + the oracle.** One soft dialog ([assets/js/palette.ts](assets/js/palette.ts)):
 fuzzy keyword search over the build-time [/searchindex.json](layouts/home.searchindex.json)
 ("rate limiter" → nogo), plus **ask an agent** — a tty-style chat that streams from a free
@@ -110,7 +119,7 @@ optional, both picked up automatically at build.
 | tagline, links, default background | [hugo.toml](hugo.toml) |
 | AI-agent depth notes (llms-full.txt) | [data/llm_extra.yaml](data/llm_extra.yaml) |
 | agent profile — the bullets in /llms.txt | [data/profile.yaml](data/profile.yaml) |
-| chaos-mode fonts and color hijacks | [data/chaos.yaml](data/chaos.yaml) |
+| chaos-mode fonts, color hijacks and skins | [data/chaos.yaml](data/chaos.yaml); skin styles in [assets/css/skins/](assets/css/skins/) |
 | styles | one file per component in [assets/css/components/](assets/css/components/); [assets/css/main.css](assets/css/main.css) is the ordered `@import` index |
 
 ## Deploy
@@ -128,7 +137,8 @@ directory `public`, env var `HUGO_VERSION=0.166.0`.
 Mobile Lighthouse: 100 performance / 100 accessibility on every main page, LCP 1.2–1.9s,
 ~320–410KB per page. Zero JS until a visitor flips the breaker or opens the palette (tiny
 inline loaders gate the dynamic imports). One stylesheet (17 component files bundled and
-minified by Hugo's built-in `css.Build`, no npm), one self-hosted display font
+minified by Hugo's built-in `css.Build`, no npm; chaos skins fetch their own CSS and fonts
+only when rolled), one self-hosted display font
 (Departure Mono, 22KB woff2, OFL). The background is webp at 1280/1920w, q60, and is
 deliberately **not** preloaded and fetched at `fetchpriority=low`: Chrome excludes
 full-viewport images from LCP, so a high-priority background only starves the CSS and font

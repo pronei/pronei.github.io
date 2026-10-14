@@ -1,5 +1,5 @@
 {{- /* Build-time data for assets/js/chaos.ts, injected as js.Build "@params" (types in
-     assets/js/params.d.ts). Validates data/chaos.yaml so a malformed preset fails the build
+     assets/js/params.d.ts). Validates data/chaos.yaml so a malformed preset or skin fails the build
      instead of silently breaking the breaker at runtime. */ -}}
 {{- $c := hugo.Data.chaos -}}
 {{- $colorVars := slice "--c-accent" "--c-accent-text" "--c-accent-ink" "--c-tint" "--ink" "--ink-mute" "--ink-dim" -}}
@@ -16,6 +16,38 @@
     {{- end -}}
   {{- end -}}
 {{- end -}}
+{{- /* skins: build each stylesheet and fingerprint each font; chaos.ts fetches them on demand */ -}}
+{{- $skins := slice -}}
+{{- $chance := 0.0 -}}
+{{- range $c.skins -}}
+  {{- $skin := . -}}
+  {{- if not (and .name .stylesheet .chance) -}}
+    {{- errorf "data/chaos.yaml: skin %v needs name, stylesheet and chance" . -}}
+  {{- end -}}
+  {{- $chance = add $chance .chance -}}
+  {{- $css := resources.Get .stylesheet -}}
+  {{- if not $css -}}
+    {{- errorf "data/chaos.yaml: skin %q: stylesheet %q not found under assets/" .name .stylesheet -}}
+  {{- end -}}
+  {{- $faces := slice -}}
+  {{- range .fonts -}}
+    {{- $face := . -}}
+    {{- with resources.Get $face.file -}}
+      {{- $faces = $faces | append (dict
+            "family" $face.family "url" (. | fingerprint).RelPermalink
+            "weight" (printf "%v" (default "400" $face.weight)) "style" (default "normal" $face.style)) -}}
+    {{- else -}}
+      {{- errorf "data/chaos.yaml: skin %q: font %q not found under assets/" $skin.name $face.file -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $skins = $skins | append (dict
+        "name" .name "chance" .chance "fonts" $faces
+        "css" ($css | css.Build (dict "minify" true) | fingerprint).RelPermalink
+        "title" (default "" .title) "slate" (default "" .slate)) -}}
+{{- end -}}
+{{- if gt $chance 1.0 -}}
+  {{- errorf "data/chaos.yaml: skin chances add up to %v; they must leave room for ordinary rolls (≤ 1)" $chance -}}
+{{- end -}}
 {{- /* every processed background + its palette, so chaos can swap backgrounds client-side */ -}}
 {{- $bgs := slice -}}
 {{- range $name, $pal := hugo.Data.palettes -}}
@@ -24,4 +56,4 @@
     {{- $bgs = $bgs | append (merge (dict "name" $name "url" $w.RelPermalink) $pal) -}}
   {{- end -}}
 {{- end -}}
-{{- return dict "fonts" $c.fonts "colors" $c.colors "backgrounds" $bgs -}}
+{{- return dict "fonts" $c.fonts "colors" $c.colors "skins" $skins "backgrounds" $bgs -}}

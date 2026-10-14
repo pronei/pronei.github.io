@@ -33,3 +33,23 @@ colors:
   - name: paper-tape
     light: true
     vars: { --c-accent: "#b3261e", --c-accent-text: "#8f1d16", --c-accent-ink: "#fff6ec", --c-tint: "#e9e4d8", --ink: "#221d14", --ink-mute: "#5d5749", --ink-dim: "#6a6458" }
+
+# skins: a whole design system takes the site over (fonts, colours, shape, texture) instead
+# of a font set + colour roll. Each skin is one stylesheet scoped to :root.skin-<name> plus
+# its webfonts. Both are fingerprinted at build time and fetched only when the skin first
+# rolls, so visitors who never get it pay nothing. chance = share of rolls that become this
+# skin (all chances must add up to ≤ 1). title/slate drive the title card shown when it lands.
+skins:
+  - name: belladonna
+    # the Mxx Belladonna design system (minerva's @minerva/design-system), dark theme
+    chance: 0.25
+    stylesheet: css/skins/belladonna.css
+    title: Atropa belladonna        # the plant's genus is named for Atropos, the Fate who cuts the thread
+    slate: 35mm · tungsten · santa cruz
+    fonts:
+      - { family: Bodoni Moda,  file: fonts/belladonna/bodoni-moda-400.woff2,        weight: "400" }
+      - { family: Bodoni Moda,  file: fonts/belladonna/bodoni-moda-400-italic.woff2, weight: "400", style: italic }
+      - { family: Cinzel,       file: fonts/belladonna/cinzel-500.woff2,             weight: "500" }
+      - { family: Jost,         file: fonts/belladonna/jost-400.woff2,               weight: "400" }
+      - { family: Jost,         file: fonts/belladonna/jost-500.woff2,               weight: "500" }
+      - { family: Martian Mono, file: fonts/belladonna/martian-mono-400.woff2,       weight: "400" }

@@ -1,0 +1,216 @@
+/* ─── skin: belladonna ─────────────────────────────────────────────────────
+   A chaos-mode takeover: the site wears the Mxx Belladonna design system (minerva's
+   @minerva/design-system, dark theme): "a precision instrument, cinematically shot".
+   Warm near-black, off-white text, one oxblood accent, square edges, Bodoni display,
+   Cinzel wayfinding caps, Jost body, Martian Mono instrument labels, graded + grained
+   photography in an anamorphic frame.
+
+   Loaded on demand by assets/js/chaos.ts (registered in data/chaos.yaml) and scoped to
+   :root.skin-belladonna, so it is inert until that fault rolls. Fonts arrive through the
+   FontFace API from the same registry, so there are no @font-face rules here.
+
+   Two deliberate departures from the DS tokens, both from its own gap audit: oxblood
+   #9b333b fails as text on the near-black (2.76:1) and --text-faint fails for readable
+   meta (3.62:1), so text accents use a lifted oxblood and dim text a lifted faint. Every
+   text role below clears WCAG AA on the skin's surfaces. */
+
+@media screen {
+  :root.skin-belladonna {
+    /* design-system tokens */
+    --bd-display: "Bodoni Moda", Didot, "Playfair Display", ui-serif, Georgia, serif;
+    --bd-nav: Cinzel, "Trajan Pro", "Bodoni Moda", ui-serif, serif;
+    --bd-mono: "Martian Mono", "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    --bd-elev: #121013;
+    --bd-solid: #1a171a;
+    --bd-line: #2a2528;
+    --bd-line-strong: #3a3338;
+    --bd-accent-strong: #b23c45;
+    --bd-accent-dim: #6e242b;
+    --bd-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --bd-shadow-md: 0 8px 30px rgba(0, 0, 0, 0.5);
+    --bd-shadow-lg: 0 30px 80px rgba(0, 0, 0, 0.6);
+
+    /* the site's own variables, re-pointed at the DS */
+    --c-accent: #9b333b;
+    --c-accent-text: #cf6f77;  /* accent-strong lifted to 5.8:1 for text */
+    --c-accent-ink: #f7f2f0;
+    --c-tint: #0a0a0b;
+    --ink: #f3efec;
+    --ink-mute: #b8b0ab;
+    --ink-dim: #958c87;        /* text-faint lifted to 6.0:1 */
+    --warn: #c9a227;           /* --mark-tribute, the DS's one sanctioned second signal */
+    --down: #e0626b;
+    --glass: color-mix(in oklab, var(--bd-elev) 90%, transparent);
+    --glass-border: var(--bd-line-strong);
+    --hairline: var(--bd-line);
+    --scrim-top: 52%;
+    --scrim-mid: 36%;
+    --scrim-bot: 92%;
+    --font-display: var(--bd-display);
+    --font-body: Jost, Futura, "Century Gothic", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: var(--bd-mono);
+    --radius: 0;
+    color-scheme: dark;
+  }
+
+  /* sharp boxes: every DS radius token is 0 */
+  :root.skin-belladonna * { border-radius: 0 !important; }
+  /* …except the circular portrait mark, which the DS header keeps round */
+  :root.skin-belladonna .portrait { border-radius: 50% !important; }
+
+  :root.skin-belladonna body { -webkit-font-smoothing: antialiased; line-height: 1.6; }
+  :root.skin-belladonna strong, :root.skin-belladonna b { font-weight: 500; }
+
+  /* links: off-white over an oxblood hairline; the colour arrives on hover */
+  :where(:root.skin-belladonna) a {
+    color: var(--ink);
+    border-bottom-color: color-mix(in oklab, var(--c-accent) 75%, transparent);
+    transition: color 0.16s var(--bd-ease), border-color 0.16s var(--bd-ease);
+  }
+  :where(:root.skin-belladonna) a:hover { color: var(--c-accent-text); border-bottom-color: var(--c-accent-text); }
+
+  /* ── photography: tungsten grade, film grain, anamorphic frame ── */
+  :root.skin-belladonna .bg { overflow: hidden; }
+  :root.skin-belladonna .bg img { filter: sepia(0.4) saturate(0.7) contrast(1.14) brightness(0.58); }
+  :root.skin-belladonna .bg .scrim::after {
+    content: ""; position: absolute; inset: -64px; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+    opacity: 0.17; mix-blend-mode: overlay;
+    animation: bd-grain 0.9s steps(5) infinite;
+  }
+  @keyframes bd-grain {
+    0%, 100% { transform: translate(0, 0); }
+    20% { transform: translate(-22px, 14px); }
+    40% { transform: translate(17px, -26px); }
+    60% { transform: translate(-12px, -9px); }
+    80% { transform: translate(26px, 19px); }
+  }
+  /* --ratio-scope 2.39:1 letterbox, only where the screen is wide enough to frame */
+  @media (min-aspect-ratio: 4/3) {
+    :root.skin-belladonna .bg::before, :root.skin-belladonna .bg::after {
+      content: ""; position: absolute; left: 0; right: 0; z-index: 1;
+      height: max(0px, calc((100vh - 100vw / 2.39) / 2));
+      background: #000;
+      animation: bd-bars 0.8s var(--bd-ease) both;
+    }
+    :root.skin-belladonna .bg::before { top: 0; transform-origin: top; }
+    :root.skin-belladonna .bg::after { bottom: 0; transform-origin: bottom; }
+  }
+  @keyframes bd-bars { from { transform: scaleY(0); } }
+
+  /* ── header: Bodoni wordmark, Cinzel wayfinding, ghost buttons ── */
+  :root.skin-belladonna .top { border-bottom: 1px solid var(--bd-line); padding-bottom: 14px; }
+  :root.skin-belladonna .brand { font-family: var(--bd-display); font-size: 1.35rem; letter-spacing: -0.02em; }
+  :root.skin-belladonna .brand .at { color: var(--ink); font-style: italic; }
+  :root.skin-belladonna .top nav { font-family: var(--bd-nav); font-weight: 500; font-size: 12.5px; letter-spacing: 0.04em; text-transform: uppercase; gap: 8px; }
+  :root.skin-belladonna .top nav a {
+    color: var(--ink-mute); padding: 0.35rem 0.55rem; border: 1px solid transparent;
+    transition: color 0.16s var(--bd-ease), border-color 0.16s var(--bd-ease);
+  }
+  :root.skin-belladonna .top nav a:hover { color: var(--ink); border-color: var(--bd-line-strong); }
+  /* active tab = a sharp accent box, never an underline */
+  :root.skin-belladonna .top nav a[aria-current="page"] { color: var(--ink); border-color: var(--c-accent); }
+  :root.skin-belladonna .navbtn {
+    font-family: var(--bd-mono); font-size: 10.5px; letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--ink); background: transparent; border: 1px solid var(--bd-line-strong); padding: 6px 11px;
+    transition: border-color 0.16s var(--bd-ease), background 0.16s var(--bd-ease);
+  }
+  :root.skin-belladonna .navbtn:hover { background: transparent; border-color: var(--c-accent); }
+  /* the fault is this view's highest-intent action, so it earns the one solid accent */
+  :root.skin-belladonna .breaker[aria-pressed="true"] { background: var(--c-accent); border-color: var(--c-accent); color: var(--c-accent-ink); }
+  :root.skin-belladonna .breaker[aria-pressed="true"]:hover { background: var(--bd-accent-strong); border-color: var(--bd-accent-strong); }
+
+  /* ── display type ── */
+  :root.skin-belladonna h1, :root.skin-belladonna .pagetitle { font-family: var(--bd-display); font-weight: 400; letter-spacing: -0.02em; line-height: 1.08; }
+  :root.skin-belladonna .hero h1 { font-size: clamp(2.1rem, 1.4rem + 3vw, 3.4rem); }
+  :root.skin-belladonna .pagetitle { font-size: clamp(1.9rem, 1.4rem + 2.2vw, 2.8rem); }
+  :root.skin-belladonna .pagetitle .dim { font-style: italic; }
+  :root.skin-belladonna .sub { font-family: var(--bd-display); font-size: 1.18rem; line-height: 1.3; color: var(--ink-mute); }
+  /* over the photo (not a card) the DS's dim lede is too thin for Bodoni hairlines */
+  :root.skin-belladonna .hero .sub { color: color-mix(in oklab, var(--ink) 92%, transparent); }
+  :root.skin-belladonna .portrait,
+  :root.skin-belladonna .page-portrait { box-shadow: 0 0 0 1px var(--bd-line-strong), var(--bd-shadow-lg); filter: sepia(0.2) saturate(0.85) contrast(1.05); }
+
+  /* ── surfaces: square vitrines with a hairline, no frosting showing through ── */
+  :root.skin-belladonna .card { border-color: var(--bd-line-strong); box-shadow: var(--bd-shadow-md); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+
+  /* ── the status board as a dispatch ledger: Bodoni titles, mono metadata ── */
+  :root.skin-belladonna .label { font-family: var(--bd-mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--c-accent-text); }
+  :root.skin-belladonna .state,
+  :root.skin-belladonna .row .status { font-family: var(--bd-mono); font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; }
+  :root.skin-belladonna .state.ok,
+  :root.skin-belladonna .row .status { color: var(--ink-dim); }
+  :root.skin-belladonna .row[data-status="degraded"] .status { color: var(--warn); }
+  :root.skin-belladonna .row[data-status="down"] .status { color: var(--down); }
+  :root.skin-belladonna .row { font-size: 14px; }
+  :root.skin-belladonna .row .dot { width: 7px; height: 7px; }
+  :root.skin-belladonna .row .name { font-family: var(--bd-display); font-size: 1.12rem; letter-spacing: -0.01em; }
+  :root.skin-belladonna .board-foot { font-family: var(--bd-mono); font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; }
+
+  /* ── project plaques ── */
+  :root.skin-belladonna .plaque { transition: border-color 0.16s var(--bd-ease), transform 0.16s var(--bd-ease); }
+  :root.skin-belladonna .plaque:hover { border-color: var(--c-accent); }
+  :root.skin-belladonna .plaque h2 { font-family: var(--bd-display); font-size: 1.45rem; letter-spacing: -0.015em; }
+  :root.skin-belladonna .glyph { color: color-mix(in oklab, var(--c-accent) 16%, transparent); }
+  :root.skin-belladonna .glyph.big { color: color-mix(in oklab, var(--c-accent) 55%, transparent); }
+  :root.skin-belladonna .myth { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; opacity: 1; }
+  :root.skin-belladonna .metrics li::before { content: "—"; }
+  :root.skin-belladonna .chips i { font-size: 9.5px; letter-spacing: 0.04em; text-transform: uppercase; border-color: var(--bd-line); padding: 0.25em 0.7em; }
+  :root.skin-belladonna .links { font-family: var(--bd-mono); font-size: 10.5px; letter-spacing: 0.04em; text-transform: uppercase; }
+
+  /* ── content pages + cv ── */
+  :root.skin-belladonna .prose { font-size: 16px; }
+  :root.skin-belladonna .prose h2, :root.skin-belladonna .prose h3 { font-family: var(--bd-display); font-size: 1.5rem; line-height: 1.15; letter-spacing: -0.015em; }
+  :root.skin-belladonna .rail-label { font-family: var(--bd-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; }
+  :root.skin-belladonna .affil { border-color: var(--bd-line); }
+  :root.skin-belladonna .affil:hover { border-color: var(--c-accent); background: transparent; }
+  :root.skin-belladonna .affil-meta b { font-family: var(--bd-display); font-size: 1rem; }
+  :root.skin-belladonna .cvsec { font-family: var(--bd-mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; }
+  :root.skin-belladonna .cvtop strong { font-family: var(--bd-display); font-weight: 400; font-size: 1.15rem; }
+  :root.skin-belladonna .cvtop .dim,
+  :root.skin-belladonna .cvskill .dim { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; }
+  /* primary button: oxblood fill, mono caps, square */
+  :root.skin-belladonna .btn {
+    font-family: var(--bd-mono); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 0.85em 1.6em; background: var(--c-accent); border-color: var(--c-accent); color: var(--c-accent-ink);
+    transition: background 0.16s var(--bd-ease), transform 0.16s var(--bd-ease);
+  }
+  :root.skin-belladonna .btn:hover { filter: none; background: var(--bd-accent-strong); border-color: var(--bd-accent-strong); transform: translateY(-1px); }
+
+  /* ── footer: the sober Cinzel row ── */
+  :root.skin-belladonna .bottom { font-family: var(--bd-nav); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; border-top-color: var(--bd-line); }
+
+  /* ── ⌘K palette ── */
+  :root.skin-belladonna dialog#palette { background: color-mix(in oklab, var(--bd-solid) 96%, transparent); border-color: var(--bd-line-strong); box-shadow: var(--bd-shadow-lg); }
+  :root.skin-belladonna .pal-item.sel { background: color-mix(in oklab, var(--bd-accent-dim) 55%, transparent); }
+  :root.skin-belladonna .pal-item.sel .pal-sub { color: var(--ink-mute); }
+  :root.skin-belladonna .pal-title { font-family: var(--bd-display); font-size: 1rem; }
+  :root.skin-belladonna .pal-kind { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); border-color: var(--bd-line-strong); }
+  :root.skin-belladonna .pal-ask { border-style: solid; border-color: var(--bd-line-strong); }
+
+  /* ── title card: shown once when the takeover lands (chaos.ts skips it for reduced motion) ── */
+  :root.skin-belladonna .skin-titlecard {
+    position: fixed; inset: 0; z-index: 60; pointer-events: none;
+    display: grid; place-content: center; justify-items: center; gap: 16px;
+    background: rgba(10, 10, 11, 0.42);
+    animation: bd-titlecard 2.6s var(--bd-ease) both;
+  }
+  :root.skin-belladonna .skin-titlecard .t {
+    font-family: var(--bd-display); font-style: italic; font-size: clamp(2.4rem, 1.6rem + 4vw, 5rem);
+    letter-spacing: 0.01em; color: var(--ink); text-shadow: 0 2px 18px rgba(0, 0, 0, 0.7);
+  }
+  :root.skin-belladonna .skin-titlecard .s { font-family: var(--bd-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-mute); }
+  @keyframes bd-titlecard { 0% { opacity: 0; } 18%, 70% { opacity: 1; } 100% { opacity: 0; } }
+
+  /* phones: wide-tracked caps and a bigger display name would squeeze the board's note column */
+  @media (max-width: 640px) {
+    :root.skin-belladonna .row { font-size: 13px; }
+    :root.skin-belladonna .row .name { font-size: 1rem; }
+    :root.skin-belladonna .state,
+    :root.skin-belladonna .row .status { letter-spacing: 0.1em; }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    :root.skin-belladonna .card { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--bd-elev); }
+  }
+}
