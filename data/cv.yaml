@@ -5,7 +5,7 @@
 education:
   - school: University of California, Santa Cruz
     degree: Master of Science in Computer Science
-    gpa: GPA 3.93
+    gpa: GPA 3.89
     when: Sept 2024 – Aug 2026
     detail: Advanced Computer Architecture, Distributed Systems, Advanced OS, Algorithms.
   - school: PES University, Bengaluru
@@ -17,10 +17,10 @@ education:
 experience:
   - org: University of California, Santa Cruz
     role: Graduate Teaching Assistant
-    when: Jan 2025 – Jun 2025
+    when: Jan 2025 – Jun 2026
     points:
       - Mentored students in CSE115A/B/C on software projects sponsored by Nutanix and Keysight Technologies — requirements analysis, high-level system design, sprint planning.
-  - org: MakeMyTrip & Goibibo (NASDAQ:MMYT)
+  - org: "MakeMyTrip & Goibibo (NASDAQ: MMYT)"
     role: Software Engineer I
     when: Jun 2022 – Jun 2024
     points:
