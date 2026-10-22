@@ -7,8 +7,7 @@
       "repo": "microfaults/manteion-go",
       "status": "operational",
       "subject": "docs: add Manteion oracle banner to README",
-      "pushed_at": "2026-09-09T01:28:21Z",
-      "ci": "success"
+      "pushed_at": "2026-09-09T01:28:21Z"
     },
     {
       "name": "atropos",
