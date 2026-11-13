@@ -45,8 +45,8 @@
       "link": "/projects/slug-mcp/",
       "repo": "pronei/slug-mcp",
       "status": "operational",
-      "subject": "fix(events): stop listing events that already…",
-      "pushed_at": "2026-11-13T05:52:03Z",
+      "subject": "feat: add traffic camera and bike share tools",
+      "pushed_at": "2026-11-13T12:02:54Z",
       "ci": "success"
     }
   ]
