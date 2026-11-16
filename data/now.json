@@ -7,7 +7,7 @@
       "repo": "microfaults/manteion-go",
       "status": "operational",
       "subject": "docs: add Manteion oracle banner to README",
-      "pushed_at": "2026-09-09T01:28:21Z",
+      "pushed_at": "2026-11-15T20:09:20Z",
       "ci": "success"
     },
     {
@@ -17,7 +17,7 @@
       "repo": "microfaults/atropos-go",
       "status": "operational",
       "subject": "docs: add Atropos banner to README; align net…",
-      "pushed_at": "2026-07-14T19:06:37Z",
+      "pushed_at": "2026-11-15T20:09:16Z",
       "ci": "success"
     },
     {
