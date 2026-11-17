@@ -1,10 +1,6 @@
 /* ─── cv ────────────────────────────────────────────────────────────────── */
 .cvhead { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
-.btn { font-family: var(--font-display); font-size: 12px; cursor: pointer; background: var(--c-accent); color: var(--c-accent-ink); border: 1px solid var(--c-accent); border-radius: 8px; padding: 8px 14px; transition: filter 0.15s ease, transform 0.1s ease; }
-.btn:hover { filter: brightness(1.12); }
-.btn:active { transform: scale(0.97); }
-a.btn { border-bottom: 1px solid var(--c-accent); }
-.cvsec { font-family: var(--font-display); font-weight: 400; font-size: 12px; letter-spacing: 0.09em; color: var(--c-accent-text); margin: 26px 0 4px; }
+.cvsec { font-size: 12px; font-weight: 400; margin: 26px 0 4px; }
 .cventry { padding: 10px 0; border-bottom: 1px solid var(--hairline); }
 .cventry:last-child { border-bottom: none; }
 .cvtop { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 14px; }

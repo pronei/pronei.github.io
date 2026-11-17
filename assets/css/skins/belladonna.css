@@ -110,12 +110,12 @@
   :root.skin-belladonna .top nav a:hover { color: var(--ink); border-color: var(--bd-line-strong); }
   /* active tab = a sharp accent box, never an underline */
   :root.skin-belladonna .top nav a[aria-current="page"] { color: var(--ink); border-color: var(--c-accent); }
-  :root.skin-belladonna .navbtn {
+  :root.skin-belladonna .btn-ghost {
     font-family: var(--bd-mono); font-size: 10.5px; letter-spacing: 0.04em; text-transform: uppercase;
     color: var(--ink); background: transparent; border: 1px solid var(--bd-line-strong); padding: 6px 11px;
     transition: border-color 0.16s var(--bd-ease), background 0.16s var(--bd-ease);
   }
-  :root.skin-belladonna .navbtn:hover { background: transparent; border-color: var(--c-accent); }
+  :root.skin-belladonna .btn-ghost:hover { background: transparent; border-color: var(--c-accent); }
   /* the fault is this view's highest-intent action, so it earns the one solid accent */
   :root.skin-belladonna .breaker[aria-pressed="true"] { background: var(--c-accent); border-color: var(--c-accent); color: var(--c-accent-ink); }
   :root.skin-belladonna .breaker[aria-pressed="true"]:hover { background: var(--bd-accent-strong); border-color: var(--bd-accent-strong); }
@@ -155,27 +155,27 @@
   :root.skin-belladonna .glyph.big { color: color-mix(in oklab, var(--c-accent) 55%, transparent); }
   :root.skin-belladonna .myth { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; opacity: 1; }
   :root.skin-belladonna .metrics li::before { content: "—"; }
-  :root.skin-belladonna .chips i { font-size: 9.5px; letter-spacing: 0.04em; text-transform: uppercase; border-color: var(--bd-line); padding: 0.25em 0.7em; }
+  :root.skin-belladonna .chip { font-size: 9.5px; letter-spacing: 0.04em; text-transform: uppercase; border-color: var(--bd-line); padding: 0.25em 0.7em; }
   :root.skin-belladonna .links { font-family: var(--bd-mono); font-size: 10.5px; letter-spacing: 0.04em; text-transform: uppercase; }
 
   /* ── content pages + cv ── */
   :root.skin-belladonna .prose { font-size: 16px; }
   :root.skin-belladonna .prose h2, :root.skin-belladonna .prose h3 { font-family: var(--bd-display); font-size: 1.5rem; line-height: 1.15; letter-spacing: -0.015em; }
   :root.skin-belladonna .rail-label { font-family: var(--bd-mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; }
-  :root.skin-belladonna .affil { border-color: var(--bd-line); }
-  :root.skin-belladonna .affil:hover { border-color: var(--c-accent); background: transparent; }
+  :root.skin-belladonna .tile { border-color: var(--bd-line); }
+  :root.skin-belladonna .tile-hover:hover { border-color: var(--c-accent); background: transparent; }
   :root.skin-belladonna .affil-meta b { font-family: var(--bd-display); font-size: 1rem; }
   :root.skin-belladonna .cvsec { font-family: var(--bd-mono); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; }
   :root.skin-belladonna .cvtop strong { font-family: var(--bd-display); font-weight: 400; font-size: 1.15rem; }
   :root.skin-belladonna .cvtop .dim,
   :root.skin-belladonna .cvskill .dim { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; }
   /* primary button: oxblood fill, mono caps, square */
-  :root.skin-belladonna .btn {
+  :root.skin-belladonna .btn-solid {
     font-family: var(--bd-mono); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase;
     padding: 0.85em 1.6em; background: var(--c-accent); border-color: var(--c-accent); color: var(--c-accent-ink);
     transition: background 0.16s var(--bd-ease), transform 0.16s var(--bd-ease);
   }
-  :root.skin-belladonna .btn:hover { filter: none; background: var(--bd-accent-strong); border-color: var(--bd-accent-strong); transform: translateY(-1px); }
+  :root.skin-belladonna .btn-solid:hover { filter: none; background: var(--bd-accent-strong); border-color: var(--bd-accent-strong); transform: translateY(-1px); }
 
   /* ── footer: the sober Cinzel row ── */
   :root.skin-belladonna .bottom { font-family: var(--bd-nav); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; border-top-color: var(--bd-line); }
@@ -185,7 +185,7 @@
   :root.skin-belladonna .pal-item.sel { background: color-mix(in oklab, var(--bd-accent-dim) 55%, transparent); }
   :root.skin-belladonna .pal-item.sel .pal-sub { color: var(--ink-mute); }
   :root.skin-belladonna .pal-title { font-family: var(--bd-display); font-size: 1rem; }
-  :root.skin-belladonna .pal-kind { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); border-color: var(--bd-line-strong); }
+  :root.skin-belladonna .chip-accent { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); border-color: var(--bd-line-strong); }
   :root.skin-belladonna .pal-ask { border-style: solid; border-color: var(--bd-line-strong); }
 
   /* ── title card: shown once when the takeover lands (chaos.ts skips it for reduced motion) ── */

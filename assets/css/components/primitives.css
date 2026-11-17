@@ -1,0 +1,45 @@
+/* ─── primitives ──────────────────────────────────────────────────────────
+   The site's small design system: the five pieces every page is built from.
+   Components further down only add layout on top of these; new UI starts here.
+     label  — small display-font caption (section heads, rail titles, board labels)
+     tile   — hairline box; add .tile-hover to lift it and tint its border on hover
+     chip   — mono tag (stack entries, result kinds, project status)
+     btn    — base button; .btn-ghost is the accent outline, .btn-solid the accent fill
+     steps  — a tile holding a titled step list; authored with the {{< steps >}} shortcode
+   Sizes, radii, tints and motion come from tokens.css, never from literals here. */
+
+.label { font-family: var(--font-display); font-size: 11px; letter-spacing: 0.09em; color: var(--ink-dim); text-transform: lowercase; }
+.label-accent { color: var(--c-accent-text); }
+
+.tile { border: 1px solid var(--hairline); border-radius: var(--radius-lg); }
+.tile-hover { transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease), background var(--dur) var(--ease); }
+.tile-hover:hover { border-color: color-mix(in oklab, var(--c-accent) var(--tint-3), transparent); transform: translateY(-2px); }
+.tile.tile-hover:hover { background: color-mix(in oklab, var(--c-accent) var(--tint-1), transparent); }
+
+.chip {
+  display: inline-block; font-style: normal; font-family: var(--font-mono); font-size: 10.5px; line-height: 1.5;
+  color: var(--ink-mute); border: 1px solid var(--hairline); border-radius: var(--radius-sm); padding: 2px 7px;
+}
+.chip-accent { color: var(--c-accent-text); border-color: color-mix(in oklab, var(--c-accent) var(--tint-3), transparent); }
+
+.btn {
+  font-family: var(--font-display); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid transparent; border-radius: var(--radius-md);
+  transition: background var(--dur-fast) var(--ease), filter var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+}
+.btn:active { transform: scale(0.97); }
+.btn-ghost {
+  font-size: 11.5px; padding: 5px 10px; color: var(--c-accent-text);
+  background: color-mix(in oklab, var(--c-accent) var(--tint-1), transparent);
+  border-color: color-mix(in oklab, var(--c-accent) var(--tint-3), transparent);
+}
+.btn-ghost:hover { background: color-mix(in oklab, var(--c-accent) var(--tint-2), transparent); }
+.btn-solid { font-size: 12px; padding: 8px 14px; color: var(--c-accent-ink); background: var(--c-accent); border-color: var(--c-accent); }
+.btn-solid:hover { filter: brightness(1.12); }
+
+.steps { padding: 10px 14px 4px; margin: 0 0 12px; }
+.steps .label { display: block; margin: 0 0 4px; font-size: 11px; font-weight: 400; color: var(--c-accent-text); }
+.steps ul { list-style: none; margin: 0; padding: 0; }
+.steps li { margin: 0; padding: 7px 0; font-size: 0.93em; color: color-mix(in oklab, var(--ink) 88%, transparent); }
+.steps li + li { border-top: 1px dashed var(--hairline); }
+.steps strong { font-family: var(--font-display); font-weight: 400; color: var(--ink); margin-right: 0.35em; }

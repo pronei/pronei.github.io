@@ -58,7 +58,7 @@ function render(items: Item[]): void {
     const li = document.createElement("li");
     li.className = "pal-item" + (i === 0 ? " sel" : "");
     li.setAttribute("role", "option");
-    li.innerHTML = `<span class="pal-kind">${item.kind}</span><span class="pal-title"></span><span class="pal-sub"></span>`;
+    li.innerHTML = `<span class="chip chip-accent">${item.kind}</span><span class="pal-title"></span><span class="pal-sub"></span>`;
     (li.children[1] as HTMLElement).textContent = item.title;
     (li.children[2] as HTMLElement).textContent =
       item.summary.length > 92 ? item.summary.slice(0, 92) + "…" : item.summary;

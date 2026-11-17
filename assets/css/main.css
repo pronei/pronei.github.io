@@ -5,6 +5,7 @@
 
 @import "components/tokens.css";
 @import "components/base.css";
+@import "components/primitives.css";
 @import "components/background.css";
 @import "components/header.css";
 @import "components/hero.css";

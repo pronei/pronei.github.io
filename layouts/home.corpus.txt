@@ -17,7 +17,9 @@ CURRENT WORKLOADS (checked {{ now.UTC.Format "2006-01-02" }} against the GitHub 
 {{ end }}{{ with .Params.greek }}name origin: {{ .translit }} — {{ .gloss }}
 {{ end }}{{ with .Params.stack }}stack: {{ delimit . ", " }}
 {{ end }}{{ with .Params.metrics }}{{ range . }}- {{ . }}
-{{ end }}{{ end }}{{ with .Params.links }}{{ with .github }}source: {{ . }}
+{{ end }}{{ end }}{{ with .Params.status }}status: {{ . }}
+{{ end }}{{ with .Params.links }}{{ with .live }}live: {{ . }}
+{{ end }}{{ with .github }}source: {{ . }}
 {{ end }}{{ end }}{{ with .Params.connector }}mcp connector (add to any MCP client): {{ . }}
 {{ end }}
 {{ .Plain | chomp }}

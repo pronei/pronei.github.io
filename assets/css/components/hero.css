@@ -37,15 +37,15 @@ h1, .pagetitle { font-family: var(--font-display); font-weight: 400; line-height
 .portrait {
   width: 180px; height: 180px; border-radius: 50%; object-fit: cover; flex: none;
   box-shadow:
-    0 0 0 1px color-mix(in oklab, var(--c-accent) 35%, transparent),
+    0 0 0 1px color-mix(in oklab, var(--c-accent) var(--tint-3), transparent),
     0 12px 50px color-mix(in oklab, var(--c-tint) 80%, transparent),
     0 0 110px 36px color-mix(in oklab, var(--c-tint) 60%, transparent);
 }
 .page-portrait {
   float: right; width: min(300px, 46%); height: auto; margin: 4px 0 16px 22px;
-  border-radius: 16px; object-fit: cover;
+  border-radius: var(--radius-xl); object-fit: cover;
   box-shadow:
-    0 0 0 1px color-mix(in oklab, var(--c-accent) 30%, transparent),
+    0 0 0 1px color-mix(in oklab, var(--c-accent) var(--tint-3), transparent),
     0 16px 60px color-mix(in oklab, var(--c-tint) 75%, transparent);
 }
 /* text protection over arbitrary photos */

@@ -1,0 +1,9 @@
+{{- /* One titled lane of a pipeline, drawn as a tile with a step list. Consecutive lanes stack.
+       {{< steps "every night" >}}
+       - **crawl** each brand's feed
+       - **embed** every piece
+       {{< /steps >}} */ -}}
+<section class="tile steps">
+  {{- with .Get 0 }}<h3 class="label">{{ . }}</h3>{{ end }}
+  {{ .InnerDeindent | markdownify }}
+</section>

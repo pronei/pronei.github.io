@@ -19,9 +19,9 @@
     </div>
     {{ if .Params.affiliations }}
     <aside class="rail" aria-label="affiliations">
-      <p class="rail-label">where I've been</p>
+      <p class="label rail-label">where I've been</p>
       {{ range hugo.Data.affiliations }}
-      <a class="affil" href="{{ .url }}" target="_blank" rel="noopener">
+      <a class="tile tile-hover affil" href="{{ .url }}" target="_blank" rel="noopener">
         <span class="affil-logo">
           {{ with resources.Get .logo }}<img src="{{ .RelPermalink }}" alt="" loading="lazy">{{ end }}
         </span>

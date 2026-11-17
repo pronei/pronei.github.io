@@ -36,6 +36,11 @@ failures, scroll-jacking, and broken links.
   `:root.skin-<name>` built with `css.Build`, plus fonts registered through the FontFace
   API. Both are fingerprinted at build time and fetched only when the skin rolls. Each roll
   first clears the previous roll's inline vars, since they would outrank a skin's stylesheet.
+- **Design system (Nov 2026)**: five primitives in `primitives.css` (`label`, `tile` + `tile-hover`,
+  `chip` + `chip-accent`, `btn` + `btn-ghost`/`btn-solid`, `steps`) and three scales in `tokens.css`
+  (radius sm/md/lg/xl, accent tint 1/2/3, dur-fast/dur/ease). Before this the same tile, label,
+  chip and button were specified five times with 11 radii and 13 tint percentages between them.
+  Component files add layout only; the belladonna skin restyles the primitives, not the copies.
 - **CSS**: one file per component under `assets/css/components/`, bundled by `css.Build`
   (Hugo ≥ 0.158, esbuild) from the `@import` index in `main.css`. Import order is the
   cascade: preferences, responsive and print stay last.
