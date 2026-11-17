@@ -114,7 +114,7 @@ optional, both picked up automatically at build.
 |---|---|
 | status board rows | [data/ci.toml](data/ci.toml) — `data/now.json` is generated, don't edit it |
 | CV (page + corpus) | [data/cv.yaml](data/cv.yaml) — keep `static/cv/pranay-mundra-cv.pdf` in sync |
-| projects | one markdown file each in [content/projects/](content/projects/); front matter takes `stack`, `metrics`, `links.github` / `links.live` / `links.note`, `connector`, and `status` (shown as a chip, e.g. `in progress`) |
+| projects | one markdown file each in [content/projects/](content/projects/); front matter takes `stack`, `metrics`, `links.github` / `links.live` / `links.note`, `connector`, and `status` (shown as a chip, e.g. `in progress`); `mark: {svg, href, title}` puts a linked logo from `assets/` in the page header (it spins on hover) |
 | about / contact | [content/about.md](content/about.md), [content/contact.md](content/contact.md) |
 | tagline, links, default background | [hugo.toml](hugo.toml) |
 | AI-agent depth notes (llms-full.txt) | [data/llm_extra.yaml](data/llm_extra.yaml) |

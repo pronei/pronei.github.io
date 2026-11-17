@@ -18,3 +18,15 @@
 .connector { font-size: 12px; color: var(--ink-mute); margin: 4px 0 0; overflow-wrap: anywhere; }
 .connector code { color: var(--c-accent-text); }
 .projhead { border-bottom: 1px solid var(--hairline); padding-bottom: 16px; margin-bottom: 4px; }
+
+/* ─── project mark ─ a partner/brand logo in the page header (front matter `mark:`).
+   It spins while hovered (one turn per 6 s, as the Belladonna brand motion rule has it) and
+   pauses in place when the pointer leaves — never snaps back. Static under reduced motion. */
+.projhead { position: relative; }
+.mark { position: absolute; top: 0; right: 0; width: 56px; height: 56px; display: block; line-height: 0; border: 0; text-decoration: none; }
+.mark svg { width: 100%; height: 100%; display: block; }
+.mark .mark-turn { transform-box: view-box; transform-origin: 120px 120px; animation: mark-spin 6s linear infinite paused; }
+.mark:hover .mark-turn, .mark:focus-visible .mark-turn { animation-play-state: running; }
+@keyframes mark-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .mark .mark-turn { animation: none; } }
+@media (max-width: 720px) { .mark { width: 44px; height: 44px; } .projhead:has(.mark) .pagetitle { padding-right: 48px; } }

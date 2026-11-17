@@ -9,6 +9,10 @@ metrics:
   - two embedding models on a six-core CPU with no GPU, about 9 ms and 22 ms per query
 links:
   note: private code · walkthrough on request
+mark:
+  svg: img/belladonna-berry.svg
+  href: https://mxxbelladonna.com/wishlist
+  title: Mxx Belladonna — the wishlist this was built for
 ---
 
 I built this for one person, in one specific size. Independent fashion labels each run their

@@ -1,6 +1,11 @@
 {{ define "main" }}
 <article class="card page reveal">
   <header class="projhead">
+    {{ with .Params.mark }}
+    {{- $svg := resources.Get .svg -}}
+    {{- if not $svg }}{{ errorf "project mark %q not found under assets/" .svg }}{{ end -}}
+    <a class="mark" href="{{ .href }}" title="{{ .title }}" aria-label="{{ .title }}">{{ $svg.Content | safeHTML }}</a>
+    {{ end }}
     {{ with .Params.greek }}<span class="glyph big" aria-hidden="true">{{ .glyph }}</span>{{ end }}
     <h1 class="pagetitle">{{ .Title }}</h1>
     {{ with .Params.greek }}<p class="myth">{{ .translit }} — {{ .gloss }}</p>{{ end }}
