@@ -21,6 +21,12 @@ repo = "microfaults/zeus-go"
 link = "/projects/faults-lab/"
 
 [[workloads]]
+name = "grepthink2"
+gloss = "course team platform"
+repo = "grepthink2/grepthink2.0"
+link = "/projects/grepthink2/"
+
+[[workloads]]
 name = "chatcut 3.0"
 gloss = "natural-language video editing"
 repo = "pronei/ChatCut-3.0"

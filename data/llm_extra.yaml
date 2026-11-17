@@ -42,6 +42,42 @@ notes:
       detections, beach water quality, C-HARM harmful-algal-bloom risk, CUTI/BEUTI coastal
       upwelling indices, and citizen-science wildlife observations. Public connector
       endpoint: https://2262-cse115b-02.be.ucsc.edu/mcp — add it to any MCP client.
+  - topic: grepthink2 (course team platform) in depth
+    text: |
+      GrepThink 2.0 is the team-project platform behind UC Santa Cruz's CSE 115 software
+      engineering series, live at grepthink2.com, and the v2 rebuild of grepthink.com. Pranay
+      TA'd the series and led the rebuild: about 1,400 commits in the public AGPL-3.0 repository
+      (github.com/grepthink2/grepthink2.0) between January and November 2026, 913 of them his,
+      with students from the course contributing the rest. Instructors create a class under
+      their school, import a roster, invite students and designate TAs; one account can hold a
+      different role in each class. Students create or join project teams and submit team
+      self-reviews (TSRs); TAs run each project's weekly meeting, take attendance and review the
+      submissions; every project has a scrum board with sprints, user stories, tasks, burnup
+      charts, comments and pull-request links; messaging covers direct and group conversations,
+      in-app notifications and optional email reminders and digests. The front end is React 19,
+      TypeScript, Vite and SCSS, ported by hand from a Claude Design export; the back end is
+      FastAPI on Supabase Postgres through the service role, with hand-applied SQL migrations;
+      Vitest and pytest coverage gates run on every pull request and releases are tagged (v0.94
+      in November 2026). Hosted on Vercel.
+  - topic: catalogue-search (hybrid fashion search) in depth
+    text: |
+      catalogue-search is a one-of-a-kind fashion catalogue Pranay built for one person with
+      a specific size. Every night it reads the published product feeds of 25 independent
+      brands (about 6,400 pieces in November 2026), respecting robots.txt with one request at
+      a time per site; product photos are proxied and never stored. Pieces are classified
+      into 13 categories and 6 materials, and Claude Haiku tags new or changed photos
+      (neckline, sleeves, length, closure, color) through the Message Batches API against a
+      JSON schema; re-tagging about 5,900 pieces cost $1.17. Search is hybrid: SQLite FTS5
+      with BM25 field weights and hard category and size filters, then a meaning boost from
+      two embedding models run on CPU with transformers.js (multilingual-e5-base on the
+      words, Marqo-FashionSigLIP on the card photo), each turned into per-query z-scores and
+      blended 0.85 photo to 0.15 text. With fewer than ten strict matches, related pieces that
+      still pass every filter are added below them. There is no vector database: about 6,500
+      vectors of 768 dimensions per model are scanned by brute force in milliseconds.
+      Evaluation uses 97 queries in ten groups, with Claude Haiku grading the top 20 results
+      from photos and listing text; adding photo vectors moved NDCG@10 from 0.824 to 0.900
+      and P@10 from 0.887 to 0.940, with no empty results. The code is private; Pranay walks
+      through it on request.
   - topic: working style and interests
     text: |
       Pranay names his systems after Greek and Roman mythology and the names encode

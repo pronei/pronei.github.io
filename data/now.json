@@ -31,6 +31,16 @@
       "ci": "success"
     },
     {
+      "name": "grepthink2",
+      "gloss": "course team platform",
+      "link": "/projects/grepthink2/",
+      "repo": "grepthink2/grepthink2.0",
+      "status": "operational",
+      "subject": "Merge pull request #323 from grepthink2/beta",
+      "pushed_at": "2026-11-17T08:48:48Z",
+      "ci": "success"
+    },
+    {
       "name": "chatcut 3.0",
       "gloss": "natural-language video editing",
       "link": "/projects/chatcut/",
