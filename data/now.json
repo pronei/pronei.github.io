@@ -36,8 +36,8 @@
       "link": "/projects/grepthink2/",
       "repo": "grepthink2/grepthink2.0",
       "status": "operational",
-      "subject": "Merge pull request #332 from grepthink2/beta",
-      "pushed_at": "2026-11-19T07:18:07Z",
+      "subject": "Merge pull request #340 from grepthink2/beta",
+      "pushed_at": "2026-11-19T20:36:12Z",
       "ci": "success"
     },
     {
@@ -55,8 +55,8 @@
       "link": "/projects/slug-mcp/",
       "repo": "pronei/slug-mcp",
       "status": "operational",
-      "subject": "fix(http): drop the SSE priming event from le…",
-      "pushed_at": "2026-11-18T23:40:10Z",
+      "subject": "Merge pull request #7 from pronei/claude/cach…",
+      "pushed_at": "2026-11-19T19:47:55Z",
       "ci": "success"
     }
   ]
