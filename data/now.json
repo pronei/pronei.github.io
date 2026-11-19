@@ -37,7 +37,7 @@
       "repo": "grepthink2/grepthink2.0",
       "status": "operational",
       "subject": "Merge pull request #332 from grepthink2/beta",
-      "pushed_at": "2026-11-18T04:27:37Z",
+      "pushed_at": "2026-11-19T07:18:07Z",
       "ci": "success"
     },
     {
@@ -55,8 +55,8 @@
       "link": "/projects/slug-mcp/",
       "repo": "pronei/slug-mcp",
       "status": "operational",
-      "subject": "feat: add traffic camera and bike share tools",
-      "pushed_at": "2026-11-13T12:02:54Z",
+      "subject": "fix(http): drop the SSE priming event from le…",
+      "pushed_at": "2026-11-18T23:40:10Z",
       "ci": "success"
     }
   ]
