@@ -27,7 +27,7 @@
       "repo": "microfaults/zeus-go",
       "status": "operational",
       "subject": "docs: add Zeus banner and a Status & roadmap …",
-      "pushed_at": "2026-11-17T00:32:55Z",
+      "pushed_at": "2026-11-20T05:44:56Z",
       "ci": "success"
     },
     {
@@ -37,7 +37,7 @@
       "repo": "grepthink2/grepthink2.0",
       "status": "operational",
       "subject": "Merge pull request #340 from grepthink2/beta",
-      "pushed_at": "2026-11-19T20:36:12Z",
+      "pushed_at": "2026-11-20T06:23:18Z",
       "ci": "success"
     },
     {
