@@ -9,7 +9,7 @@ metrics:
   - stdio & SSE transports, served to real users at UCSC
 links:
   github: https://github.com/pronei/slug-mcp
-connector: https://2262-cse115b-02.be.ucsc.edu/mcp
+connector: https://slug-mcp.fly.dev/mcp
 ---
 
 A Model Context Protocol server that turns UC Santa Cruz and the surrounding county into
@@ -29,7 +29,7 @@ public APIs is rude. Speaks stdio for local agents and SSE for hosted ones.
 It's live — add the connector to your own client and try it:
 
 ```
-https://2262-cse115b-02.be.ucsc.edu/mcp
+https://slug-mcp.fly.dev/mcp
 ```
 
 *Fun fact: if you're reading this with an AI assistant connected to my MCP server, it can

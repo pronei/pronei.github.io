@@ -1,12 +1,12 @@
 ---
 title: grepthink2
 weight: 3
-summary: Team-project management for UC Santa Cruz's software-engineering course series — classes, teams, self-reviews, TA meetings and a scrum board, live at grepthink2.com. I TA'd the series and led the v2 rebuild.
+summary: Team-project management for UC Santa Cruz's software-engineering course series, since adopted by Istinye University — classes, teams, self-reviews, TA meetings and a scrum board, live at grepthink2.com. I TA'd the series and led the v2 rebuild.
 stack: [TypeScript, React 19, Vite, SCSS, Python, FastAPI, Supabase Postgres, Vercel]
 metrics:
-  - the platform behind CSE 115A/B/C — students, TAs and instructors, each with a role per class
-  - ~1,400 commits since January 2026, 913 of them mine; Vitest and pytest coverage gates on every pull request, releases tagged to v0.94
-  - a scrum board per project — sprints, stories, tasks, burnup charts, PR links — plus messaging, notifications and email digests
+  - the platform behind CSE 115A/B/C — one account can hold a different role in each class, across institutions
+  - primary developer — 100 merged pull requests, 913 of ~1,400 commits since January 2026; Vitest and pytest coverage gates on every pull request
+  - entry bundle cut 57% (416 → 179 kB) with lazy routes; up to 40% fewer database round trips on hot routes by selecting on write
 links:
   live: https://grepthink2.com
   github: https://github.com/grepthink2/grepthink2.0
@@ -33,5 +33,7 @@ Both sides run coverage-gated tests on every pull request, and a check fails the
 migration lands without updating the schema snapshot. It's AGPL-3.0 and hosted on Vercel.
 
 The part I'd defend: the roles. A student in one class can be a TA in another, and the
-permission model has to hold that without special cases. Getting that right once made every
-later feature smaller.
+permission model has to hold that without special cases. Roles come from the class, not the
+account, and every class belongs to an institution, which is what let an instructor at
+Istinye University in Istanbul run a course on it with no special build. Getting that right
+once made every later feature smaller.

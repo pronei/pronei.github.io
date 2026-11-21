@@ -7,10 +7,10 @@ portrait: true
 
 No contact form — forms need a backend, and this site doesn't have one. Email gets read.
 
-- **email** — [pmundra@ucsc.edu](mailto:pmundra@ucsc.edu)
+- **email** — [pranay.mundra@outlook.com](mailto:pranay.mundra@outlook.com)
 - **github** — [github.com/pronei](https://github.com/pronei)
 - **linkedin** — [pranay-mundra](https://www.linkedin.com/in/pranay-mundra-115055189)
-- **location** — San Francisco / Santa Cruz, CA
+- **location** — San Francisco, CA
 
 Currently open to **distributed systems roles** — infrastructure, observability, reliability,
 or anything where the interesting bugs only show up above 10k RPS.

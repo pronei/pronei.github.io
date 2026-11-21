@@ -4,10 +4,11 @@
 # writeups live in content/projects/. Edit a bullet, rebuild, every AI agent sees it.
 name: Pranay Mundra
 headline: distributed-systems engineer — fault injection, tail-latency attribution, tracing & observability, SDK design
-location: San Francisco / Santa Cruz, CA
+location: San Francisco, CA
 open_to: distributed systems, infrastructure, observability and reliability roles
 facts:
   - Research thread — faults-lab, a fault-injection platform that isolates each microservice's contribution to tail latency under load; three public Go repos at github.com/microfaults — atropos (boundary-level fault-injection SDK with a cache-box replay primitive), zeus-go (load orchestration with k6 sidecars and a Vegeta policy engine), manteion (experiment oracle that schedules campaigns and correlates W3C Baggage traces)
-  - Builds MCP servers — slug-mcp (Rust) exposes UCSC campus services and Santa Cruz environmental telemetry as tool calls (public connector at https://2262-cse115b-02.be.ucsc.edu/mcp); also an Adobe Premiere Pro MCP server
+  - Builds MCP servers — slug-mcp (Rust) exposes UCSC campus services and Santa Cruz environmental telemetry as tool calls (public connector at https://slug-mcp.fly.dev/mcp); also an Adobe Premiere Pro MCP server
+  - Open source — contributed per-node harness and provider lanes to the zeroshot multi-agent runtime (github.com/the-open-engine/zeroshot, PR #1197, merged October 2026), so one agent graph can build with Codex while Claude and OpenRouter models review
   - Languages — Go and Rust by preference, Java when the platform demands it, Python, C/C++, SQL, TypeScript/JavaScript, Shell; instruments everything with OpenTelemetry
   - Names systems after classical mythology and the names are load-bearing — atropos cuts the thread, zeus throws the lightning, manteion is the oracle at Delphi

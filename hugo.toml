@@ -10,15 +10,15 @@ disableKinds = ["taxonomy", "term"]
   background = "PXL_20260608_221035697.jpg"
   # background = "signal-dusk.jpg"
   tagline = "I break distributed systems on purpose."
-  subline = "MS CS @ UC Santa Cruz · fault injection, observability & SDK design"
+  subline = "MS CS, UC Santa Cruz '26 · fault injection, observability & SDK design"
   prevline = "previously platforms at"
   # Deployed Cloudflare Worker for the cmd+k "ask the agent" mode (workers/oracle).
   # Leave empty to show a "not configured" notice in the chat pane.
   oracleEndpoint = "https://oracle.pranayrs.workers.dev"
-  email = "pmundra@ucsc.edu"
+  email = "pranay.mundra@outlook.com"
   github = "https://github.com/pronei"
   linkedin = "https://www.linkedin.com/in/pranay-mundra-115055189"
-  location = "San Francisco / Santa Cruz, CA"
+  location = "San Francisco, CA"
   description = "Pranay Mundra — distributed systems engineer. Fault injection, tracing & observability, SDK design."
 
 [outputs]

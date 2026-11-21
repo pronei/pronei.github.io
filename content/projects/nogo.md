@@ -11,9 +11,9 @@ links:
 ---
 
 At MakeMyTrip I built a rule-based rate limiter that decided which notifications were worth
-sending across SMS, WhatsApp and email. The result was fewer, better messages — engagement
-went up while infra cost went down ([numbers on the CV](/cv/)), because the cheapest
-notification is the one you don't send.
+sending across SMS, WhatsApp and email, with throttling rules set per campaign and per
+priority, on roughly ten million notifications a day ([the CV](/cv/)). The result was fewer,
+better messages, because the cheapest notification is the one you don't send.
 
 **nogo** is the distilled, open version of that idea: a small Go library where rate limiting
 is driven by declarative rules rather than a single global bucket. Different message

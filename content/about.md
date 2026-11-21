@@ -37,6 +37,7 @@ disease. I have no plans to treat it.
 When not staring at Grafana: I'm somewhere between San Francisco and Santa Cruz, and I built
 [slug-mcp](https://github.com/pronei/slug-mcp) partly so my own AI tools could tell me the
 surf conditions and whether the campus gym is full. I also TA'd UCSC's software engineering
-sequence (CSE115A/B/C), mentoring teams on projects sponsored by Nutanix and Keysight.
+sequence (CSE115A/B/C), mentoring teams on projects sponsored by Nutanix and Keysight, and
+led the rebuild of the platform the course runs on, [grepthink2](/projects/grepthink2/).
 
 If any of this sounds like your kind of problem, [say hello](/contact/).

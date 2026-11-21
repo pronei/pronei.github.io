@@ -6,7 +6,7 @@ education:
   - school: University of California, Santa Cruz
     degree: Master of Science in Computer Science
     gpa: GPA 3.89
-    when: Sept 2024 – Aug 2026
+    when: Sep 2024 – Aug 2026
     detail: Advanced Computer Architecture, Distributed Systems, Advanced OS, Algorithms.
   - school: PES University, Bengaluru
     degree: B.Tech in Electronics & Communication
@@ -19,23 +19,17 @@ experience:
     role: Graduate Teaching Assistant
     when: Jan 2025 – Jun 2026
     points:
-      - Mentored students in CSE115A/B/C on software projects sponsored by Nutanix and Keysight Technologies — requirements analysis, high-level system design, sprint planning.
+      - Mentored student teams in CSE 115A/B/C on software projects sponsored by companies such as Nutanix and Keysight Technologies — requirements analysis, high-level system design, sprint planning.
   - org: "MakeMyTrip & Goibibo (NASDAQ: MMYT)"
-    role: Software Engineer I
-    when: Jun 2022 – Jun 2024
+    role: Software Engineer I (previously Intern)
+    when: Jan 2022 – Jun 2024
     points:
-      - Part of India's largest online travel agency, on the platforms behind A/B experimentation, discounting and persuasion.
-      - Designed a highly concurrent multi-org ConfigKey store for the A/B platform — two-level caching on Aerospike, sub-millisecond p99 at 300k requests/second, down from 50ms.
-      - Built a rule-based rate limiter optimizing notification delivery across SMS, WhatsApp and email — more relevant engagement, up to 40% lower infra cost.
-      - Revamped loyalty programs ([MMTBLACK](https://tech.makemytrip.com/introducing-the-all-new-mmtblack-indias-ultimate-travel-loyalty-program-that-keeps-on-giving-83a20ebee850), [GoTribe](https://www.goibibo.com/loyalty/), [myPartner Hero](https://mypartner.makemytrip.com/agent/loyalty/hero/?crId=0d2930d8-532a-4a16-be35-a26b44ff23f1)) with configurable per-user aggregations, enabling new program types for any customer segment.
-      - Closed a fraud hole in Refer&Earn (~$50K) by constraining mobile-number reuse in the signup flow.
-      - Added virtual-thread support to the legacy Java 8 A/B platform with quasar, cutting CPU footprint up to 40%.
-  - org: MakeMyTrip & Goibibo
-    role: Software Intern
-    when: Jan 2022 – May 2022
-    points:
-      - Set up cache sync for intra-cluster services using Kafka; parallelized /assignVariant on the A/B platform.
-      - Supported the legacy route-planning service ahead of its [How2Go](https://www.makemytrip.com/how2go) rework.
+      - Part of India's largest online travel agency, overseeing A/B infrastructure and the discounting and persuasion engines.
+      - Designed a highly concurrent multi-org ConfigKey store for the A/B platform with a three-tier cache (in-process Caffeine, Aerospike, MySQL), serving 1–2 ms p99 at about 350K requests/second on two small ECS Fargate tasks.
+      - Implemented a [rate limiter](https://github.com/pronei/nogo) with throttling rules customizable per campaign and priority, for notifications across SMS, WhatsApp and email (roughly 10 million sent per day).
+      - Revamped loyalty programs ([MMTBLACK](https://tech.makemytrip.com/introducing-the-all-new-mmtblack-indias-ultimate-travel-loyalty-program-that-keeps-on-giving-83a20ebee850), [GoTribe](https://www.goibibo.com/loyalty/), [myPartner Hero](https://mypartner.makemytrip.com/agent/loyalty/hero/)) with configurable per-user aggregations, so newer programs can target any type of customer.
+      - Fixed widespread fraud in Refer&Earn (up to $50K) by constraining mobile numbers in the sign-up flow.
+      - Supported the legacy route-planning service before it was enhanced for [How2Go](https://www.makemytrip.com/how2go).
   - org: ARTPARK @ Indian Institute of Science
     role: Research Intern
     when: Jun 2021 – Dec 2021
@@ -46,22 +40,30 @@ experience:
 projects:
   - name: faults-lab (atropos · zeus-go · manteion)
     stack: Go, OpenTelemetry, gRPC, Kubernetes, k6, Vegeta
-    line: Fault-injection research platform — SDK-level fault injection, load orchestration, experiment oracle.
+    line: Fault-injection research platform — an SDK that injects faults at service boundaries and freezes services into cached-response replay (cache-box) to isolate each one's contribution to tail latency under load.
   - name: global upgrade safety & MSS
     stack: Go, OpenAPI, Protobuf
-    line: Static analysis deciding whether simultaneous schema changes across a microservice mesh can co-deploy safely; computes the maximal safe subset in linear time.
+    line: Static analysis deciding whether simultaneous schema changes across a microservice mesh can co-deploy safely; computes the maximal safe subset in linear time (MAX-TRUE Horn-SAT).
   - name: slug mcp
     stack: Rust, rmcp, Moka
     line: MCP server exposing UCSC campus services and Santa Cruz environmental telemetry as LLM tool calls.
+  - name: grepthink 2.0
+    stack: React, TypeScript, FastAPI, PostgreSQL (Supabase)
+    line: Team-project platform for UCSC's CSE 115 series, since adopted by Istinye University; as primary developer (100 merged PRs), re-modeled roles per class across institutions, cut the entry bundle 57% (416 to 179 kB) and removed up to 40% of database round trips on hot routes.
+  - name: zeroshot (open source)
+    stack: Rust, TypeScript
+    line: "Added per-node harness and provider lanes to the multi-agent runtime ([PR #1197](https://github.com/the-open-engine/zeroshot/pull/1197)) — one agent graph can build with Codex while Claude and OpenRouter models review concurrently."
 
 skills:
   - group: languages
-    items: [Go, Rust, Java, Python, C/C++, SQL, JavaScript, Shell]
+    items: [Go, Rust, Java, Python, TypeScript, C/C++, SQL, JavaScript, Shell]
   - group: frameworks
-    items: [OpenTelemetry, gRPC, vert.X, Spring, gin, k6, Vegeta]
+    items: [OpenTelemetry, gRPC, Vert.x, Spring, Gin, FastAPI, React, k6, Vegeta]
+  - group: ai engineering
+    items: [MCP servers, LLM tool calling, multi-agent orchestration, Claude Code, Codex, OpenRouter]
   - group: devops
-    items: [Docker, Kubernetes, Jaeger, Prometheus, Grafana, Jenkins, AWS, git]
+    items: [Docker, Kubernetes, Jaeger, Prometheus, Grafana, Jenkins, AWS (ECS Fargate, SQS), Git]
   - group: data & queues
-    items: [MongoDB, MySQL, Aerospike, Redis, Kafka, RabbitMQ]
+    items: [MongoDB, MySQL, PostgreSQL, Aerospike, Redis, Kafka, RabbitMQ]
   - group: expertise
     items: [distributed systems, fault injection, tracing & observability, SDK design, scalable web services]

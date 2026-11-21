@@ -37,7 +37,7 @@
     {{ range $cv.projects }}
     <div class="cventry">
       <div class="cvtop"><strong>{{ .name }}</strong><span class="dim">{{ .stack }}</span></div>
-      <p class="cvnote">{{ .line }}</p>
+      <p class="cvnote">{{ .line | markdownify }}</p>
     </div>
     {{ end }}
   </section>

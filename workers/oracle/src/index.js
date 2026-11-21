@@ -49,7 +49,7 @@ function cors(origin) {
 function classify(err) {
   const msg = String(err?.message ?? err);
   if (/neuron|allocation|daily|quota|4006/i.test(msg))
-    return [429, "the oracle has spent today's free inference budget — it resets daily. email pmundra@ucsc.edu in the meantime"];
+    return [429, "the oracle has spent today's free inference budget — it resets daily. email pranay.mundra@outlook.com in the meantime"];
   if (/5035|paid plan|workers paid/i.test(msg))
     return [503, "the oracle's model needs a paid Cloudflare plan — site misconfiguration, not you"];
   if (/capacity|busy|overload|3040/i.test(msg))
@@ -91,7 +91,7 @@ export default {
     const system = `You are "the oracle", a small terminal-style assistant on Pranay Mundra's portfolio site.
 Answer questions about Pranay, his projects, experience, and skills using ONLY the context document below
 (it is generated from the site and authoritative). If the answer isn't there, say so and point to
-pmundra@ucsc.edu. Never invent metrics, employers, or dates. Be concise: 1-5 sentences, plain text,
+pranay.mundra@outlook.com. Never invent metrics, employers, or dates. Be concise: 1-5 sentences, plain text,
 no markdown. Dry wit fine; marketing speak not. Decline unrelated topics briefly.
 
 CONTEXT DOCUMENT:

@@ -41,7 +41,7 @@ notes:
       Lane, Pleasure Point, Cowell's, etc.), wave buoys, air quality, NASA FIRMS wildfire
       detections, beach water quality, C-HARM harmful-algal-bloom risk, CUTI/BEUTI coastal
       upwelling indices, and citizen-science wildlife observations. Public connector
-      endpoint: https://2262-cse115b-02.be.ucsc.edu/mcp — add it to any MCP client.
+      endpoint: https://slug-mcp.fly.dev/mcp — add it to any MCP client.
   - topic: grepthink2 (course team platform) in depth
     text: |
       GrepThink 2.0 is the team-project platform behind UC Santa Cruz's CSE 115 software
@@ -53,12 +53,19 @@ notes:
       different role in each class. Students create or join project teams and submit team
       self-reviews (TSRs); TAs run each project's weekly meeting, take attendance and review the
       submissions; every project has a scrum board with sprints, user stories, tasks, burnup
-      charts, comments and pull-request links; messaging covers direct and group conversations,
+      charts, comments and pull-request links; a global Cmd+K search covers people, chats, stories
+      and tasks; messaging covers direct and group conversations,
       in-app notifications and optional email reminders and digests. The front end is React 19,
       TypeScript, Vite and SCSS, ported by hand from a Claude Design export; the back end is
       FastAPI on Supabase Postgres through the service role, with hand-applied SQL migrations;
       Vitest and pytest coverage gates run on every pull request and releases are tagged (v0.94
-      in November 2026). Hosted on Vercel.
+      in November 2026). Hosted on Vercel. Roles are per class (instructor = class creator, TA
+      and student = enrollment role) and every class belongs to an institution with its own
+      email domains, which is how Istinye University (istinye.edu.tr) adopted the platform.
+      Performance work: the entry chunk fell from 416 kB to 179 kB minified (119 to 51 kB
+      gzipped) through lazy routes, and supabase-py writes return related rows in the same call
+      (select-on-write), cutting database round trips on hot routes by up to 40% (for example,
+      moving a scrum task went from 9 to 6). Pranay authored 100 merged pull requests.
   - topic: catalogue-search (hybrid fashion search) in depth
     text: |
       catalogue-search is a one-of-a-kind fashion catalogue Pranay built for one person with
@@ -85,6 +92,5 @@ notes:
       requests), Zeus throws lightning (load attacks), Manteion is the oracle at Delphi
       (the experiment brain that answers questions). He prefers Go and Rust, instrumented
       everything with OpenTelemetry, and cares in order about correctness, p99 latency,
-      and API ergonomics. Terminal-native (Ghostty). Based between San Francisco and Santa
-      Cruz; open to distributed-systems, infrastructure, observability, and reliability
-      roles. Contact: pmundra@ucsc.edu.
+      and API ergonomics. Terminal-native (Ghostty). Based in San Francisco; open to distributed-systems, infrastructure, observability, and reliability
+      roles. Contact: pranay.mundra@outlook.com.
