@@ -1,6 +1,6 @@
 ---
 title: slug-mcp
-weight: 4
+weight: 3
 summary: An MCP server for banana slugs — UCSC campus services and Santa Cruz environmental telemetry as structured tool calls for LLMs.
 stack: [Rust, rmcp, Moka cache]
 metrics:

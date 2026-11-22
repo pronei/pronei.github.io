@@ -1,6 +1,6 @@
 ---
 title: grepthink2
-weight: 3
+weight: 2
 summary: Team-project management for UC Santa Cruz's software-engineering course series, since adopted by Istinye University — classes, teams, self-reviews, TA meetings and a scrum board, live at grepthink2.com. I TA'd the series and led the v2 rebuild.
 stack: [TypeScript, React 19, Vite, SCSS, Python, FastAPI, Supabase Postgres, Vercel]
 metrics:

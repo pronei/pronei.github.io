@@ -12,13 +12,22 @@ notes:
       to p99 can be measured in isolation. zeus-go orchestrates load: declarative JSON
       workflow DAGs, persona-based k6 sidecars, and a policy engine that automatically
       triggers Vegeta attacks when trigger conditions are met. manteion (with a Postgres
-      backing store and a UI, manteion-ui) schedules whole fault campaigns, correlates
-      results via W3C Baggage propagation so one trace ID survives the injected chaos
-      end-to-end, and persists experiment verdicts. Service-beds (e.g. a Go microservices
-      demo) act as systems under test. Active threads of work in mid-2026: experiment
-      resume in manteion, a rewritten attack scheduler in zeus-go, MySQL/HikariCP
-      contention modeling, and evaluating what an Antithesis-style deterministic hypervisor
-      would eliminate as interference sources.
+      backing store and a UI, manteion-ui) is the control plane: it pushes rules to every live
+      SDK instance, sequences baseline, fault and freeze phases while zeus replays the same
+      open-loop workload in each, drains every phase before closing it, and gives each phase a
+      verdict (VALID, VALID_WITH_WARNINGS, INVALID) from its own fidelity checks; invalid runs
+      are refused rather than reported. W3C Baggage keeps one trace ID end to end. The method
+      is attribution by intervention: instead of inferring a service's share of tail latency
+      from traces (critical-path tools such as CRISP), or from observational causal models
+      (Sage, CIRCA), it runs the counterfactual. It extends the interventional idea of causal
+      profiling (Coz), which cannot cross a process boundary, across the network, at the
+      interposition points of boundary fault injectors (Filibuster, 3MileBeach), which test
+      correctness rather than latency. Results on an eleven-service Go port of Google's Online
+      Boutique: a slow shared dependency's tail cost grows in proportion to how many times a
+      request path traverses it; freezing one caller removes exactly that caller's share,
+      which separates into a contention part and the dependency's own latency; and the same
+      freeze contains latency, error and hang faults alike, including one that had escalated
+      into a crash loop. This is Pranay's MS work at UC Santa Cruz, advised by Peter Alvaro.
   - topic: global upgrade safety & maximal safe subset (theory)
     text: |
       The upgrade-safety checker models every service-to-service edge with four schemas:

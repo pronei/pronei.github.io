@@ -1,6 +1,6 @@
 ---
 title: global upgrade safety & MSS
-weight: 2
+weight: 5
 summary: Static analysis that decides whether simultaneous schema changes across a microservice mesh can co-deploy safely — and computes the maximal safe subset when they can't.
 stack: [Go, OpenAPI, Protobuf]
 metrics:

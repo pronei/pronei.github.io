@@ -1,6 +1,6 @@
 ---
 title: catalogue-search
-weight: 6
+weight: 8
 summary: A one-of-a-kind fashion catalogue for one person with a specific size — keyword, text-vector and photo-vector search over 25 independent brands, measured by an LLM judge.
 stack: [TypeScript, Node.js, Hono, SQLite FTS5, transformers.js, Claude API]
 metrics:

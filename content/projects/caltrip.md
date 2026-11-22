@@ -1,6 +1,6 @@
 ---
 title: caltrip
-weight: 8
+weight: 4
 status: in progress
 summary: An unofficial, HTML-first rethink of caltrain.com — static pages under a 70 KB script budget, a Go service streaming live departures over SSE, and a design system that lives in code.
 stack: [Astro 7, Preact, TypeScript, Go, GTFS-Realtime, Cloudflare Pages, Fly.io]

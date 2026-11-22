@@ -1,6 +1,6 @@
 ---
 title: chatcut 3.0
-weight: 5
+weight: 7
 summary: Natural-language video editing on real footage — a Premiere Pro plugin and a standalone desktop editor sharing one AI backend. Vibe editing, not AI-generated video.
 stack: [Python, FastAPI, TypeScript, React, Tauri, Rust, Premiere Pro UXP]
 metrics:

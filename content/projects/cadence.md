@@ -1,6 +1,6 @@
 ---
 title: cadence
-weight: 7
+weight: 9
 summary: A lamp that listens — speech transcribed on-device, Claude turning "something warmer" into light, a bulb driven over the LAN. Nothing about your evening leaves the house.
 stack: [Python, mlx-whisper, Claude API, python-kasa, WebSockets]
 metrics:

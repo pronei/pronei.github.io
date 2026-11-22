@@ -1,6 +1,6 @@
 ---
 title: nogo
-weight: 9
+weight: 6
 summary: A lightweight, rules-driven rate limiter — the open-source descendant of the notification gate I built at MakeMyTrip.
 stack: [Go]
 metrics:
